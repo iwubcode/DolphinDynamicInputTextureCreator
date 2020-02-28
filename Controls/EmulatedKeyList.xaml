@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="DolphinDynamicInputTextureCreator.Controls.EmulatedKeyList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             xmlns:data="clr-namespace:DolphinDynamicInputTextureCreator.Data"
+             xmlns:design="clr-namespace:DolphinDynamicInputTextureCreator.Design"
+             xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:ColorToStringValueConverter x:Key="ColorToStringValueConverter"/>
+        <converters:ColorToPropertyInfoValueConverter x:Key="ColorToPropertyInfoValueConverter"/>
+        <converters:PropertyInfoToColorValueConverter x:Key="PropertyInfoToColorValueConverter"/>
+        <ObjectDataProvider ObjectInstance="{x:Type Colors}" MethodName="GetProperties" x:Key="colorPropertiesOdp" />
+    </UserControl.Resources>
+    <Grid d:DataContext="{x:Static design:DesignEmulatedDevice.Instance}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="0 0 0 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Column="0" ItemsSource="{Binding Source={StaticResource colorPropertiesOdp}}" x:Name="ColorCB">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                            <Rectangle Fill="{Binding Name}" Width="20" Height="20" Stroke="#FF211E1E" OpacityMask="Black" StrokeThickness="1" Margin="10 0 0 0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Grid.Column="1" Content="Add Emulated Key" Command="{Binding AddKeyCommand}" CommandParameter="{Binding SelectedItem, ElementName=ColorCB, Converter={StaticResource PropertyInfoToColorValueConverter}}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedItem, ElementName=ColorCB, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding EmulatedKeys}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="120" Height="120" Margin="5">
+                            <Border BorderThickness="1" BorderBrush="Black" Padding="2" Background="DarkGray">
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Rectangle Grid.Row="0" Fill="{Binding RegionColor, Converter={StaticResource ColorToStringValueConverter}}" Stroke="#FF211E1E" OpacityMask="Black" StrokeThickness="1"/>
+                                        <Grid Grid.Row="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="3*" />
+                                            </Grid.RowDefinitions>
+                                            <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="9*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Button Content="X" Grid.Column="1" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EmulatedKeyList}},
+                                              Path=DataContext.DeleteKeyCommand}" CommandParameter="{Binding}"></Button>
+                                            </Grid>
+                                        </Grid>
+                                        <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EmulatedKeyList}},
+                                              Path=DataContext.SearchSuggestions}" />
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

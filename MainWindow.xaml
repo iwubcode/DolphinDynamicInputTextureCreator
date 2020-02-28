@@ -1,0 +1,68 @@
+﻿<Window x:Class="DolphinDynamicInputTextureCreator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
+        xmlns:controls="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+        Title="Dolphin Dynamic Input Texture Creator" MinHeight="600" MinWidth="800">
+    <Window.Resources>
+        <converters:ColorToStringValueConverter x:Key="ColorToStringValueConverter"/>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Save to Location..." Name="SaveToLocation" Click="SaveToLocation_Click"/>
+                <MenuItem Header="_Quit" Name="QuitProgram" Click="QuitProgram_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Emulated Devices..." Name="EditEmulatedDevices" Click="EditEmulatedDevices_Click"  />
+                <MenuItem Header="_Host Devices..." Name="EditHostDevices" Click="EditHostDevices_Click"   />
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Left" MinWidth="200">
+            <controls:TexturePicker></controls:TexturePicker>
+        </Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Label Content="Choose an emulated control to map in the image:" Margin="0 0 5 0" />
+                <ComboBox ItemsSource="{Binding EmulatedDevices}" Margin="0 0 0 0" Width="100" x:Name="EmulatedDeviceCB" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedDevice}" VerticalAlignment="Center">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Label Content="And key:" Margin="5 0 5 0" />
+                <ComboBox ItemsSource="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.EmulatedKeys}" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedKey}" VerticalAlignment="Center" Width="120" Margin="0 0 5 0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                <Rectangle Fill="{Binding RegionColor, Converter={StaticResource ColorToStringValueConverter}}" Width="20" Height="20" Stroke="#FF211E1E" OpacityMask="Black" StrokeThickness="1" Margin="10 0 0 0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.Keys.Count}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </StackPanel>
+            <controls:PanZoom x:Name="PanZoom" Grid.Row="1"></controls:PanZoom>
+        </Grid>
+    </DockPanel>
+</Window>

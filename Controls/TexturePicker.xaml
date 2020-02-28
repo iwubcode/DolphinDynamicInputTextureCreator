@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="DolphinDynamicInputTextureCreator.Controls.TexturePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             xmlns:design="clr-namespace:DolphinDynamicInputTextureCreator.Design"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="500">
+    <Grid d:DataContext="{x:Static design:DesignDynamicInputPack.Instance}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <ItemsControl ItemsSource="{Binding Textures}" HorizontalAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0 0 0 2">
+                            <Button HorizontalAlignment="Center">
+                                <Button.InputBindings>
+                                    <MouseBinding Gesture="LeftDoubleClick"  Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
+                                              Path=DataContext.EditTextureCommand}" CommandParameter="{Binding}" />
+                                </Button.InputBindings>
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Border BorderThickness="1" BorderBrush="Black" Padding="2" Background="DarkGray">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid Grid.Column="0" HorizontalAlignment="Center" Width="150">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <Viewbox Grid.Row="0" HorizontalAlignment="Center">
+                                                        <Image Source="{Binding TexturePath}" HorizontalAlignment="Center" />
+                                                    </Viewbox>
+                                                    <Grid Grid.Row="0">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="*" />
+                                                            <RowDefinition Height="9*" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid Grid.Row="0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="9*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Button Content="X" Grid.Column="1" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
+                                              Path=DataContext.DeleteTextureCommand}" CommandParameter="{Binding}"></Button>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <TextBox Grid.Row="1" Padding="2" Margin="1" HorizontalAlignment="Center" MinWidth="50" TextWrapping="Wrap" Text="{Binding TextureHash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <CheckBox Grid.Row="0" IsChecked="{Binding ShouldGetHashFromTextureFilename, Mode=TwoWay}" Content="Get hash from filename?" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 0 0 0" />
+            <Button Grid.Row="1" Name="AddTexture" Click="AddTexture_Click">Add Texture</Button>
+        </Grid>
+    </Grid>
+</UserControl>

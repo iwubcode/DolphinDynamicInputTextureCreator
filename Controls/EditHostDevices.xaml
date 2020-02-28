@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="DolphinDynamicInputTextureCreator.Controls.EditHostDevices"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             mc:Ignorable="d" 
+             Height="400" Width="500">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Margin="1 0 0 1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListBox ItemsSource="{Binding HostDevices}" SelectedItem="{Binding SelectedHostDevice}" Grid.Row="0" Margin="0 0 0 1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Grid Grid.Row="1" Margin="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Add" Command="{Binding AddHostDeviceCommand}" Grid.Column="0" Margin="0 0 2 0" />
+                    <Button Content="Delete" Command="{Binding DeleteHostDeviceCommand}" CommandParameter="{Binding SelectedHostDevice}" Grid.Column="1" Margin="2 0 2 0" />
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid Visibility="{Binding AreHostDeviceDetailsVisible, Converter={StaticResource BoolToVis}}">
+                    <local:HostKeyList DataContext="{Binding SelectedHostDevice}"></local:HostKeyList>
+                </Grid>
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsHostDeviceHelpVisible, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="Click the 'Add' button to the left to get started." />
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Visibility="{Binding IsEditingNewHostDeviceName, Converter={StaticResource BoolToVis}}">
+            <Grid Background="Black" Opacity="0.5"/>
+            <Border
+            MinWidth="250"
+            Background="LightGray" 
+            BorderBrush="Black" 
+            BorderThickness="1" 
+            CornerRadius="5,5,5,5" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Margin="2" Text="Host Device Name:" FontWeight="Bold" FontFamily="Cambria" />
+                    <ComboBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding NewHostDeviceInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding HostDeviceSuggestions}" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
+                        <Button Content="Ok" Command="{Binding OkNewHostDeviceCommand}" IsEnabled="{Binding HasNewHostDeviceInput}" />
+                        <Button Content="Cancel" Command="{Binding CancelNewHostDeviceCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
