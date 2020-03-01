@@ -22,15 +22,51 @@ namespace DolphinDynamicInputTextureCreator.Data
                 _name = value;
                 OnPropertyChanged(nameof(Name));
 
-                if (_name.EndsWith("Keyboard Mouse"))
+                if (_name.Contains("Keyboard Mouse"))
                 {
                     List<string> suggestions = new List<string>();
-                    suggestions.Add("A");
-                    suggestions.Add("B");
-                    suggestions.Add("C");
-                    suggestions.Add("D");
-                    suggestions.Add("E");
-                    suggestions.Add("F");
+
+                    // Mouse
+                    suggestions.Add("Click 0");
+                    suggestions.Add("Click 1");
+                    suggestions.Add("Click 2");
+
+                    // Keyboard
+                    char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+
+                    foreach (char c in alpha)
+                    {
+                        suggestions.Add(c.ToString());
+                    }
+                    suggestions.Add("LSHIFT");
+                    suggestions.Add("RSHIFT");
+                    suggestions.Add("LCONTROL");
+                    suggestions.Add("RCONTROL");
+                    suggestions.Add("SPACE");
+
+                    suggestions.Sort();
+
+                    SearchSuggestions = new ObservableCollection<string>(suggestions);
+                }
+                else if (_name.Contains("XInput"))
+                {
+                    List<string> suggestions = new List<string>();
+                    suggestions.Add("`Pad N`");
+                    suggestions.Add("`Pad S`");
+                    suggestions.Add("`Pad E`");
+                    suggestions.Add("`Pad W`");
+                    suggestions.Add("`Button A`");
+                    suggestions.Add("`Button B`");
+                    suggestions.Add("`Button X`");
+                    suggestions.Add("`Button Y`");
+                    suggestions.Add("`Shoulder L`");
+                    suggestions.Add("`Shoulder R`");
+                    suggestions.Add("`Trigger L`");
+                    suggestions.Add("`Trigger R`");
+                    suggestions.Add("`Thumb L`");
+                    suggestions.Add("`Thumb R`");
+                    suggestions.Add("Start");
+                    suggestions.Add("Back");
                     suggestions.Sort();
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);

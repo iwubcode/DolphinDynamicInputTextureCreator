@@ -26,12 +26,72 @@ namespace DolphinDynamicInputTextureCreator.Data
                 if (_name.StartsWith("Wiimote"))
                 {
                     List<string> suggestions = new List<string>();
+
+                    // Wiimote button presses
                     suggestions.Add("Buttons/A");
                     suggestions.Add("Buttons/B");
+                    suggestions.Add("Buttons/1");
+                    suggestions.Add("Buttons/2");
+                    suggestions.Add("Buttons/-");
+                    suggestions.Add("Buttons/+");
                     suggestions.Add("D-Pad/Up");
                     suggestions.Add("D-Pad/Down");
                     suggestions.Add("D-Pad/Left");
                     suggestions.Add("D-Pad/Right");
+
+                    // Wiimote simulated motions
+                    suggestions.Add("Swing/Up");
+                    suggestions.Add("Swing/Down");
+                    suggestions.Add("Swing/Left");
+                    suggestions.Add("Swing/Right");
+                    suggestions.Add("Swing/Forward");
+                    suggestions.Add("Shake/X");
+                    suggestions.Add("Shake/Y");
+                    suggestions.Add("Shake/Z");
+
+                    // Nunchuk
+                    suggestions.Add("Nunchuk/Buttons/Z");
+                    suggestions.Add("Nunchuk/Buttons/C");
+                    suggestions.Add("Nunchuk/Shake/X");
+                    suggestions.Add("Nunchuk/Shake/Y");
+                    suggestions.Add("Nunchuk/Shake/Z");
+
+                    // Classic
+                    suggestions.Add("Classic/Buttons/A");
+                    suggestions.Add("Classic/Buttons/B");
+                    suggestions.Add("Classic/Buttons/X");
+                    suggestions.Add("Classic/Buttons/Y");
+                    suggestions.Add("Classic/Buttons/ZL");
+                    suggestions.Add("Classic/Buttons/ZR");
+                    suggestions.Add("Classic/Triggers/L");
+                    suggestions.Add("Classic/Triggers/R");
+                    suggestions.Add("Classic/D-Pad/Up");
+                    suggestions.Add("Classic/D-Pad/Down");
+                    suggestions.Add("Classic/D-Pad/Left");
+                    suggestions.Add("Classic/D-Pad/Right");
+
+                    suggestions.Sort();
+
+                    SearchSuggestions = new ObservableCollection<string>(suggestions);
+                }
+                else if (_name.StartsWith("GCPad"))
+                {
+                    List<string> suggestions = new List<string>();
+
+                    suggestions.Add("Buttons/A");
+                    suggestions.Add("Buttons/B");
+                    suggestions.Add("Buttons/X");
+                    suggestions.Add("Buttons/Y");
+                    suggestions.Add("Buttons/Z");
+                    suggestions.Add("Buttons/Start");
+                    suggestions.Add("D-Pad/Up");
+                    suggestions.Add("D-Pad/Down");
+                    suggestions.Add("D-Pad/Left");
+                    suggestions.Add("D-Pad/Right");
+
+                    suggestions.Add("Triggers/L");
+                    suggestions.Add("Triggers/R");
+
                     suggestions.Sort();
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
