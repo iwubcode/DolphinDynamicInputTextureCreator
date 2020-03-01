@@ -56,7 +56,7 @@
                                               Path=DataContext.DeleteKeyCommand}" CommandParameter="{Binding}"></Button>
                                             </Grid>
                                         </Grid>
-                                        <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EmulatedKeyList}},
+                                        <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},
                                               Path=DataContext.SearchSuggestions}" />
                                     </Grid>
                                 </Grid>
