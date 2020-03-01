@@ -9,6 +9,9 @@
     <Company />
     <Product>Dolphin</Product>
     <Description>A tool for creating dynamic input texture packages for the Dolphin emulator</Description>
+    <Version>03.01.20-0</Version>
+    <PackageProjectUrl />
+    <RepositoryUrl>https://github.com/iwubcode/DolphinDynamicInputTextureCreator</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
