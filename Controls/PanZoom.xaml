@@ -10,6 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:ScaleFactorToPercentageValueConverter x:Key="ScaleFactorToPercentageValueConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <ContextMenu x:Key="ItemContextMenu">
             <MenuItem Header="Delete" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
                                               Path=DataContext.InputPack.EditingTexture.DeleteRegionCommand}" CommandParameter="{Binding}" />
@@ -122,6 +123,18 @@
                 </Grid>
             </Grid>
         </ScrollViewer>
-        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="{Binding InputPack.EditingTexture.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" Margin="20" Command="{Binding InputPack.EditingTexture.ResetScaleFactorCommand}" />
+        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20" Background="LightGray" Width="125" Height="50" Padding="5" Visibility="{Binding InputPack.IsEditingTexture, Converter={StaticResource BoolToVis}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <TextBlock Text="Zoom = " />
+                    <TextBlock Text="{Binding InputPack.EditingTexture.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" />
+                </StackPanel>
+                <Button Grid.Row="1" Content="Reset" Command="{Binding InputPack.EditingTexture.ResetScaleFactorCommand}" />
+            </Grid>
+        </Border> 
     </Grid>
 </UserControl>

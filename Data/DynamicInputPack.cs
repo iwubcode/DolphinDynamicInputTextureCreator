@@ -44,6 +44,15 @@ namespace DolphinDynamicInputTextureCreator.Data
             {
                 _editing_texture = value;
                 OnPropertyChanged(nameof(EditingTexture));
+                OnPropertyChanged(nameof(IsEditingTexture));
+            }
+        }
+
+        public bool IsEditingTexture
+        {
+            get
+            {
+                return EditingTexture != null;
             }
         }
 
@@ -619,6 +628,8 @@ namespace DolphinDynamicInputTextureCreator.Data
 
             emulated_device_suggestions.Sort();
             EmulatedDeviceSuggestions = new ObservableCollection<string>(emulated_device_suggestions);
+
+            EditingTexture = null;
         }
         #endregion
 
