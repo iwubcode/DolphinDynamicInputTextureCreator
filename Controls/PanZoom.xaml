@@ -10,6 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:ScaleFactorToPercentageValueConverter x:Key="ScaleFactorToPercentageValueConverter"/>
+        <converters:PathToImageValueConverter x:Key="PathToImageValueConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <ContextMenu x:Key="ItemContextMenu">
             <MenuItem Header="Delete" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
@@ -110,7 +111,7 @@
                                     <ScaleTransform ScaleX="{Binding InputPack.EditingTexture.ScaleFactor}" ScaleY="{Binding InputPack.EditingTexture.ScaleFactor}"/>
                                 </TransformGroup>
                             </Grid.LayoutTransform>
-                            <Image Source="{Binding InputPack.EditingTexture.TexturePath}"  Width="{Binding InputPack.EditingTexture.ImageWidth}" Height="{Binding InputPack.EditingTexture.ImageHeight}" Stretch="Fill" x:Name="Img"
+                            <Image Source="{Binding InputPack.EditingTexture.TexturePath, Converter={StaticResource PathToImageValueConverter}}"  Width="{Binding InputPack.EditingTexture.ImageWidth}" Height="{Binding InputPack.EditingTexture.ImageHeight}" Stretch="Fill" x:Name="Img"
                                 VerticalAlignment="Top" HorizontalAlignment="Left" UseLayoutRounding="True" SnapsToDevicePixels="True">
                             </Image>
                         </Grid>

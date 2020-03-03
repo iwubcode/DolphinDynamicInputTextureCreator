@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
              xmlns:design="clr-namespace:DolphinDynamicInputTextureCreator.Design"
+             xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:PathToImageValueConverter x:Key="PathToImageValueConverter"/>
+    </UserControl.Resources>
     <Grid d:DataContext="{x:Static design:DesignHostDevice.Instance}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -40,7 +44,7 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <Viewbox>
-                                            <Image Source="{Binding TexturePath}" />
+                                            <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" />
                                         </Viewbox>
                                         <Grid Grid.Row="0">
                                             <Grid.RowDefinitions>
