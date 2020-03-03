@@ -37,15 +37,19 @@ namespace DolphinDynamicInputTextureCreator.Controls
 
             dlg.DefaultExt = ".png";
             dlg.Filter = "PNG Files (*.png)|*.png";
+            dlg.Multiselect = true;
 
             Nullable<bool> result = dlg.ShowDialog();
             if (result == true)
             {
-                HostDevice.HostKeys.Add(new Data.HostKey
+                foreach (var filename in dlg.FileNames)
                 {
-                    Name = "",
-                    TexturePath = dlg.FileName
-                });
+                    HostDevice.HostKeys.Add(new Data.HostKey
+                    {
+                        Name = "",
+                        TexturePath = filename
+                    });
+                }
             }
         }
     }

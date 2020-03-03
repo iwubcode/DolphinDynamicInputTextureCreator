@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
  
-            <Button Grid.Column="1" Content="Add Host Key" x:Name="AddHostKey" Click="AddHostKey_Click" />
+            <Button Grid.Column="1" Content="Add Host Key(s)" x:Name="AddHostKey" Click="AddHostKey_Click" />
         </Grid>
         <ScrollViewer Grid.Row="1">
             <ItemsControl ItemsSource="{Binding HostKeys}">
