@@ -88,10 +88,8 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                     return;
                 }
             }
-            
-            Point unscaled_pt = new Point(p.X / InputPack.EditingTexture.ScaleFactor, p.Y / InputPack.EditingTexture.ScaleFactor);
 
-            _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = unscaled_pt.X, Y = unscaled_pt.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey };
+            _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey };
             InputPack.EditingTexture.Regions.Add(_currently_creating_region);
         }
 
@@ -106,8 +104,8 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 return;
             }
 
-            double diff_x = _currently_creating_region.X - (p.X / InputPack.EditingTexture.ScaleFactor);
-            double diff_y = _currently_creating_region.Y - (p.Y / InputPack.EditingTexture.ScaleFactor);
+            double diff_x = _currently_creating_region.X - p.X;
+            double diff_y = _currently_creating_region.Y - p.Y;
 
             double left = _currently_creating_region.X;
             double top = _currently_creating_region.Y;
