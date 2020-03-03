@@ -45,6 +45,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                 _editing_texture = value;
                 OnPropertyChanged(nameof(EditingTexture));
                 OnPropertyChanged(nameof(IsEditingTexture));
+                OnPropertyChanged(nameof(IsEditingTextureHelpAvailable));
             }
         }
 
@@ -53,6 +54,14 @@ namespace DolphinDynamicInputTextureCreator.Data
             get
             {
                 return EditingTexture != null;
+            }
+        }
+
+        public bool IsEditingTextureHelpAvailable
+        {
+            get
+            {
+                return EditingTexture == null;
             }
         }
 

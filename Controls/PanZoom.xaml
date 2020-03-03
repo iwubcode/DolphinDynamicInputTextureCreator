@@ -87,54 +87,59 @@
 
     </UserControl.Resources>
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Visible"
+        <Grid Visibility="{Binding InputPack.IsEditingTexture, Converter={StaticResource BoolToVis}}">
+            <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Visible" x:Name="scr"
                   ScrollChanged="ScrollChanged" Background="DarkGray">
-            <Grid MouseDown="Grid_MouseDown" MouseUp="Grid_MouseUp" MouseMove="Grid_MouseMove" MouseWheel="Grid_MouseWheel">
-                <Grid>
-                    <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
-                        <Grid.Background>
-                            <DrawingBrush TileMode="Tile" Viewport="0,0,60,60" 
+                <Grid MouseDown="Grid_MouseDown" MouseUp="Grid_MouseUp" MouseMove="Grid_MouseMove" MouseWheel="Grid_MouseWheel">
+                    <Grid>
+                        <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <Grid.Background>
+                                <DrawingBrush TileMode="Tile" Viewport="0,0,60,60" 
                                       ViewportUnits="Absolute">
-                                <DrawingBrush.Drawing>
-                                    <DrawingGroup>
-                                        <GeometryDrawing Brush="#F8F8F8" Geometry="M5,5 L0,5 0,10 5,10 5,5 10,5 10,0 5,0 Z"/>
-                                        <GeometryDrawing Brush="White" Geometry="M0,0 L0,5 0,10 0,5, 10,5 10,10 5,10 5,0 Z"/>
-                                    </DrawingGroup>
-                                </DrawingBrush.Drawing>
-                            </DrawingBrush>
-                        </Grid.Background>
-                        <Grid.LayoutTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="{Binding InputPack.EditingTexture.ScaleFactor}" ScaleY="{Binding InputPack.EditingTexture.ScaleFactor}"/>
-                            </TransformGroup>
-                        </Grid.LayoutTransform>
-                        <Image Source="{Binding InputPack.EditingTexture.TexturePath}"  Width="{Binding InputPack.EditingTexture.ImageWidth}" Height="{Binding InputPack.EditingTexture.ImageHeight}" Stretch="Fill" x:Name="Img"
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <GeometryDrawing Brush="#F8F8F8" Geometry="M5,5 L0,5 0,10 5,10 5,5 10,5 10,0 5,0 Z"/>
+                                            <GeometryDrawing Brush="White" Geometry="M0,0 L0,5 0,10 0,5, 10,5 10,10 5,10 5,0 Z"/>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Grid.Background>
+                            <Grid.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="{Binding InputPack.EditingTexture.ScaleFactor}" ScaleY="{Binding InputPack.EditingTexture.ScaleFactor}"/>
+                                </TransformGroup>
+                            </Grid.LayoutTransform>
+                            <Image Source="{Binding InputPack.EditingTexture.TexturePath}"  Width="{Binding InputPack.EditingTexture.ImageWidth}" Height="{Binding InputPack.EditingTexture.ImageHeight}" Stretch="Fill" x:Name="Img"
                                 VerticalAlignment="Top" HorizontalAlignment="Left" UseLayoutRounding="True" SnapsToDevicePixels="True">
-                        </Image>
-                    </Grid>
+                            </Image>
+                        </Grid>
 
-                    <ListBox x:Name="lb" ItemsSource="{Binding InputPack.EditingTexture.Regions}"
+                        <ListBox x:Name="lb" ItemsSource="{Binding InputPack.EditingTexture.Regions}"
                                  Width="{Binding ActualWidth, ElementName=Img}"
                                  Height="{Binding ActualHeight,ElementName=Img}"
                                  VerticalAlignment="Top" HorizontalAlignment="Left"
                                  Style="{StaticResource RectRegionListBoxStyle}"
                                  ItemContainerStyle="{StaticResource RectRegionItemStyle}"/>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </ScrollViewer>
-        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20" Background="LightGray" Width="125" Height="50" Padding="5" Visibility="{Binding InputPack.IsEditingTexture, Converter={StaticResource BoolToVis}}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <TextBlock Text="Zoom = " />
-                    <TextBlock Text="{Binding InputPack.EditingTexture.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" />
-                </StackPanel>
-                <Button Grid.Row="1" Content="Reset" Command="{Binding InputPack.EditingTexture.ResetScaleFactorCommand}" />
-            </Grid>
-        </Border> 
+            </ScrollViewer>
+            <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20" Background="LightGray" Width="125" Height="50" Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <TextBlock Text="Zoom = " />
+                        <TextBlock Text="{Binding InputPack.EditingTexture.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" />
+                    </StackPanel>
+                    <Button Grid.Row="1" Content="Reset" Command="{Binding InputPack.EditingTexture.ResetScaleFactorCommand}" />
+                </Grid>
+            </Border>
+        </Grid>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding InputPack.IsEditingTextureHelpAvailable, Converter={StaticResource BoolToVis}}">
+            <TextBlock TextWrapping="Wrap" Text="Click the 'Add Texture' buton on the left to get started.  Once added, double click on a texture to begin placing emulated regions." />
+        </Grid>
     </Grid>
 </UserControl>
