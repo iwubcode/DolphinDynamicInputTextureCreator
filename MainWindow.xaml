@@ -3,17 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
         xmlns:controls="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+        xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator"
         Title="Dolphin Dynamic Input Texture Creator" MinHeight="600" MinWidth="800">
     <Window.Resources>
         <converters:ColorToStringValueConverter x:Key="ColorToStringValueConverter"/>
     </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="New" CanExecute="NewData_CanExecute" Executed="NewData_Click" />
+        <CommandBinding Command="Open" CanExecute="OpenData_CanExecute" Executed="OpenData_Click" />
+        <CommandBinding Command="Save" CanExecute="SaveData_CanExecute" Executed="SaveData_Click" />
+        <CommandBinding Command="{x:Static local:MainWindow.SaveAsCmd}" CanExecute="SaveDataAs_CanExecute" Executed="SaveAsData_Click" />
+    </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" Name="NewData" Click="NewData_Click" />
-                <MenuItem Header="_Open..." Name="OpenData" Click="OpenData_Click" />
+                <MenuItem Header="_New" Command="New" />
+                <MenuItem Header="_Open..." Command="Open" />
                 <Separator />
-                <MenuItem Header="_Save" Name="SaveData" Click="SaveData_Click" />
+                <MenuItem Header="_Save" Command="Save" />
+                <MenuItem Header="_Save As..." Command="{x:Static local:MainWindow.SaveAsCmd}" />
                 <Separator />
                 <MenuItem Header="_Export Dolphin Output to Location..." Name="ExportToLocation" Click="ExportToLocation_Click"/>
                 <Separator />

@@ -264,6 +264,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// Suggestions for possible host device names
         /// </summary>
         private ObservableCollection<string> _host_device_suggestions = new ObservableCollection<string>();
+        [JsonIgnore]
         public ObservableCollection<string> HostDeviceSuggestions
         {
             get
@@ -505,6 +506,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// A list of emulated device name suggestions
         /// </summary>
         private ObservableCollection<string> _emulated_device_suggestions = new ObservableCollection<string>();
+        [JsonIgnore]
         public ObservableCollection<string> EmulatedDeviceSuggestions
         {
             get

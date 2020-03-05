@@ -35,6 +35,8 @@ namespace DolphinDynamicInputTextureCreator
             ((ViewModels.PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
         }
 
+        private string _saved_document = null;
+
         private Data.DynamicInputPack InputPack
         {
             get
@@ -88,17 +90,29 @@ namespace DolphinDynamicInputTextureCreator
             window.ShowDialog();
         }
 
+        public static RoutedUICommand SaveAsCmd = new RoutedUICommand("Save as...", "SaveAsCmd", typeof(MainWindow));
+
+        #region SAVE
         private void SaveData_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.SaveFileDialog();
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
+            if (_saved_document == null)
             {
-                string output = JsonConvert.SerializeObject(InputPack);
-                File.WriteAllText(dialog.FileName, output);
+                SaveAsData_Click(sender, e);
+            }
+            else
+            {
+                string output = JsonConvert.SerializeObject(InputPack, Formatting.Indented);
+                File.WriteAllText(_saved_document, output);
             }
         }
 
+        private void SaveData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        #endregion
+
+        #region OPEN
         private void OpenData_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.OpenFileDialog();
@@ -106,13 +120,48 @@ namespace DolphinDynamicInputTextureCreator
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 string input = File.ReadAllText(dialog.FileName);
-                SetInputPack(JsonConvert.DeserializeObject<Data.DynamicInputPack>(input));
+                var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
+                SetInputPack(JsonConvert.DeserializeObject<Data.DynamicInputPack>(input, settings));
+                _saved_document = dialog.FileName;
             }
         }
 
+        private void OpenData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        #endregion
+
+        #region NEW
         private void NewData_Click(object sender, RoutedEventArgs e)
         {
             SetInputPack(new Data.DynamicInputPack());
+            _saved_document = null;
         }
+
+        private void NewData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        #endregion
+
+        #region SAVE AS
+        private void SaveAsData_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.SaveFileDialog();
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string output = JsonConvert.SerializeObject(InputPack, Formatting.Indented);
+                File.WriteAllText(dialog.FileName, output);
+                _saved_document = dialog.FileName;
+            }
+        }
+
+        private void SaveDataAs_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        #endregion
     }
 }

@@ -129,6 +129,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ObservableCollection<string> _search_suggestions = new ObservableCollection<string>();
+        [JsonIgnore]
         public ObservableCollection<string> SearchSuggestions
         {
             get
