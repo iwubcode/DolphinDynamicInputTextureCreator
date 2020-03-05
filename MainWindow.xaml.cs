@@ -116,6 +116,7 @@ namespace DolphinDynamicInputTextureCreator
         private void OpenData_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.OpenFileDialog();
+            dialog.Filter = "JSON Files (*.json)|*.json";
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -149,6 +150,7 @@ namespace DolphinDynamicInputTextureCreator
         private void SaveAsData_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.SaveFileDialog();
+            dialog.Filter = "JSON Files (*.json)|*.json";
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
