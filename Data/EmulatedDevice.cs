@@ -1,4 +1,5 @@
 ﻿using DolphinDynamicInputTextureCreator.Other;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -143,6 +144,7 @@ namespace DolphinDynamicInputTextureCreator.Data
 
         #region Commands
         private ICommand _delete_key_command;
+        [JsonIgnore]
         public ICommand DeleteKeyCommand
         {
             get
@@ -161,6 +163,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _add_key_command;
+        [JsonIgnore]
         public ICommand AddKeyCommand
         {
             get

@@ -10,7 +10,13 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Save to Location..." Name="SaveToLocation" Click="SaveToLocation_Click"/>
+                <MenuItem Header="_New" Name="NewData" Click="NewData_Click" />
+                <MenuItem Header="_Open..." Name="OpenData" Click="OpenData_Click" />
+                <Separator />
+                <MenuItem Header="_Save" Name="SaveData" Click="SaveData_Click" />
+                <Separator />
+                <MenuItem Header="_Export Dolphin Output to Location..." Name="ExportToLocation" Click="ExportToLocation_Click"/>
+                <Separator />
                 <MenuItem Header="_Quit" Name="QuitProgram" Click="QuitProgram_Click"/>
             </MenuItem>
             <MenuItem Header="_Edit">

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +26,13 @@ namespace DolphinDynamicInputTextureCreator
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new Data.DynamicInputPack();
-            ((ViewModels.PanZoomViewModel)PanZoom.DataContext).InputPack = InputPack;
+            SetInputPack(new Data.DynamicInputPack());
+        }
+
+        private void SetInputPack(Data.DynamicInputPack pack)
+        {
+            DataContext = pack;
+            ((ViewModels.PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
         }
 
         private Data.DynamicInputPack InputPack
@@ -36,7 +43,7 @@ namespace DolphinDynamicInputTextureCreator
             }
         }
 
-        private void SaveToLocation_Click(object sender, RoutedEventArgs e)
+        private void ExportToLocation_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
@@ -79,6 +86,33 @@ namespace DolphinDynamicInputTextureCreator
             };
 
             window.ShowDialog();
+        }
+
+        private void SaveData_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.SaveFileDialog();
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string output = JsonConvert.SerializeObject(InputPack);
+                File.WriteAllText(dialog.FileName, output);
+            }
+        }
+
+        private void OpenData_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.OpenFileDialog();
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string input = File.ReadAllText(dialog.FileName);
+                SetInputPack(JsonConvert.DeserializeObject<Data.DynamicInputPack>(input));
+            }
+        }
+
+        private void NewData_Click(object sender, RoutedEventArgs e)
+        {
+            SetInputPack(new Data.DynamicInputPack());
         }
     }
 }

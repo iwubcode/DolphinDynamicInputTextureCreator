@@ -1,5 +1,6 @@
 ﻿using DolphinDynamicInputTextureCreator.Other;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
@@ -141,6 +142,7 @@ namespace DolphinDynamicInputTextureCreator.Data
 
         #region COMMANDS
         private ICommand _delete_region_command;
+        [JsonIgnore]
         public ICommand DeleteRegionCommand
         {
             get
@@ -159,6 +161,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _reset_scale_factor;
+        [JsonIgnore]
         public ICommand ResetScaleFactorCommand
         {
             get

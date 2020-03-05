@@ -49,6 +49,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
+        [JsonIgnore]
         public bool IsEditingTexture
         {
             get
@@ -57,6 +58,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
+        [JsonIgnore]
         public bool IsEditingTextureHelpAvailable
         {
             get
@@ -102,6 +104,8 @@ namespace DolphinDynamicInputTextureCreator.Data
 
         #region DYNAMIC TEXTURE COMMANDS
         private ICommand _delete_texture_command;
+
+        [JsonIgnore]
         public ICommand DeleteTextureCommand
         {
             get
@@ -124,6 +128,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _edit_texture_command;
+        [JsonIgnore]
         public ICommand EditTextureCommand
         {
             get
@@ -179,6 +184,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Whether the help text is visible
         /// </summary>
+        [JsonIgnore]
         public bool IsHostDeviceHelpVisible
         {
             get
@@ -190,6 +196,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Whether the host device details are visible
         /// </summary>
+        [JsonIgnore]
         public bool AreHostDeviceDetailsVisible
         {
             get
@@ -202,6 +209,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// Says whether a new host device entry is being edited
         /// </summary>
         private bool _is_editing_new_host_device_name;
+        [JsonIgnore]
         public bool IsEditingNewHostDeviceName
         {
             get
@@ -219,6 +227,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// The new host device entry input for the name
         /// </summary>
         private string _new_host_device_input;
+        [JsonIgnore]
         public string NewHostDeviceInput
         {
             get
@@ -236,6 +245,8 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Whether the new host device entry input is available
         /// </summary>
+        /// 
+        [JsonIgnore]
         public bool HasNewHostDeviceInput
         {
             get
@@ -269,6 +280,7 @@ namespace DolphinDynamicInputTextureCreator.Data
 
         #region HOST DEVICE COMMANDS
         private ICommand _add_host_device_command;
+        [JsonIgnore]
         public ICommand AddHostDeviceCommand
         {
             get
@@ -292,6 +304,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _delete_host_device_command;
+        [JsonIgnore]
         public ICommand DeleteHostDeviceCommand
         {
             get
@@ -327,6 +340,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _ok_new_host_device_command;
+        [JsonIgnore]
         public ICommand OkNewHostDeviceCommand
         {
             get
@@ -351,6 +365,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _cancel_new_host_device_command;
+        [JsonIgnore]
         public ICommand CancelNewHostDeviceCommand
         {
             get
@@ -408,6 +423,8 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Whether the emulated device help is visible
         /// </summary>
+        /// 
+        [JsonIgnore]
         public bool IsEmulatedDeviceHelpVisible
         {
             get
@@ -419,6 +436,8 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Whether the emulated device details are visible
         /// </summary>
+        /// 
+        [JsonIgnore]
         public bool AreEmulatedDeviceDetailsVisible
         {
             get
@@ -431,6 +450,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// Returns true if we are editing a new emulated device entry name
         /// </summary>
         private bool _is_editing_new_emulated_device_name;
+        [JsonIgnore]
         public bool IsEditingNewEmulatedDeviceName
         {
             get
@@ -448,6 +468,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// Returns the current input for the new emulated device name
         /// </summary>
         private string _new_emulated_device_input;
+        [JsonIgnore]
         public string NewEmulatedDeviceInput
         {
             get
@@ -465,6 +486,8 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Returns true if the emulated device input has text
         /// </summary>
+        /// 
+        [JsonIgnore]
         public bool HasNewEmulatedDeviceInput
         {
             get
@@ -498,6 +521,7 @@ namespace DolphinDynamicInputTextureCreator.Data
 
         #region EMULATED DEVICE COMMANDS
         private ICommand _add_emulated_device_command;
+        [JsonIgnore]
         public ICommand AddEmulatedDeviceCommand
         {
             get
@@ -521,6 +545,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _delete_emulated_device_command;
+        [JsonIgnore]
         public ICommand DeleteEmulatedDeviceCommand
         {
             get
@@ -562,6 +587,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _ok_new_emulated_device_command;
+        [JsonIgnore]
         public ICommand OkNewEmulatedDeviceCommand
         {
             get
@@ -592,6 +618,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         private ICommand _cancel_new_emulated_device_command;
+        [JsonIgnore]
         public ICommand CancelNewEmulatedDeviceCommand
         {
             get
