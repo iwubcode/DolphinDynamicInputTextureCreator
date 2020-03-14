@@ -554,7 +554,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             {
                 if (_delete_emulated_device_command == null)
                 {
-                    _delete_emulated_device_command = new RelayCommand(param => DeleteEmulatedDevice((EmulatedDevice)param), param => CanDeleteHostDevice);
+                    _delete_emulated_device_command = new RelayCommand(param => DeleteEmulatedDevice((EmulatedDevice)param), param => CanDeleteEmulatedtDevice);
                 }
                 return _delete_emulated_device_command;
             }
