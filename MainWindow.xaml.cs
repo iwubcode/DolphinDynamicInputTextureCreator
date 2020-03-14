@@ -37,6 +37,9 @@ namespace DolphinDynamicInputTextureCreator
 
         private string _saved_document = null;
 
+        private Window _edit_emulated_devices_window;
+        private Window _edit_host_devices_window;
+
         private Data.DynamicInputPack InputPack
         {
             get
@@ -62,32 +65,40 @@ namespace DolphinDynamicInputTextureCreator
 
         private void EditHostDevices_Click(object sender, RoutedEventArgs e)
         {
-            var user_control = new Controls.EditHostDevices { DataContext = InputPack };
-            Window window = new Window
+            if (_edit_host_devices_window != null)
+            {
+                _edit_host_devices_window.Close();
+            }
+
+            _edit_host_devices_window = new Window
             {
                 Title = "Editing Host Devices",
-                Content = user_control,
                 ResizeMode = ResizeMode.NoResize,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 Owner = Application.Current.MainWindow
             };
 
-            window.ShowDialog();
+            UpdateEditWindows();
+            _edit_host_devices_window.Show();
         }
 
         private void EditEmulatedDevices_Click(object sender, RoutedEventArgs e)
         {
-            var user_control = new Controls.EditEmulatedDevices { DataContext = InputPack };
-            Window window = new Window
+            if (_edit_emulated_devices_window != null)
+            {
+                _edit_emulated_devices_window.Close();
+            }
+
+            _edit_emulated_devices_window = new Window
             {
                 Title = "Editing Emulated Devices",
-                Content = user_control,
                 ResizeMode = ResizeMode.NoResize,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 Owner = Application.Current.MainWindow
             };
 
-            window.ShowDialog();
+            UpdateEditWindows();
+            _edit_emulated_devices_window.Show();
         }
 
         public static RoutedUICommand SaveAsCmd = new RoutedUICommand("Save as...", "SaveAsCmd", typeof(MainWindow));
@@ -124,6 +135,7 @@ namespace DolphinDynamicInputTextureCreator
                 var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
                 SetInputPack(JsonConvert.DeserializeObject<Data.DynamicInputPack>(input, settings));
                 _saved_document = dialog.FileName;
+                UpdateEditWindows();
             }
         }
 
@@ -137,6 +149,7 @@ namespace DolphinDynamicInputTextureCreator
         private void NewData_Click(object sender, RoutedEventArgs e)
         {
             SetInputPack(new Data.DynamicInputPack());
+            UpdateEditWindows();
             _saved_document = null;
         }
 
@@ -165,5 +178,20 @@ namespace DolphinDynamicInputTextureCreator
             e.CanExecute = true;
         }
         #endregion
+
+        private void UpdateEditWindows()
+        {
+            if (_edit_emulated_devices_window != null)
+            {
+                var user_control = new Controls.EditEmulatedDevices { DataContext = InputPack };
+                _edit_emulated_devices_window.Content = user_control;
+            }
+
+            if (_edit_host_devices_window != null)
+            {
+                var user_control = new Controls.EditHostDevices { DataContext = InputPack };
+                _edit_host_devices_window.Content = user_control;
+            }
+        }
     }
 }
