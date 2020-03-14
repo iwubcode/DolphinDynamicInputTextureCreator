@@ -41,7 +41,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Label Content="Choose an emulated control to map in the image:" Margin="0 0 5 0" />
+                <Label Content="Choose an emulated control to map in the texture:" Margin="0 0 5 0" />
                 <ComboBox ItemsSource="{Binding EmulatedDevices}" Margin="0 0 0 0" Width="100" x:Name="EmulatedDeviceCB" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedDevice}" VerticalAlignment="Center">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -50,6 +50,19 @@
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding EmulatedDevices.Count}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
                 </ComboBox>
                 <Label Content="And key:" Margin="5 0 5 0" />
                 <ComboBox ItemsSource="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.EmulatedKeys}" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedKey}" VerticalAlignment="Center" Width="120" Margin="0 0 5 0">
@@ -68,7 +81,10 @@
                                 <DataTrigger Binding="{Binding}" Value="{x:Null}">
                                     <Setter Property="IsEnabled" Value="False"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.Keys.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedRegionBrush.SelectedEmulatedDevice.EmulatedKeys.Count}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding EmulatedDevices.Count}" Value="0">
                                     <Setter Property="IsEnabled" Value="False"/>
                                 </DataTrigger>
                             </Style.Triggers>
