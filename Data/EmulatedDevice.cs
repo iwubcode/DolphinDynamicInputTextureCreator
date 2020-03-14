@@ -64,6 +64,8 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("Classic/Buttons/Y");
                     suggestions.Add("Classic/Buttons/ZL");
                     suggestions.Add("Classic/Buttons/ZR");
+                    suggestions.Add("Classic/Buttons/-");
+                    suggestions.Add("Classic/Buttons/+");
                     suggestions.Add("Classic/Triggers/L");
                     suggestions.Add("Classic/Triggers/R");
                     suggestions.Add("Classic/D-Pad/Up");
