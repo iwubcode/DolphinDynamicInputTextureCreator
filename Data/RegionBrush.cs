@@ -34,6 +34,20 @@ namespace DolphinDynamicInputTextureCreator.Data
                 OnPropertyChanged(nameof(SelectedEmulatedKey));
             }
         }
+
+        /// <summary>
+        /// Whether to fill the entire image with the region
+        /// </summary>
+        private bool _fill_region;
+        public bool FillRegion
+        {
+            get { return _fill_region; }
+            set
+            {
+                _fill_region = value;
+                OnPropertyChanged(nameof(FillRegion));
+            }
+        }
         #endregion
     }
 }

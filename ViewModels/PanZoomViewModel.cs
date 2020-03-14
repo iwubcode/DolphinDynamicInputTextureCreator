@@ -89,8 +89,21 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 }
             }
 
-            _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey };
+            if (InputPack.SelectedRegionBrush.FillRegion)
+            {
+                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = 0, Y = 0, Height = InputPack.EditingTexture.ImageHeight, Width = InputPack.EditingTexture.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey };
+            }
+            else
+            {
+                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey };
+            }
             InputPack.EditingTexture.Regions.Add(_currently_creating_region);
+
+            if (InputPack.SelectedRegionBrush.FillRegion)
+            {
+                // No need to continue, operation is finished
+                _currently_creating_region = null;
+            }
         }
 
         /// <summary>
