@@ -5,9 +5,6 @@
         xmlns:controls="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
         xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator"
         Title="Dolphin Dynamic Input Texture Creator" MinHeight="600" MinWidth="800">
-    <Window.Resources>
-        <converters:ColorToStringValueConverter x:Key="ColorToStringValueConverter"/>
-    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="NewData_CanExecute" Executed="NewData_Click" />
         <CommandBinding Command="Open" CanExecute="OpenData_CanExecute" Executed="OpenData_Click" />
@@ -70,7 +67,6 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                <Rectangle Fill="{Binding RegionColor, Converter={StaticResource ColorToStringValueConverter}}" Width="20" Height="20" Stroke="#FF211E1E" OpacityMask="Black" StrokeThickness="1" Margin="10 0 0 0" />
                             </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

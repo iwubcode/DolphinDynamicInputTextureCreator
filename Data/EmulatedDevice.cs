@@ -173,19 +173,18 @@ namespace DolphinDynamicInputTextureCreator.Data
             {
                 if (_add_key_command == null)
                 {
-                    _add_key_command = new RelayCommand(param => AddKey((Color)param));
+                    _add_key_command = new RelayCommand(AddKey);
                 }
                 return _add_key_command;
             }
         }
 
-        private void AddKey(Color color)
+        private void AddKey(object obj)
         {
             EmulatedKeys.Add(
                 new EmulatedKey
                 {
-                    Name = "",
-                    RegionColor = color
+                    Name = ""
                 });
         }
         #endregion

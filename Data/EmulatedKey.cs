@@ -21,23 +21,6 @@ namespace DolphinDynamicInputTextureCreator.Data
                 OnPropertyChanged(nameof(Name));
             }
         }
-
-        /// <summary>
-        /// The color in the texture associated with the emulated key
-        /// </summary>
-        private Color _region_color;
-        public Color RegionColor
-        {
-            get
-            {
-                return _region_color;
-            }
-            set
-            {
-                _region_color = value;
-                OnPropertyChanged(nameof(RegionColor));
-            }
-        }
         #endregion
     }
 }

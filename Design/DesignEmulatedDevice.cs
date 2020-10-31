@@ -14,64 +14,56 @@ namespace DolphinDynamicInputTextureCreator.Design
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/A",
-                    RegionColor = Colors.Purple
+                    Name = "Buttons/A"
                 }
             );
 
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/B",
-                    RegionColor = Colors.Red
+                    Name = "Buttons/B"
                 }
             );
 
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/C",
-                    RegionColor = Colors.Orange
+                    Name = "Buttons/C"
                 }
             );
 
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/D",
-                    RegionColor = Colors.Blue
+                    Name = "Buttons/D"
                 }
             );
 
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/E",
-                    RegionColor = Colors.DarkCyan
+                    Name = "Buttons/E"
                 }
             );
 
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/F",
-                    RegionColor = Colors.CornflowerBlue
+                    Name = "Buttons/F"
                 }
             );
 
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/G",
-                    RegionColor = Colors.Chocolate
+                    Name = "Buttons/G"
                 }
             );
 
             EmulatedKeys.Add(
                 new Data.EmulatedKey
                 {
-                    Name = "Buttons/Z",
-                    RegionColor = Colors.Yellow
+                    Name = "Buttons/Z"
                 }
             );
         }

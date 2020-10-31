@@ -9,8 +9,6 @@
              Height="400" Width="500">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <converters:ColorToPropertyInfoValueConverter x:Key="ColorToPropertyInfoValueConverter"/>
-        <ObjectDataProvider ObjectInstance="{x:Type Colors}" MethodName="GetProperties" x:Key="colorPropertiesOdp" />
     </UserControl.Resources>
     <Grid>
         <Grid>

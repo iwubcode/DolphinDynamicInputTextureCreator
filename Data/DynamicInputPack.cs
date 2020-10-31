@@ -1,5 +1,6 @@
 ﻿using DolphinDynamicInputTextureCreator.Other;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -678,18 +679,11 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         #region JSON WRITER HELPERS
-        private string GetFallbackName(string texture_name)
+        private string GetImageName(string texture_name)
         {
             string name = Path.GetFileNameWithoutExtension(texture_name);
             string extension = Path.GetExtension(texture_name);
-            return name + "_fallback" + extension;
-        }
-
-        private string GetColorkeyName(string texture_name)
-        {
-            string name = Path.GetFileNameWithoutExtension(texture_name);
-            string extension = Path.GetExtension(texture_name);
-            return name + "_colorkey" + extension;
+            return name + extension;
         }
 
         private string GetHostDeviceKeyTextureLocation(string root_location, HostDevice device, HostKey key)
@@ -709,9 +703,8 @@ namespace DolphinDynamicInputTextureCreator.Data
                     continue;
                 }
 
-                WriteColorKeyImage(location, texture);
                 const bool overwrite = true;
-                File.Copy(texture.TexturePath, Path.Combine(location, GetFallbackName(texture.TexturePath)), overwrite);
+                File.Copy(texture.TexturePath, Path.Combine(location, GetImageName(texture.TexturePath)), overwrite);
             }
 
             foreach (var device in _host_devices)
@@ -724,23 +717,6 @@ namespace DolphinDynamicInputTextureCreator.Data
                     File.Copy(key.TexturePath, texture_location, overwrite);
                 }
             }
-        }
-
-        private void WriteColorKeyImage(string location, DynamicInputTexture texture)
-        {
-            var colorkey_image = new Bitmap(texture.TexturePath);
-
-            Graphics g = Graphics.FromImage(colorkey_image);
-            foreach (var region in texture.Regions)
-            {
-                var drawing_color = System.Drawing.Color.FromArgb(region.Key.RegionColor.A, region.Key.RegionColor.R, region.Key.RegionColor.G, region.Key.RegionColor.B);
-                using (var drawing_brush = new SolidBrush(drawing_color))
-                {
-                    g.FillRectangle(drawing_brush, (int)region.X, (int)region.Y, (int)region.Width, (int)region.Height);
-                }
-            }
-            g.Flush();
-            colorkey_image.Save(Path.Combine(location, GetColorkeyName(texture.TexturePath)), System.Drawing.Imaging.ImageFormat.Png);
         }
 
         private void WriteJson(string file)
@@ -767,19 +743,14 @@ namespace DolphinDynamicInputTextureCreator.Data
                     writer.WritePropertyName(texture.TextureHash);
                     writer.WriteStartObject();
 
-                    // Color key image
-                    writer.WritePropertyName("colorkey_image");
-                    writer.WriteValue(GetColorkeyName(texture.TexturePath));
-
-                    // Fallback image
-                    writer.WritePropertyName("fallback_image");
-                    writer.WriteValue(GetFallbackName(texture.TexturePath));
+                    writer.WritePropertyName("image");
+                    writer.WriteValue(GetImageName(texture.TexturePath));
 
                     #region EMULATED KEYS
                     writer.WritePropertyName("emulated_controls");
                     writer.WriteStartObject();
-                    var emulated_controls = CollectKeysForDevices(texture);
-                    foreach (var pair in emulated_controls)
+                    var device_to_keys_to_regions = CollectRegionsForDevices(texture);
+                    foreach (var pair in device_to_keys_to_regions)
                     {
                         // Skip devices with no mapped keys
                         if (pair.Value.Count == 0)
@@ -787,12 +758,33 @@ namespace DolphinDynamicInputTextureCreator.Data
                             continue;
                         }
 
-                        writer.WritePropertyName(pair.Key.Name);
+                        writer.WritePropertyName(pair.Key);
                         writer.WriteStartObject();
-                        foreach (var key in pair.Value)
+
+                        foreach (var keys_to_regions in pair.Value)
                         {
-                            writer.WritePropertyName(key.Name);
-                            writer.WriteValue(key.RegionColor.ToString());
+                            writer.WritePropertyName(keys_to_regions.Key);
+
+                            if (keys_to_regions.Value.Count > 0)
+                            {
+                                writer.WriteStartArray();
+                                foreach (var region in keys_to_regions.Value)
+                                {
+                                    if (region.Width < RectRegion.MinWidth)
+                                        continue;
+
+                                    if (region.Height < RectRegion.MinHeight)
+                                        continue;
+
+                                    writer.WriteStartArray();
+                                    writer.WriteValue(region.X);
+                                    writer.WriteValue(region.Y);
+                                    writer.WriteValue(region.X + region.Width);
+                                    writer.WriteValue(region.Y + region.Height);
+                                    writer.WriteEndArray();
+                                }
+                                writer.WriteEndArray();
+                            }
                         }
                         writer.WriteEndObject();
                     }
@@ -832,22 +824,32 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         /// <summary>
-        /// Given a texture will return a mapping between each emulated device and its emulated keys
+        /// Given a texture will return a mapping between each emulated device name and map of key name to list of regions
         /// </summary>
         /// <param name="texture"></param>
         /// <returns></returns>
-        private Dictionary<EmulatedDevice, List<EmulatedKey>> CollectKeysForDevices(DynamicInputTexture texture)
+        private Dictionary<string, Dictionary<string, List<RectRegion>>> CollectRegionsForDevices(DynamicInputTexture texture)
         {
-            Dictionary<EmulatedDevice, List<EmulatedKey>> result = new Dictionary<EmulatedDevice, List<EmulatedKey>>();
+            Dictionary<string, Dictionary<string, List<RectRegion>>> result = new Dictionary<string, Dictionary<string, List<RectRegion>>>();
             foreach (var region in texture.Regions)
             {
-                if (result.ContainsKey(region.Device))
+                if (result.ContainsKey(region.Device.Name))
                 {
-                    result[region.Device].Add(region.Key);
+                    var key_to_regions = result[region.Device.Name];
+                    if (key_to_regions.ContainsKey(region.Key.Name))
+                    {
+                        key_to_regions[region.Key.Name].Add(region);
+                    }
+                    else
+                    {
+                        key_to_regions.Add(region.Key.Name, new List<RectRegion> { region });
+                    }
                 }
                 else
                 {
-                    result.Add(region.Device, new List<EmulatedKey> { region.Key });
+                    var key_to_regions = new Dictionary<string, List<RectRegion>>();
+                    key_to_regions.Add(region.Key.Name, new List<RectRegion> { region });
+                    result.Add(region.Device.Name, key_to_regions);
                 }
             }
 

@@ -132,5 +132,8 @@
                 Height = value / ScaleFactor;
             }
         }
+
+        public static double MinWidth = 5.0;
+        public static double MinHeight = 5.0;
     }
 }
