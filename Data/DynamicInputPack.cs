@@ -29,6 +29,35 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
+        #region GENERAL PROPERTIES
+        private string _generated_folder_name = "";
+        public string GeneratedFolderName
+        {
+            get
+            {
+                return _generated_folder_name;
+            }
+            set
+            {
+                _generated_folder_name = value;
+                OnPropertyChanged(nameof(GeneratedFolderName));
+            }
+        }
+
+        private bool _preserve_aspect_ratio = true;
+        public bool PreserveAspectRatio
+        {
+            get
+            {
+                return _preserve_aspect_ratio;
+            }
+            set
+            {
+                _preserve_aspect_ratio = value;
+                OnPropertyChanged(nameof(PreserveAspectRatio));
+            }
+        }
+        #endregion
 
         #region DYNAMIC TEXTURE PROPERTIES
         /// <summary>
@@ -728,6 +757,17 @@ namespace DolphinDynamicInputTextureCreator.Data
                 writer.Formatting = Formatting.Indented;
 
                 writer.WriteStartObject();
+
+                #region GENERAL PROPERTIES
+                if (GeneratedFolderName.Length > 0)
+                {
+                    writer.WritePropertyName("generated_folder_name");
+                    writer.WriteValue(GeneratedFolderName);
+                }
+
+                writer.WritePropertyName("preserve_aspect_ratio");
+                writer.WriteValue(PreserveAspectRatio);
+                #endregion
 
                 #region OUTPUT TEXTURES
                 writer.WritePropertyName("output_textures");
