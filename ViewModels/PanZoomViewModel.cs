@@ -91,11 +91,11 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
 
             if (InputPack.SelectedRegionBrush.FillRegion)
             {
-                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = 0, Y = 0, Height = InputPack.EditingTexture.ImageHeight, Width = InputPack.EditingTexture.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey };
+                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = 0, Y = 0, Height = InputPack.EditingTexture.ImageHeight, Width = InputPack.EditingTexture.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
             }
             else
             {
-                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey };
+                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
             }
             InputPack.EditingTexture.Regions.Add(_currently_creating_region);
 
@@ -146,7 +146,10 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         public void StopCreatingRegion()
         {
-            RemoveSmallRegion();
+            if (_currently_creating_region != null)
+            {
+                RemoveSmallRegion();
+            }
             _currently_creating_region = null;
         }
 
@@ -155,12 +158,9 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         private void RemoveSmallRegion()
         {
-            if (_currently_creating_region != null)
+            if (_currently_creating_region.Width == 1 && _currently_creating_region.Height == 1)
             {
-                if (_currently_creating_region.Width == 1 && _currently_creating_region.Height == 1)
-                {
-                    InputPack.EditingTexture.Regions.Remove(_currently_creating_region);
-                }
+                InputPack.EditingTexture.Regions.Remove(_currently_creating_region);
             }
         }
 

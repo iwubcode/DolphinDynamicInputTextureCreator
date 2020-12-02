@@ -24,6 +24,21 @@
             }
         }
 
+        private DynamicInputTexture _owned_texture;
+        public DynamicInputTexture OwnedTexture
+        {
+            get { return _owned_texture; }
+            set
+            {
+                _owned_texture = value;
+                OnPropertyChanged(nameof(OwnedTexture));
+                OnPropertyChanged(nameof(X));
+                OnPropertyChanged(nameof(Y));
+                OnPropertyChanged(nameof(Height));
+                OnPropertyChanged(nameof(Width));
+            }
+        }
+
         private double _scale_factor;
         public double ScaleFactor
         {
@@ -46,6 +61,8 @@
             set
             {
                 _x = value;
+                if (_x < 0)
+                    _x = 0;
                 OnPropertyChanged(nameof(X));
                 OnPropertyChanged(nameof(ScaledX));
             }
@@ -58,6 +75,8 @@
             set
             {
                 _y = value;
+                if (_y < 0)
+                    _y = 0;
                 OnPropertyChanged(nameof(Y));
                 OnPropertyChanged(nameof(ScaledY));
             }
@@ -70,6 +89,13 @@
             set
             {
                 _height = value;
+                if (OwnedTexture != null)
+                {
+                    if (_height > OwnedTexture.ImageHeight)
+                        _height = OwnedTexture.ImageHeight;
+                }
+                if (_height < 0)
+                    _height = 1;
                 OnPropertyChanged(nameof(Height));
                 OnPropertyChanged(nameof(ScaledHeight));
             }
@@ -82,6 +108,13 @@
             set
             {
                 _width = value;
+                if (OwnedTexture != null)
+                {
+                    if (_width > OwnedTexture.ImageWidth)
+                        _width = OwnedTexture.ImageWidth;
+                }
+                if (_width < 0)
+                    _width = 1;
                 OnPropertyChanged(nameof(Width));
                 OnPropertyChanged(nameof(ScaledWidth));
             }
@@ -132,8 +165,5 @@
                 Height = value / ScaleFactor;
             }
         }
-
-        public static double MinWidth = 5.0;
-        public static double MinHeight = 5.0;
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 namespace DolphinDynamicInputTextureCreator.Data
 {
+    [JsonObject(IsReference = true)]
     public class HostDevice : Other.PropertyChangedBase
     {
         /// <summary>

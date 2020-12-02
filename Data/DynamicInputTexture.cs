@@ -9,6 +9,7 @@ using System.Windows.Input;
 
 namespace DolphinDynamicInputTextureCreator.Data
 {
+    [JsonObject(IsReference = true)]
     public class DynamicInputTexture : Other.PropertyChangedBase
     {
         #region PROPERTIES

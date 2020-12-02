@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 namespace DolphinDynamicInputTextureCreator.Data
 {
+    [JsonObject(IsReference = true)]
     public class EmulatedDevice : Other.PropertyChangedBase
     {
         /// <summary>

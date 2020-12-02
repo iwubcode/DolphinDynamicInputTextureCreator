@@ -810,12 +810,6 @@ namespace DolphinDynamicInputTextureCreator.Data
                                 writer.WriteStartArray();
                                 foreach (var region in keys_to_regions.Value)
                                 {
-                                    if (region.Width < RectRegion.MinWidth)
-                                        continue;
-
-                                    if (region.Height < RectRegion.MinHeight)
-                                        continue;
-
                                     writer.WriteStartArray();
                                     writer.WriteValue(region.X);
                                     writer.WriteValue(region.Y);
