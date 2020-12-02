@@ -64,6 +64,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// The current texture being edited
         /// </summary>
         private DynamicInputTexture _editing_texture;
+        [JsonIgnore]
         public DynamicInputTexture EditingTexture
         {
             get
