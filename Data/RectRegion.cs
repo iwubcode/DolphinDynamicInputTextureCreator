@@ -91,8 +91,8 @@
                 _height = value;
                 if (OwnedTexture != null)
                 {
-                    if (_height > OwnedTexture.ImageHeight)
-                        _height = OwnedTexture.ImageHeight;
+                    if ((_height + Y) > OwnedTexture.ImageHeight)
+                        _height = OwnedTexture.ImageHeight - Y;
                 }
                 if (_height < 0)
                     _height = 1;
@@ -110,8 +110,8 @@
                 _width = value;
                 if (OwnedTexture != null)
                 {
-                    if (_width > OwnedTexture.ImageWidth)
-                        _width = OwnedTexture.ImageWidth;
+                    if ((_width + X) > OwnedTexture.ImageWidth)
+                        _width = OwnedTexture.ImageWidth - X;
                 }
                 if (_width < 0)
                     _width = 1;
