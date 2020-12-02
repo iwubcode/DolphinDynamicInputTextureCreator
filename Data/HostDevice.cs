@@ -40,11 +40,13 @@ namespace DolphinDynamicInputTextureCreator.Data
                     {
                         suggestions.Add(c.ToString());
                     }
-                    suggestions.Add("LSHIFT");
-                    suggestions.Add("RSHIFT");
-                    suggestions.Add("LCONTROL");
-                    suggestions.Add("RCONTROL");
+                    suggestions.Add("Shift");
+                    suggestions.Add("Ctrl");
                     suggestions.Add("SPACE");
+                    suggestions.Add("UP");
+                    suggestions.Add("DOWN");
+                    suggestions.Add("LEFT");
+                    suggestions.Add("RIGHT");
 
                     suggestions.Sort();
 
