@@ -45,7 +45,7 @@
                                                         <RowDefinition />
                                                     </Grid.RowDefinitions>
                                                     <Viewbox Grid.Row="0" HorizontalAlignment="Center">
-                                                        <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" HorizontalAlignment="Center" />
+                                                        <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="NearestNeighbor" />
                                                     </Viewbox>
                                                     <Grid Grid.Row="0">
                                                         <Grid.RowDefinitions>

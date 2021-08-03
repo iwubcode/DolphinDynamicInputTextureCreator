@@ -111,7 +111,7 @@
                                     <ScaleTransform ScaleX="{Binding InputPack.EditingTexture.ScaleFactor}" ScaleY="{Binding InputPack.EditingTexture.ScaleFactor}"/>
                                 </TransformGroup>
                             </Grid.LayoutTransform>
-                            <Image Source="{Binding InputPack.EditingTexture.TexturePath, Converter={StaticResource PathToImageValueConverter}}"  Width="{Binding InputPack.EditingTexture.ImageWidth}" Height="{Binding InputPack.EditingTexture.ImageHeight}" Stretch="Fill" x:Name="Img"
+                            <Image Source="{Binding InputPack.EditingTexture.TexturePath, Converter={StaticResource PathToImageValueConverter}}"  Width="{Binding InputPack.EditingTexture.ImageWidth}" Height="{Binding InputPack.EditingTexture.ImageHeight}" Stretch="Fill" x:Name="Img" RenderOptions.BitmapScalingMode="NearestNeighbor"
                                 VerticalAlignment="Top" HorizontalAlignment="Left" UseLayoutRounding="True" SnapsToDevicePixels="True">
                             </Image>
                         </Grid>
