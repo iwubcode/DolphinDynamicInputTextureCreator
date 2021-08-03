@@ -727,14 +727,22 @@ namespace DolphinDynamicInputTextureCreator.Data
         {
             foreach (DynamicInputTexture texture in _textures)
             {
+                string destImagePath = Path.Combine(location, GetImageName(texture.TexturePath));
+
                 // Unlikely that we get here but skip textures that don't exist
                 if (!File.Exists(texture.TexturePath))
                 {
                     continue;
                 }
 
+                // Prevents the file from trying to overwrite itself.
+                if (texture.TexturePath == destImagePath)
+                {
+                    continue;
+                }
+
                 const bool overwrite = true;
-                File.Copy(texture.TexturePath, Path.Combine(location, GetImageName(texture.TexturePath)), overwrite);
+                File.Copy(texture.TexturePath, destImagePath, overwrite);
             }
 
             foreach (var device in _host_devices)
