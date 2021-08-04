@@ -681,6 +681,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             host_device_suggestions.Add("XInput/3/Gamepad");
 
             host_device_suggestions.Add("DInput/0/Keyboard Mouse");
+            host_device_suggestions.Add("Bluetooth/0/Wii Remote");
             host_device_suggestions.Sort();
             HostDeviceSuggestions = new ObservableCollection<string>(host_device_suggestions);
 

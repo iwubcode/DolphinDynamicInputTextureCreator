@@ -75,6 +75,60 @@ namespace DolphinDynamicInputTextureCreator.Data
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
+                else if (_name.Contains("Wii Remote"))
+                {
+                    List<string> suggestions = new List<string>();
+
+                    // Wiimote button presses
+                    suggestions.Add("A");
+                    suggestions.Add("B");
+                    suggestions.Add("`1`");
+                    suggestions.Add("`2`");
+                    suggestions.Add("`-`");
+                    suggestions.Add("`+`");
+                    suggestions.Add("HOME");
+                    suggestions.Add("Up");
+                    suggestions.Add("Down");
+                    suggestions.Add("Left");
+                    suggestions.Add("Right");
+
+                    // Nunchuk
+                    suggestions.Add("`Nunchuk C`");
+                    suggestions.Add("`Nunchuk Z`");
+                    suggestions.Add("`Nunchuk X-`");
+                    suggestions.Add("`Nunchuk X+`");
+                    suggestions.Add("`Nunchuk Y-`");
+                    suggestions.Add("`Nunchuk Y+`");
+
+                    // Classic
+                    suggestions.Add("`Classic A`");
+                    suggestions.Add("`Classic B`");
+                    suggestions.Add("`Classic X`");
+                    suggestions.Add("`Classic Y`");
+                    suggestions.Add("`Classic -`");
+                    suggestions.Add("`Classic +`");
+                    suggestions.Add("`Classic HOME`");
+                    suggestions.Add("`Classic L`");
+                    suggestions.Add("`Classic R`");
+                    suggestions.Add("`Classic ZL`");
+                    suggestions.Add("`Classic ZR`");
+                    suggestions.Add("`Classic Up`");
+                    suggestions.Add("`Classic Down`");
+                    suggestions.Add("`Classic Left`");
+                    suggestions.Add("`Classic Right`");
+                    suggestions.Add("`Classic Left X-`");
+                    suggestions.Add("`Classic Left X+`");
+                    suggestions.Add("`Classic Left Y-`");
+                    suggestions.Add("`Classic Left Y+`");
+                    suggestions.Add("`Classic RightS X-`");
+                    suggestions.Add("`Classic Right X+`");
+                    suggestions.Add("`Classic Right Y-`");
+                    suggestions.Add("`Classic Right Y+`");
+
+                    //suggestions.Sort(); only makes it messy :/
+
+                    SearchSuggestions = new ObservableCollection<string>(suggestions);
+                }
             }
         }
 
