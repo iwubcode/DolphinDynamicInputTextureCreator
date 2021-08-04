@@ -32,6 +32,8 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("Click 0");
                     suggestions.Add("Click 1");
                     suggestions.Add("Click 2");
+                    suggestions.Add("Click 3");
+                    suggestions.Add("Click 4");
 
                     // Keyboard
                     char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
@@ -40,25 +42,56 @@ namespace DolphinDynamicInputTextureCreator.Data
                     {
                         suggestions.Add(c.ToString());
                     }
-                    suggestions.Add("Shift");
-                    suggestions.Add("Ctrl");
-                    suggestions.Add("SPACE");
+
+                    char[] Numbers = "1234567890".ToCharArray();
+
+                    foreach (char c in Numbers)
+                    {
+                        suggestions.Add(c.ToString());
+                    }
+
                     suggestions.Add("UP");
                     suggestions.Add("DOWN");
                     suggestions.Add("LEFT");
                     suggestions.Add("RIGHT");
 
-                    suggestions.Sort();
+                    suggestions.Add("Shift");
+                    suggestions.Add("Ctrl");
+                    suggestions.Add("SPACE");
+                    suggestions.Add("Alt");
+                    suggestions.Add("TAP");
+                    suggestions.Add("RETURN");
+
+                    suggestions.Add("APOSTROPHE");
+                    suggestions.Add("BACK");
+                    suggestions.Add("SLASH");
+                    suggestions.Add("BACKSLASH");
+                    suggestions.Add("PERIOD");
+                    suggestions.Add("COMMA");
+                    suggestions.Add("EQUALS");
+                    suggestions.Add("LBRACKET");
+                    suggestions.Add("RBRACKET");
+                    suggestions.Add("SEMICOLON");
+
+                    //numpad
+                    foreach (char c in Numbers)
+                    {
+                        suggestions.Add("NUMPAD" + c.ToString());
+                    }
+                    suggestions.Add("DIVIDE");
+                    suggestions.Add("MULTIPLY");
+                    suggestions.Add("SUBTRACT");
+                    suggestions.Add("ADD");
+                    suggestions.Add("NUMPADENTER");
+                    suggestions.Add("DECIMAL");
+
+                    //suggestions.Sort(); only makes it messy :|
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
                 else if (_name.Contains("XInput"))
                 {
                     List<string> suggestions = new List<string>();
-                    suggestions.Add("`Pad N`");
-                    suggestions.Add("`Pad S`");
-                    suggestions.Add("`Pad E`");
-                    suggestions.Add("`Pad W`");
                     suggestions.Add("`Button A`");
                     suggestions.Add("`Button B`");
                     suggestions.Add("`Button X`");
@@ -71,7 +104,20 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("`Thumb R`");
                     suggestions.Add("Start");
                     suggestions.Add("Back");
-                    suggestions.Sort();
+                    suggestions.Add("Guide");
+                    suggestions.Add("`Pad N`");
+                    suggestions.Add("`Pad S`");
+                    suggestions.Add("`Pad E`");
+                    suggestions.Add("`Pad W`");
+                    suggestions.Add("`Left X-`");
+                    suggestions.Add("`Left X+`");
+                    suggestions.Add("`Left Y-`");
+                    suggestions.Add("`Left Y+`");
+                    suggestions.Add("`Right X-`");
+                    suggestions.Add("`Right X+`");
+                    suggestions.Add("`Right Y-`");
+                    suggestions.Add("`Right Y+`");
+                    //suggestions.Sort(); only makes it messy :/
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
