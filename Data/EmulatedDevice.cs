@@ -36,6 +36,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("Buttons/2");
                     suggestions.Add("Buttons/-");
                     suggestions.Add("Buttons/+");
+                    suggestions.Add("Buttons/Home");
                     suggestions.Add("D-Pad/Up");
                     suggestions.Add("D-Pad/Down");
                     suggestions.Add("D-Pad/Left");
@@ -54,6 +55,10 @@ namespace DolphinDynamicInputTextureCreator.Data
                     // Nunchuk
                     suggestions.Add("Nunchuk/Buttons/Z");
                     suggestions.Add("Nunchuk/Buttons/C");
+                    suggestions.Add("Nunchuk/Stick/Up");
+                    suggestions.Add("Nunchuk/Stick/Down");
+                    suggestions.Add("Nunchuk/Stick/Left");
+                    suggestions.Add("Nunchuk/Stick/Right");
                     suggestions.Add("Nunchuk/Shake/X");
                     suggestions.Add("Nunchuk/Shake/Y");
                     suggestions.Add("Nunchuk/Shake/Z");
@@ -67,14 +72,23 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("Classic/Buttons/ZR");
                     suggestions.Add("Classic/Buttons/-");
                     suggestions.Add("Classic/Buttons/+");
+                    suggestions.Add("Classic/Buttons/Home");
                     suggestions.Add("Classic/Triggers/L");
                     suggestions.Add("Classic/Triggers/R");
                     suggestions.Add("Classic/D-Pad/Up");
                     suggestions.Add("Classic/D-Pad/Down");
                     suggestions.Add("Classic/D-Pad/Left");
                     suggestions.Add("Classic/D-Pad/Right");
+                    suggestions.Add("Classic/Left Stick/Up");
+                    suggestions.Add("Classic/Left Stick/Down");
+                    suggestions.Add("Classic/Left Stick/Left");
+                    suggestions.Add("Classic/Left Stick/Right");
+                    suggestions.Add("Classic/Right Stick/Up");
+                    suggestions.Add("Classic/Right Stick/Down");
+                    suggestions.Add("Classic/Right Stick/Left");
+                    suggestions.Add("Classic/Right Stick/Right");
 
-                    suggestions.Sort();
+                    //suggestions.Sort(); only makes it messy :/
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
@@ -92,11 +106,19 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("D-Pad/Down");
                     suggestions.Add("D-Pad/Left");
                     suggestions.Add("D-Pad/Right");
+                    suggestions.Add("Main Stick/Up");
+                    suggestions.Add("Main Stick/Down");
+                    suggestions.Add("Main Stick/Left");
+                    suggestions.Add("Main Stick/Right");
+                    suggestions.Add("C-Stick/Up");
+                    suggestions.Add("C-Stick/Down");
+                    suggestions.Add("C-Stick/Left");
+                    suggestions.Add("C-Stick/Right");
 
                     suggestions.Add("Triggers/L");
                     suggestions.Add("Triggers/R");
 
-                    suggestions.Sort();
+                    //suggestions.Sort(); only makes it messy :/
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
