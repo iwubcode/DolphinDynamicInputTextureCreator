@@ -696,7 +696,12 @@ namespace DolphinDynamicInputTextureCreator.Data
             emulated_device_suggestions.Add("GCPad3");
             emulated_device_suggestions.Add("GCPad4");
 
-            emulated_device_suggestions.Sort();
+            emulated_device_suggestions.Add("GBA1");
+            emulated_device_suggestions.Add("GBA2");
+            emulated_device_suggestions.Add("GBA3");
+            emulated_device_suggestions.Add("GBA4");
+
+            //emulated_device_suggestions.Sort(); is more enjoyable without :)
             EmulatedDeviceSuggestions = new ObservableCollection<string>(emulated_device_suggestions);
 
             EditingTexture = null;

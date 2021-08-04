@@ -100,6 +100,25 @@ namespace DolphinDynamicInputTextureCreator.Data
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
+                else if (_name.StartsWith("GBA"))
+                {
+                    List<string> suggestions = new List<string>();
+
+                    suggestions.Add("Buttons/B");
+                    suggestions.Add("Buttons/A");
+                    suggestions.Add("Buttons/L");
+                    suggestions.Add("Buttons/R");
+                    suggestions.Add("Buttons/SELECT");
+                    suggestions.Add("Buttons/START");
+                    suggestions.Add("D-Pad/Up");
+                    suggestions.Add("D-Pad/Down");
+                    suggestions.Add("D-Pad/Left");
+                    suggestions.Add("D-Pad/Right");
+
+                    //suggestions.Sort(); only makes it messy :/
+
+                    SearchSuggestions = new ObservableCollection<string>(suggestions);
+                }
             }
         }
 
