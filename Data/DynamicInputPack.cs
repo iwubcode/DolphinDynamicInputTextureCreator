@@ -834,27 +834,31 @@ namespace DolphinDynamicInputTextureCreator.Data
                     writer.WriteEndObject();
                     #endregion
 
-                    #region HOST KEYS
-                    writer.WritePropertyName("host_controls");
-                    writer.WriteStartObject();
-                    foreach (var device in _host_devices)
+                    #region HOST    
+                    // Only create if devices are assigned.   
+                    if (_host_devices.Count != 0)
                     {
-                        // Skip devices with no mapped keys
-                        if (device.HostKeys.Count == 0)
-                        {
-                            continue;
-                        }
-
-                        writer.WritePropertyName(device.Name);
+                        writer.WritePropertyName("host_controls");
                         writer.WriteStartObject();
-                        foreach (var key in device.HostKeys)
+                        foreach (var device in _host_devices)
                         {
-                            writer.WritePropertyName(key.Name);
-                            writer.WriteValue(GetHostDeviceKeyTextureLocation("", device, key));
+                            // Skip devices with no mapped keys
+                            if (device.HostKeys.Count == 0)
+                            {
+                                continue;
+                            }
+
+                            writer.WritePropertyName(device.Name);
+                            writer.WriteStartObject();
+                            foreach (var key in device.HostKeys)
+                            {
+                                writer.WritePropertyName(key.Name);
+                                writer.WriteValue(GetHostDeviceKeyTextureLocation("", device, key));
+                            }
+                            writer.WriteEndObject();
                         }
                         writer.WriteEndObject();
                     }
-                    writer.WriteEndObject();
                     #endregion
 
                     writer.WriteEndObject();
