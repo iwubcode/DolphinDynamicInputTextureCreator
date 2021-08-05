@@ -27,7 +27,7 @@
             <ItemsControl ItemsSource="{Binding HostKeys}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="2" />
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center"  />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

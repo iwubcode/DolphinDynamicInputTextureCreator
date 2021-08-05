@@ -19,12 +19,12 @@
             <ItemsControl ItemsSource="{Binding EmulatedKeys}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="2" />
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center"  />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Width="120" Height="50" Margin="5">
+                        <Grid MinWidth="140" MaxWidth="200" Height="50" Margin="5">
                             <Border BorderThickness="1" BorderBrush="Black" Padding="2" Background="DarkGray">
                                 <StackPanel Orientation="Vertical">
                                     <Grid>

@@ -73,9 +73,10 @@ namespace DolphinDynamicInputTextureCreator
             _edit_host_devices_window = new Window
             {
                 Title = "Editing Host Devices",
-                ResizeMode = ResizeMode.NoResize,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                Owner = Application.Current.MainWindow
+                ResizeMode = ResizeMode.CanResize,
+                SizeToContent = SizeToContent.Height,
+                Owner = Application.Current.MainWindow,
+                Width = 500, MinWidth = 500, MinHeight = 400
             };
 
             UpdateEditWindows();
@@ -92,9 +93,10 @@ namespace DolphinDynamicInputTextureCreator
             _edit_emulated_devices_window = new Window
             {
                 Title = "Editing Emulated Devices",
-                ResizeMode = ResizeMode.NoResize,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                Owner = Application.Current.MainWindow
+                ResizeMode = ResizeMode.CanResize,
+                SizeToContent = SizeToContent.Height,
+                Owner = Application.Current.MainWindow,
+                Width= 500, MinWidth = 500, MinHeight = 400
             };
 
             UpdateEditWindows();
