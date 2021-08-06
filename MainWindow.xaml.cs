@@ -26,6 +26,7 @@ namespace DolphinDynamicInputTextureCreator
         public MainWindow()
         {
             InitializeComponent();
+            this.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             SetInputPack(new Data.DynamicInputPack());
         }
 
