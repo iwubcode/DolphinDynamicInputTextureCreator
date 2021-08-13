@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="Transparent">
 
-        <Thumb DragDelta="Center_DragDelta" Height="10" Width="10"
+        <Thumb DragDelta="Center_DragDelta" Height="24" Width="24" Opacity="0.3"
                VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <Thumb DragDelta="UpperLeft_DragDelta" Height="10" Width="10"
