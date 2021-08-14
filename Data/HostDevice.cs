@@ -32,6 +32,8 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("Click 0");
                     suggestions.Add("Click 1");
                     suggestions.Add("Click 2");
+                    suggestions.Add("Click 3");
+                    suggestions.Add("Click 4");
 
                     // Keyboard
                     char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
@@ -40,25 +42,56 @@ namespace DolphinDynamicInputTextureCreator.Data
                     {
                         suggestions.Add(c.ToString());
                     }
-                    suggestions.Add("Shift");
-                    suggestions.Add("Ctrl");
-                    suggestions.Add("SPACE");
+
+                    char[] Numbers = "1234567890".ToCharArray();
+
+                    foreach (char c in Numbers)
+                    {
+                        suggestions.Add(c.ToString());
+                    }
+
                     suggestions.Add("UP");
                     suggestions.Add("DOWN");
                     suggestions.Add("LEFT");
                     suggestions.Add("RIGHT");
 
-                    suggestions.Sort();
+                    suggestions.Add("Shift");
+                    suggestions.Add("Ctrl");
+                    suggestions.Add("SPACE");
+                    suggestions.Add("Alt");
+                    suggestions.Add("TAP");
+                    suggestions.Add("RETURN");
+
+                    suggestions.Add("APOSTROPHE");
+                    suggestions.Add("BACK");
+                    suggestions.Add("SLASH");
+                    suggestions.Add("BACKSLASH");
+                    suggestions.Add("PERIOD");
+                    suggestions.Add("COMMA");
+                    suggestions.Add("EQUALS");
+                    suggestions.Add("LBRACKET");
+                    suggestions.Add("RBRACKET");
+                    suggestions.Add("SEMICOLON");
+
+                    //numpad
+                    foreach (char c in Numbers)
+                    {
+                        suggestions.Add("NUMPAD" + c.ToString());
+                    }
+                    suggestions.Add("DIVIDE");
+                    suggestions.Add("MULTIPLY");
+                    suggestions.Add("SUBTRACT");
+                    suggestions.Add("ADD");
+                    suggestions.Add("NUMPADENTER");
+                    suggestions.Add("DECIMAL");
+
+                    //suggestions.Sort(); only makes it messy :|
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
                 else if (_name.Contains("XInput"))
                 {
                     List<string> suggestions = new List<string>();
-                    suggestions.Add("`Pad N`");
-                    suggestions.Add("`Pad S`");
-                    suggestions.Add("`Pad E`");
-                    suggestions.Add("`Pad W`");
                     suggestions.Add("`Button A`");
                     suggestions.Add("`Button B`");
                     suggestions.Add("`Button X`");
@@ -71,7 +104,74 @@ namespace DolphinDynamicInputTextureCreator.Data
                     suggestions.Add("`Thumb R`");
                     suggestions.Add("Start");
                     suggestions.Add("Back");
-                    suggestions.Sort();
+                    suggestions.Add("Guide");
+                    suggestions.Add("`Pad N`");
+                    suggestions.Add("`Pad S`");
+                    suggestions.Add("`Pad E`");
+                    suggestions.Add("`Pad W`");
+                    suggestions.Add("`Left X-`");
+                    suggestions.Add("`Left X+`");
+                    suggestions.Add("`Left Y-`");
+                    suggestions.Add("`Left Y+`");
+                    suggestions.Add("`Right X-`");
+                    suggestions.Add("`Right X+`");
+                    suggestions.Add("`Right Y-`");
+                    suggestions.Add("`Right Y+`");
+                    //suggestions.Sort(); only makes it messy :/
+
+                    SearchSuggestions = new ObservableCollection<string>(suggestions);
+                }
+                else if (_name.Contains("Wii Remote"))
+                {
+                    List<string> suggestions = new List<string>();
+
+                    // Wiimote button presses
+                    suggestions.Add("A");
+                    suggestions.Add("B");
+                    suggestions.Add("`1`");
+                    suggestions.Add("`2`");
+                    suggestions.Add("`-`");
+                    suggestions.Add("`+`");
+                    suggestions.Add("HOME");
+                    suggestions.Add("Up");
+                    suggestions.Add("Down");
+                    suggestions.Add("Left");
+                    suggestions.Add("Right");
+
+                    // Nunchuk
+                    suggestions.Add("`Nunchuk C`");
+                    suggestions.Add("`Nunchuk Z`");
+                    suggestions.Add("`Nunchuk X-`");
+                    suggestions.Add("`Nunchuk X+`");
+                    suggestions.Add("`Nunchuk Y-`");
+                    suggestions.Add("`Nunchuk Y+`");
+
+                    // Classic
+                    suggestions.Add("`Classic A`");
+                    suggestions.Add("`Classic B`");
+                    suggestions.Add("`Classic X`");
+                    suggestions.Add("`Classic Y`");
+                    suggestions.Add("`Classic -`");
+                    suggestions.Add("`Classic +`");
+                    suggestions.Add("`Classic HOME`");
+                    suggestions.Add("`Classic L`");
+                    suggestions.Add("`Classic R`");
+                    suggestions.Add("`Classic ZL`");
+                    suggestions.Add("`Classic ZR`");
+                    suggestions.Add("`Classic Up`");
+                    suggestions.Add("`Classic Down`");
+                    suggestions.Add("`Classic Left`");
+                    suggestions.Add("`Classic Right`");
+                    suggestions.Add("`Classic Left X-`");
+                    suggestions.Add("`Classic Left X+`");
+                    suggestions.Add("`Classic Left Y-`");
+                    suggestions.Add("`Classic Left Y+`");
+                    suggestions.Add("`Classic RightS X-`");
+                    suggestions.Add("`Classic Right X+`");
+                    suggestions.Add("`Classic Right Y-`");
+                    suggestions.Add("`Classic Right Y+`");
+
+                    //suggestions.Sort(); only makes it messy :/
 
                     SearchSuggestions = new ObservableCollection<string>(suggestions);
                 }
