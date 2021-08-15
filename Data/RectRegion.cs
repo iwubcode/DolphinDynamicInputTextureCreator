@@ -117,8 +117,8 @@ namespace DolphinDynamicInputTextureCreator.Data
                     if ((_height + Y) > OwnedTexture.ImageHeight)
                         _height = OwnedTexture.ImageHeight - Y;
                 }
-                if (_height < 0)
-                    _height = 1;
+                if (_height <= 0)
+                    _height = GetMinHeight();
                 OnPropertyChanged(nameof(Height));
                 OnPropertyChanged(nameof(ScaledHeight));
             }
@@ -136,11 +136,21 @@ namespace DolphinDynamicInputTextureCreator.Data
                     if ((_width + X) > OwnedTexture.ImageWidth)
                         _width = OwnedTexture.ImageWidth - X;
                 }
-                if (_width < 0)
-                    _width = 1;
+                if (_width <= 0)
+                    _width = GetMinWidth();
                 OnPropertyChanged(nameof(Width));
                 OnPropertyChanged(nameof(ScaledWidth));
             }
+        }
+
+        private double GetMinHeight()
+        {
+            return GetMinWidth();
+        }
+
+        private double GetMinWidth()
+        {
+            return Math.Pow(10.0, - DecimalPlaces);
         }
 
         [JsonIgnore]
