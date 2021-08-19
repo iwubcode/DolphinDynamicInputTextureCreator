@@ -77,15 +77,30 @@ namespace DolphinDynamicInputTextureCreator.Controls
             }
         }
 
+        /// <summary>
+        /// ScrollViewer mouse wheel functions
+        /// </summary>
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (e.Delta > 0)
+            // Mouse wheel + Ctrl = zoom
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
             {
-                ViewModel.InputPack.EditingTexture.ScaleFactor *= 1.1;
+                e.Handled = true;
+                if (e.Delta > 0)
+                {
+                    ViewModel.InputPack.EditingTexture.ScaleFactor *= 1.1;
+                }
+                else
+                {
+                    ViewModel.InputPack.EditingTexture.ScaleFactor /= 1.1;
+                }
             }
-            else
+            // Mouse wheel + Shift = horizontal scrolling
+            if (Keyboard.IsKeyDown(Key.LeftShift))
             {
-                ViewModel.InputPack.EditingTexture.ScaleFactor /= 1.1;
+                e.Handled = true;
+                double offset = scr.HorizontalOffset;
+                scr.ScrollToHorizontalOffset(offset+e.Delta/2);
             }
         }
     }
