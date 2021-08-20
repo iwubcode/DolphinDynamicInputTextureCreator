@@ -56,6 +56,11 @@ namespace DolphinDynamicInputTextureCreator.Data
                         _image_height = bmp.Height;
                         _image_width = bmp.Width;
                     }
+                    //Automatically select suitable zoom.
+                    if (ScaleFactor == 1)
+                    {
+                        SetInitialZoom();
+                    }
                 }
             }
         }
@@ -80,6 +85,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Returns true if the texture is editable
         /// </summary>
+        [JsonIgnore]
         public bool CanEditTexture
         {
             get
@@ -140,6 +146,15 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
         #endregion
+
+        public void SetInitialZoom(double absolutescale = 600)
+        {
+            if (ImageHeight <= 0 || ImageWidth <= 0)
+                return;
+
+            absolutescale /= (ImageHeight + ImageWidth) / 2;
+            ScaleFactor = absolutescale;
+        }
 
         #region COMMANDS
         private ICommand _delete_region_command;
