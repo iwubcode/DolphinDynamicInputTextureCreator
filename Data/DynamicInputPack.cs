@@ -44,6 +44,20 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
+        private string _generated_json_name = "output";
+        public string GeneratedJsonName
+        {
+            get
+            {
+                return _generated_json_name;
+            }
+            set
+            {
+                _generated_json_name = value;
+                OnPropertyChanged(nameof(GeneratedJsonName));
+            }
+        }
+
         private bool _preserve_aspect_ratio = true;
         public bool PreserveAspectRatio
         {
@@ -710,7 +724,7 @@ namespace DolphinDynamicInputTextureCreator.Data
 
         public void OutputToLocation(string location)
         {
-            WriteJson(Path.Combine(location, "output.json"));
+            WriteJson(Path.Combine(location, GeneratedJsonName+".json"));
             WriteImages(location);
         }
 

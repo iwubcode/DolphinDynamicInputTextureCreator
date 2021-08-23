@@ -27,6 +27,7 @@
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Emulated Devices..." Name="EditEmulatedDevices" Click="EditEmulatedDevices_Click"  />
                 <MenuItem Header="_Host Devices..." Name="EditHostDevices" Click="EditHostDevices_Click"   />
+                <MenuItem Header="_Metadata..." Name="EditMetadata" Click="EditMetadata_Click"   />
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Left" MinWidth="200">
