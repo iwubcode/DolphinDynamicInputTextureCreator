@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 namespace DolphinDynamicInputTextureCreator.Controls
 {
     /// <summary>
-    /// Interaktionslogik für metadata.xaml
+    /// Interaction logic for metadata.xaml
     /// </summary>
     public partial class Metadata : UserControl
     {
