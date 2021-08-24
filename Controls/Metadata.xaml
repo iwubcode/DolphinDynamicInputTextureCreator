@@ -29,6 +29,8 @@
             <TextBox Text="{Binding GeneratedFolderName, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
             <Label Content="Preserve aspect ratio:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
             <CheckBox IsChecked="{Binding PreserveAspectRatio, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0"/>
+            <Label Content="Game ID:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+            <TextBox Text="{Binding GameID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
 
         </Grid>
     </Grid>

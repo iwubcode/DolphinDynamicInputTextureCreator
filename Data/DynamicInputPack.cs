@@ -71,6 +71,24 @@ namespace DolphinDynamicInputTextureCreator.Data
                 OnPropertyChanged(nameof(PreserveAspectRatio));
             }
         }
+
+        private string _game_id = "";
+        public string GameID
+        {
+            get
+            {
+                return _game_id;
+            }
+            set
+            {
+                if (value.Length <= 6)
+                {
+                    _game_id = value.ToUpper();
+                }
+
+                OnPropertyChanged(nameof(GameID));
+            }
+        }
         #endregion
 
         #region DYNAMIC TEXTURE PROPERTIES
