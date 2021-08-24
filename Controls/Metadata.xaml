@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="DolphinDynamicInputTextureCreator.Controls.Metadata"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             mc:Ignorable="d" 
+             Height="220" Width="320">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Output json name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+            <TextBox Text="{Binding GeneratedJsonName, Mode=TwoWay}"  Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
+            <Label Content="Generated folder name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+            <TextBox Text="{Binding GeneratedFolderName, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
+            <Label Content="Preserve aspect ratio:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+            <CheckBox IsChecked="{Binding PreserveAspectRatio, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0"/>
+
+        </Grid>
+    </Grid>
+</UserControl>

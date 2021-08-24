@@ -39,6 +39,7 @@ namespace DolphinDynamicInputTextureCreator
 
         private Window _edit_emulated_devices_window;
         private Window _edit_host_devices_window;
+        private Window _edit_metadata_window;
 
         private Data.DynamicInputPack InputPack
         {
@@ -99,6 +100,25 @@ namespace DolphinDynamicInputTextureCreator
 
             UpdateEditWindows();
             _edit_emulated_devices_window.Show();
+        }
+
+        private void EditMetadata_Click(object sender, RoutedEventArgs e)
+        {
+            if (_edit_metadata_window != null)
+            {
+                _edit_metadata_window.Close();
+            }
+
+            _edit_metadata_window = new Window
+            {
+                Title = "Editing Metadata",
+                ResizeMode = ResizeMode.NoResize,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                Owner = Application.Current.MainWindow
+            };
+
+            UpdateEditWindows();
+            _edit_metadata_window.Show();
         }
 
         public static RoutedUICommand SaveAsCmd = new RoutedUICommand("Save as...", "SaveAsCmd", typeof(MainWindow));
@@ -191,6 +211,12 @@ namespace DolphinDynamicInputTextureCreator
             {
                 var user_control = new Controls.EditHostDevices { DataContext = InputPack };
                 _edit_host_devices_window.Content = user_control;
+            }
+
+            if (_edit_metadata_window != null)
+            {
+                var user_control = new Controls.Metadata { DataContext = InputPack };
+                _edit_metadata_window.Content = user_control;
             }
         }
     }
