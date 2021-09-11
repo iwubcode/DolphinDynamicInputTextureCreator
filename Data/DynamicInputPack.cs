@@ -792,6 +792,10 @@ namespace DolphinDynamicInputTextureCreator.Data
             {
                 foreach (var key in device.HostKeys)
                 {
+                    // skip if the file does not exist.
+                    if (!File.Exists(key.TexturePath))
+                        continue;
+
                     const bool overwrite = true;
                     var texture_location = GetHostDeviceKeyTextureLocation(location, device, key);
                     Directory.CreateDirectory(Path.GetDirectoryName(texture_location));
