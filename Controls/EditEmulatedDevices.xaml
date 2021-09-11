@@ -6,15 +6,17 @@
              xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
              xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
              mc:Ignorable="d" 
-             Height="400" Width="500">
+             MinHeight="300"
+             MinWidth="400"
+             >
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition MaxWidth="200" Width="*"/>
+                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Margin="1 0 0 1">
                 <Grid.RowDefinitions>
