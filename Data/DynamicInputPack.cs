@@ -364,6 +364,130 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         #endregion
+		
+        #region Import
+
+        #region JSON Read HELPERS
+        private void ReadHostControls(JsonReader reader, string path, IList<HostDevice> hostDevices)
+        {
+            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            {
+                if (reader.TokenType == JsonToken.PropertyName)
+                {
+                    HostDevice Device = new HostDevice { Name = reader.Value.ToString() };
+                    while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+                    {
+                        if (reader.TokenType == JsonToken.PropertyName)
+                        {
+                            HostKey key = new HostKey();
+                            key.Name = reader.Value.ToString();
+                            key.RelativeTexturePath = reader.ReadAsString();
+                            key.TexturePath = Path.Combine(path, key.RelativeTexturePath);
+                            Device.HostKeys.Add(key);
+                        }
+                    }
+                    hostDevices.Add(Device);
+                }
+            }
+        }
+
+        private void ReadEmulatedControls(JsonReader Reader, DynamicInputTexture texture)
+        {
+            while (Reader.Read() && Reader.TokenType != JsonToken.EndObject)
+            {
+                if (Reader.TokenType == JsonToken.PropertyName)
+                {
+                    EmulatedDevice emulatedDevice = new EmulatedDevice { Name = Reader.Value.ToString() };
+                    while (Reader.Read() && Reader.TokenType != JsonToken.EndObject)
+                    {
+                        if (Reader.TokenType == JsonToken.PropertyName)
+                        {
+                            EmulatedKey emulatedkey = new EmulatedKey { Name = Reader.Value.ToString() };
+                            if (!emulatedDevice.EmulatedKeys.Contains(emulatedkey))
+                                emulatedDevice.EmulatedKeys.Add(emulatedkey);
+
+                            Reader.Read();
+                            while (Reader.Read() && Reader.TokenType != JsonToken.EndArray)
+                            {
+                                if (Reader.TokenType == JsonToken.StartArray)
+                                {
+                                    RectRegion Region = new RectRegion { Device = emulatedDevice, Key = emulatedkey, OwnedTexture = texture, ScaleFactor = 1 };
+                                    Region.X = Reader.ReadAsDouble().Value;
+                                    Region.Y = Reader.ReadAsDouble().Value;
+                                    Region.Width = Reader.ReadAsDouble().Value - Region.X;
+                                    Region.Height = Reader.ReadAsDouble().Value - Region.Y;
+                                    Reader.Read();
+                                    //set Region
+                                    texture.Regions.Add(Region);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        public void ImportFromLocation(string file) => ReadJson(file);
+        private void ReadJson(string file)
+        {
+            string path = Path.GetDirectoryName(file);
+            GeneratedJsonName = Path.GetFileNameWithoutExtension(file);
+            using (FileStream fs = File.Open(file, FileMode.Open))
+            using (StreamReader sr = new StreamReader(fs))
+            using (JsonReader Reader = new JsonTextReader(sr))
+            {
+                while (Reader.Read())
+                {
+                    if (Reader.TokenType == JsonToken.PropertyName)
+                    {
+                        switch (Reader.Value)
+                        {
+                            case "default_host_controls":
+                                ReadHostControls(Reader, path, HostDevices);
+                                break;
+                            case "generated_folder_name":
+                                GeneratedFolderName = Reader.ReadAsString();
+                                break;
+                            case "preserve_aspect_ratio":
+                                PreserveAspectRatio = Reader.ReadAsBoolean().Value;
+                                break;
+                            case "output_textures":
+                                while (Reader.Read() && Reader.TokenType != JsonToken.EndObject)
+                                {
+                                    if (Reader.TokenType == JsonToken.PropertyName)
+                                    {
+                                        DynamicInputTexture texture = new DynamicInputTexture { TextureHash = Reader.Value.ToString() };
+                                        while (Reader.Read() && Reader.TokenType != JsonToken.EndObject)
+                                        {
+                                            if (Reader.TokenType == JsonToken.PropertyName)
+                                            {
+                                                switch (Reader.Value)
+                                                {
+                                                    case "image":
+                                                        texture.RelativeTexturePath = Reader.ReadAsString();
+                                                        texture.TexturePath = Path.Combine(path, texture.RelativeTexturePath);
+                                                        break;
+                                                    case "host_controls":
+                                                        ReadHostControls(Reader, path, texture.HostDevices);
+                                                        break;
+                                                    case "emulated_controls":
+                                                        ReadEmulatedControls(Reader, texture);
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                        Textures.Add(texture);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+		
+        #endregion
 
         /// <summary>
         /// Given a texture will return a mapping between each emulated device name and map of key name to list of regions

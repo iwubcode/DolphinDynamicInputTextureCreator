@@ -18,7 +18,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         public new UICollection<DynamicInputTexture> Textures
         {
-            get => _textures ??= Textures = new UICollection<DynamicInputTexture>();
+            get => _textures ??= Textures = new UICollection<DynamicInputTexture>(base.Textures);
             set
             {
                 base.Textures = _textures = value;
@@ -34,7 +34,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         public new UICollection<HostDevice> HostDevices
         {
-            get => _host_devices ??= HostDevices = new UICollection<HostDevice>();
+            get => _host_devices ??= HostDevices = new UICollection<HostDevice>(base.HostDevices);
             set
             {
                 base.HostDevices = _host_devices = value;

@@ -160,6 +160,20 @@ namespace DolphinDynamicInputTextureCreator
             }
         }
 
+        private void ImportData_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.OpenFileDialog();
+            dialog.Filter = "JSON Files (*.json)|*.json";
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                Data.DynamicInputPack inputPack = new Data.DynamicInputPack();
+                inputPack.ImportFromLocation(dialog.FileName);
+                SetInputPack(inputPack);
+                UpdateEditWindows();
+            }
+        }
+
         private void OpenData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
