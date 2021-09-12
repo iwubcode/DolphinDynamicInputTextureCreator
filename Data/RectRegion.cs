@@ -1,4 +1,6 @@
-﻿namespace DolphinDynamicInputTextureCreator.Data
+﻿using Newtonsoft.Json;
+
+namespace DolphinDynamicInputTextureCreator.Data
 {
     public class RectRegion : Other.PropertyChangedBase
     {
@@ -120,6 +122,7 @@
             }
         }
 
+        [JsonIgnore]
         public double ScaledX
         {
             get
@@ -131,6 +134,8 @@
                 X = value / ScaleFactor;
             }
         }
+
+        [JsonIgnore]
         public double ScaledY
         {
             get
@@ -142,6 +147,8 @@
                 Y = value / ScaleFactor;
             }
         }
+
+        [JsonIgnore]
         public double ScaledWidth
         {
             get 
@@ -154,6 +161,7 @@
             }
         }
 
+        [JsonIgnore]
         public double ScaledHeight
         {
             get
