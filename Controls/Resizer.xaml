@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="Transparent">
 
-        <Thumb DragDelta="Center_DragDelta" Height="10" Width="10"
+        <Thumb DragDelta="Center_DragDelta" Height="24" Width="24" Opacity="0.3"
                VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         <Thumb DragDelta="UpperLeft_DragDelta" Height="10" Width="10"
@@ -23,5 +23,16 @@
         <Thumb DragDelta="LowerRight_DragDelta" Height="10" Width="10"
                VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
 
+        <Thumb DragDelta="Upper_DragDelta" Height="8" Width="20"
+               VerticalAlignment="Top" HorizontalAlignment="Center"/>
+
+        <Thumb DragDelta="Lower_DragDelta" Height="8" Width="20"
+               VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        
+        <Thumb DragDelta="Left_DragDelta" Height="20" Width="8"
+               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+        <Thumb DragDelta="Right_DragDelta" Height="20" Width="8"
+               VerticalAlignment="Center" HorizontalAlignment="Right"/>
     </Grid>
 </UserControl>

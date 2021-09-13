@@ -21,13 +21,17 @@
                 <Grid.Background>
                     <SolidColorBrush Color="Black" Opacity="0.25" />
                 </Grid.Background>
-                <Path x:Name="Path" StrokeThickness="2" Stroke="Black"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Path Grid.RowSpan="2" x:Name="Path" StrokeThickness="2" Stroke="Black"
                   Stretch="Fill">
                     <Path.Data>
                         <RectangleGeometry Rect="0,0,10,10"/>
                     </Path.Data>
                 </Path>
-                <Viewbox>
+                <Viewbox Grid.Row="0">
                     <StackPanel>
                         <Label Content="{Binding Device.Name}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
                             <Label.Effect>
@@ -41,7 +45,36 @@
                         </Label>
                     </StackPanel>
                 </Viewbox>
-                <controls:Resizer Visibility="Collapsed"
+                <Viewbox Grid.Row="1" >
+                    <StackPanel Orientation="Horizontal" Margin="1,0">
+                        <Label  Content="{Binding X}" ContentStringFormat="0.#" Foreground="White" Padding="0" >
+                            <Label.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
+                            </Label.Effect>
+                        </Label>
+                        <Label Content="{Binding Y}" ContentStringFormat="0.#" Foreground="White" Padding="6,0" >
+                            <Label.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
+                            </Label.Effect>
+                        </Label>
+                        <Label Content="{Binding Width}"  ContentStringFormat="0.#" Foreground="White"  Padding="0">
+                            <Label.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
+                            </Label.Effect>
+                        </Label>
+                        <Label Content="x"  ContentStringFormat="0.#" Foreground="White"  Padding="1,0">
+                            <Label.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
+                            </Label.Effect>
+                        </Label>
+                        <Label Content="{Binding Height}" ContentStringFormat="0.#" Foreground="White"  Padding="0">
+                            <Label.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
+                            </Label.Effect>
+                        </Label>
+                    </StackPanel>
+                </Viewbox>
+                <controls:Resizer Grid.RowSpan="2" Visibility="Collapsed"
                                   X="{Binding ScaledX}" Y="{Binding ScaledY}"
                                   ItemWidth="{Binding ScaledWidth}"
                                   ItemHeight="{Binding ScaledHeight}"

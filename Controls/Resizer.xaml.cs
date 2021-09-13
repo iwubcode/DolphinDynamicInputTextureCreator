@@ -53,6 +53,11 @@ namespace DolphinDynamicInputTextureCreator.Controls
             InitializeComponent();
         }
 
+        private void Upper_DragDelta(object sender, DragDeltaEventArgs e) => Expand_Up(e.VerticalChange);
+        private void Lower_DragDelta(object sender, DragDeltaEventArgs e) => Expand_Down(e.VerticalChange);
+        private void Left_DragDelta(object sender, DragDeltaEventArgs e) => Expand_Left(e.HorizontalChange);
+        private void Right_DragDelta(object sender, DragDeltaEventArgs e) => Expand_Right(e.HorizontalChange);
+
         private void UpperLeft_DragDelta(object sender, DragDeltaEventArgs e)
         {
             Expand_Up(e.VerticalChange);
