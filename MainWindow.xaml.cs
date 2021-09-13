@@ -250,9 +250,10 @@ namespace DolphinDynamicInputTextureCreator
             if (MessageResult == MessageBoxResult.Yes)
             {
                 var dialog = new System.Windows.Forms.OpenFileDialog();
-                dialog.FileName = name;
+                dialog.FileName = System.IO.Path.GetFileName(path);
                 dialog.DefaultExt = ".png";
-                dialog.Filter = "PNG Files (*.png)|*.png";
+                dialog.Filter = "Original Name |" + dialog.FileName;
+                dialog.Filter += "|PNG Files (*.png)|*.png";
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
