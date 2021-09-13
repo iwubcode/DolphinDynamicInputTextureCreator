@@ -81,11 +81,11 @@ namespace DolphinDynamicInputTextureCreator.Controls
         {
             if (e.Delta > 0)
             {
-                ViewModel.InputPack.EditingTexture.ScaleFactor += 0.1;
+                ViewModel.InputPack.EditingTexture.ScaleFactor *= 1.1;
             }
             else
             {
-                ViewModel.InputPack.EditingTexture.ScaleFactor -= 0.1;
+                ViewModel.InputPack.EditingTexture.ScaleFactor /= 1.1;
             }
         }
     }
