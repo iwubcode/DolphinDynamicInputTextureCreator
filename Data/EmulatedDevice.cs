@@ -221,9 +221,25 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
+        [JsonIgnore]
+        public ICommand AddAllKeyCommand
+        {
+            get { return new RelayCommand(AddAllKey); }
+        }
+
+        private void AddAllKey(object obj)
+        {
+            string name;
+            while ((name = GetNextSugges()) != "")
+            {
+                AddKey(name);
+            }
+        }
+
         private void AddKey(object obj)
         {
-            string name = GetNextSugges();
+            string name;
+            name = obj == null ? GetNextSugges() : obj.ToString();
 
             EmulatedKeys.Add(
                 new EmulatedKey

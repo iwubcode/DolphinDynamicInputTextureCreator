@@ -14,7 +14,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Content="Add Emulated Key" Command="{Binding AddKeyCommand}" />
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Add Emulated Key" Command="{Binding AddKeyCommand}" />
+            <Button Grid.Column="1" Content="Add All" Command="{Binding AddAllKeyCommand}" />
+        </Grid>
         <ScrollViewer Grid.Row="1">
             <ItemsControl ItemsSource="{Binding EmulatedKeys}">
                 <ItemsControl.ItemsPanel>
