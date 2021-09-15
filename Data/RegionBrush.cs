@@ -48,6 +48,21 @@ namespace DolphinDynamicInputTextureCreator.Data
                 OnPropertyChanged(nameof(FillRegion));
             }
         }
+
+        /// <summary>
+        /// whether subpixels are used.
+        /// </summary>
+        private bool _subpixel;
+        public bool Subpixel
+        {
+            get { return _subpixel; }
+            set
+            {
+                _subpixel = value;
+                RectRegion.DecimalPlaces = value ? 1 : 0;
+                OnPropertyChanged(nameof(Subpixel));
+            }
+        }
         #endregion
     }
 }
