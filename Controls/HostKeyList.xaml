@@ -23,7 +23,7 @@
  
             <Button Grid.Column="1" Content="Add Host Key(s)" x:Name="AddHostKey" Click="AddHostKey_Click" />
         </Grid>
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" AllowDrop="True" Drop="AddHostKey_DragEnter">
             <ItemsControl ItemsSource="{Binding HostKeys}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

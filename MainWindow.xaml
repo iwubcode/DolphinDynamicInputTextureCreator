@@ -88,7 +88,7 @@
                         </Style>
                     </ComboBox.Style>
                 </ComboBox>
-                <CheckBox Margin="5 0 5 0" Content="Fill texture?" IsChecked="{Binding SelectedRegionBrush.FillRegion}" VerticalAlignment="Center" />
+                <Button Margin="5,0,5,0" MinWidth="35" Content="Fill Region" VerticalAlignment="Center" Click="ButtonFill_Click"/>
                 <CheckBox Margin="5 0 5 0" Content="Use subpixel?" IsChecked="{Binding SelectedRegionBrush.Subpixel}" VerticalAlignment="Center" />
             </StackPanel>
             <controls:PanZoom x:Name="PanZoom" Grid.Row="1"></controls:PanZoom>

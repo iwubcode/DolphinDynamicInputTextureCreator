@@ -52,5 +52,24 @@ namespace DolphinDynamicInputTextureCreator.Controls
                 }
             }
         }
+
+        /// <summary>
+        /// catches dropped files and adds them to the texture list.
+        /// </summary>
+        private void AddTexture_DragEnter(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            foreach (string file in files)
+            {
+                if (System.IO.Path.GetExtension(file).ToLower() == ".png")
+                {
+                    InputPack.Textures.Add(new Data.DynamicInputTexture
+                    {
+                        TextureHash = InputPack.ShouldGetHashFromTextureFilename ? System.IO.Path.GetFileName(file) : "hash value",
+                        TexturePath = file
+                    });
+                }
+            }
+        }
     }
 }

@@ -36,20 +36,6 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         /// <summary>
-        /// Whether to fill the entire image with the region
-        /// </summary>
-        private bool _fill_region;
-        public bool FillRegion
-        {
-            get { return _fill_region; }
-            set
-            {
-                _fill_region = value;
-                OnPropertyChanged(nameof(FillRegion));
-            }
-        }
-
-        /// <summary>
         /// whether subpixels are used.
         /// </summary>
         private bool _subpixel;

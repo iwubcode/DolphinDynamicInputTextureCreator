@@ -69,6 +69,38 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         private System.Nullable<Point> _last_pan_position;
 
         /// <summary>
+        /// adds a filled region.
+        /// </summary>
+        public void FillRegion()
+        {
+            if (InputPack.SelectedRegionBrush.SelectedEmulatedDevice == null || InputPack.SelectedRegionBrush.SelectedEmulatedKey == null)
+            {
+                return;
+            }
+
+            Data.RectRegion f = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = 0, Y = 0, Height = InputPack.EditingTexture.ImageHeight, Width = InputPack.EditingTexture.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
+
+            //one fill region is enough
+            if (InputPack.EditingTexture.Regions.Count > 0)
+            {
+                foreach (Data.RectRegion r in InputPack.EditingTexture.Regions)
+                {
+                    if (r.X == f.X & r.Y == f.Y & r.Width == f.Width & r.Height == f.Height)
+                    {
+                        r.Device = f.Device;
+                        r.Key = f.Key;
+                    }
+                }
+
+                return;
+            }
+
+
+            InputPack.EditingTexture.Regions.Add(f);
+
+        }
+
+        /// <summary>
         /// Given a point, will create a new region if we did not click on a separate region
         /// </summary>
         /// <param name="p"></param>
@@ -90,21 +122,9 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 }
             }
 
-            if (InputPack.SelectedRegionBrush.FillRegion)
-            {
-                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = 0, Y = 0, Height = InputPack.EditingTexture.ImageHeight, Width = InputPack.EditingTexture.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
-            }
-            else
-            {
-                _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
-            }
+            _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
             InputPack.EditingTexture.Regions.Add(_currently_creating_region);
 
-            if (InputPack.SelectedRegionBrush.FillRegion)
-            {
-                // No need to continue, operation is finished
-                _currently_creating_region = null;
-            }
         }
 
         /// <summary>

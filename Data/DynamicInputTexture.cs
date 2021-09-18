@@ -1,6 +1,7 @@
 ﻿using DolphinDynamicInputTextureCreator.Other;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
@@ -56,6 +57,11 @@ namespace DolphinDynamicInputTextureCreator.Data
                         _image_height = bmp.Height;
                         _image_width = bmp.Width;
                     }
+                    //Automatically select suitable zoom.
+                    if (ScaleFactor == 1)
+                    {
+                        SetInitialZoom();
+                    }
                 }
             }
         }
@@ -80,6 +86,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// Returns true if the texture is editable
         /// </summary>
+        [JsonIgnore]
         public bool CanEditTexture
         {
             get
@@ -134,12 +141,28 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
             set
             {
-                _scale_factor = value;
+                _scale_factor = Smooth(value,2);
                 OnPropertyChanged(nameof(ScaleFactor));
-                Regions.ToList().ForEach(x => x.ScaleFactor = value);
+                Regions.ToList().ForEach(x => x.ScaleFactor = _scale_factor);
             }
         }
         #endregion
+
+        private double Smooth(double value, int accuracy)
+        {
+            double factor = ((int)value * 10).ToString().Length;
+            factor = Math.Pow(10, factor);
+            return Math.Round(value / factor, accuracy + 1) * factor;
+        }
+
+        public void SetInitialZoom(double absolutescale = 600)
+        {
+            if (ImageHeight <= 0 || ImageWidth <= 0)
+                return;
+
+            absolutescale /= (ImageHeight + ImageWidth) / 2;
+            ScaleFactor = absolutescale;
+        }
 
         #region COMMANDS
         private ICommand _delete_region_command;

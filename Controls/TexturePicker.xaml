@@ -16,7 +16,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0">
+        <ScrollViewer Grid.Row="0" AllowDrop="True" Drop="AddTexture_DragEnter">
             <ItemsControl ItemsSource="{Binding Textures}" HorizontalAlignment="Stretch">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
