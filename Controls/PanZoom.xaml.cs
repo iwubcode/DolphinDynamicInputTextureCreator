@@ -88,11 +88,11 @@ namespace DolphinDynamicInputTextureCreator.Controls
                 e.Handled = true;
                 if (e.Delta > 0)
                 {
-                    ViewModel.InputPack.EditingTexture.ScaleFactor *= 1.1;
+                    ViewModel.InputPack.Textures.Selected.ScaleFactor *= 1.1;
                 }
                 else
                 {
-                    ViewModel.InputPack.EditingTexture.ScaleFactor /= 1.1;
+                    ViewModel.InputPack.Textures.Selected.ScaleFactor /= 1.1;
                 }
             }
             // Mouse wheel + Shift = horizontal scrolling

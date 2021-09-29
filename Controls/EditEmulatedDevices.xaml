@@ -11,6 +11,10 @@
              >
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:ConverterCombinationConverter x:Key="InvertBoolToVis">
+            <converters:InvertBoolConverter />
+            <BooleanToVisibilityConverter />
+        </converters:ConverterCombinationConverter>
     </UserControl.Resources>
     <Grid>
         <Grid>
@@ -23,7 +27,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListBox ItemsSource="{Binding EmulatedDevices}" SelectedItem="{Binding SelectedEmulatedDevice}" Grid.Row="0" Margin="0 0 0 1">
+                <ListBox ItemsSource="{Binding EmulatedDevices}" SelectedItem="{Binding EmulatedDevices.Selected}" AllowDrop="True"  Grid.Row="0" Margin="0 0 0 1">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" />
@@ -35,24 +39,24 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Button Content="Add" Command="{Binding AddEmulatedDeviceCommand}" Grid.Column="0" Margin="0 0 2 0" />
-                    <Button Content="Delete" Command="{Binding DeleteEmulatedDeviceCommand}" CommandParameter="{Binding SelectedEmulatedDevice}" Grid.Column="1" Margin="2 0 2 0" />
+                    <Button Content="Add" Command="{Binding InputNewEmulatedDevice.SetToVisibleCommand}" Grid.Column="0" Margin="0 0 2 0"  CommandParameter="{Binding ElementName=NewInput}" />
+                    <Button Content="Delete" Command="{Binding EmulatedDevices.RemoveSelectedCommand}" Grid.Column="1" Margin="2 0 2 0" />
                 </Grid>
             </Grid>
             <Grid Grid.Column="1">
-                <Grid Margin="0 1 0 1" Visibility="{Binding AreEmulatedDeviceDetailsVisible, Converter={StaticResource BoolToVis}}">
+                <Grid Margin="0 1 0 1" Visibility="{Binding EmulatedDevices.ValidSelection, Converter={StaticResource BoolToVis}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <local:EmulatedKeyList DataContext="{Binding SelectedEmulatedDevice}"></local:EmulatedKeyList>
                 </Grid>
-                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsEmulatedDeviceHelpVisible, Converter={StaticResource BoolToVis}}">
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding EmulatedDevices.ValidSelection, Converter={StaticResource InvertBoolToVis}}">
                     <TextBlock Text="Click the 'Add' button to the left to get started." />
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Visibility="{Binding IsEditingNewEmulatedDeviceName, Converter={StaticResource BoolToVis}}">
+        <Grid Visibility="{Binding InputNewEmulatedDevice.Visibility, Mode=OneWay}">
             <Grid Background="Black" Opacity="0.5"/>
             <Border
             MinWidth="250"
@@ -64,10 +68,10 @@
             VerticalAlignment="Center">
                 <StackPanel>
                     <TextBlock Margin="2" Text="Emulated Device Name:" FontWeight="Bold" FontFamily="Cambria" />
-                    <ComboBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding NewEmulatedDeviceInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding EmulatedDeviceSuggestions}" />
+                    <ComboBox x:Name="NewInput" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" TextSearch.TextPath="" ItemsSource="{Binding EmulatedDeviceSuggestions.Available}" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
-                        <Button Content="Ok" Command="{Binding OkNewEmulatedDeviceCommand}" IsEnabled="{Binding HasNewEmulatedDeviceInput}" />
-                        <Button Content="Cancel" Command="{Binding CancelNewEmulatedDeviceCommand}" />
+                        <Button Content="Ok" Command="{Binding InputNewEmulatedDeviceOKCommand}" CommandParameter="{Binding ElementName=NewInput, Path=Text}" />
+                        <Button Content="Cancel" Command="{Binding InputNewEmulatedDevice.SetToCollapsCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Border>

@@ -178,45 +178,5 @@ namespace DolphinDynamicInputTextureCreator.Data
             absolutescale /= (ImageHeight + ImageWidth) / 2;
             ScaleFactor = absolutescale;
         }
-
-        #region COMMANDS
-        private ICommand _delete_region_command;
-        [JsonIgnore]
-        public ICommand DeleteRegionCommand
-        {
-            get
-            {
-                if (_delete_region_command == null)
-                {
-                    _delete_region_command = new RelayCommand(param => DeleteRegion((RectRegion)param));
-                }
-                return _delete_region_command;
-            }
-        }
-
-        private void DeleteRegion(RectRegion region)
-        {
-            Regions.Remove(region);
-        }
-
-        private ICommand _reset_scale_factor;
-        [JsonIgnore]
-        public ICommand ResetScaleFactorCommand
-        {
-            get
-            {
-                if (_reset_scale_factor == null)
-                {
-                    _reset_scale_factor = new RelayCommand(ResetScaleFactor);
-                }
-                return _reset_scale_factor;
-            }
-        }
-
-        private void ResetScaleFactor(object obj)
-        {
-            ScaleFactor = 1;
-        }
-        #endregion
     }
 }

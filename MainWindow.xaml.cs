@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DolphinDynamicInputTextureCreator.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,14 +28,14 @@ namespace DolphinDynamicInputTextureCreator
         {
             InitializeComponent();
             this.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            SetInputPack(new Data.DynamicInputPack());
+            SetInputPack(new DynamicInputPackViewModel());
         }
 
-        private void SetInputPack(Data.DynamicInputPack pack)
+        private void SetInputPack(DynamicInputPackViewModel pack)
         {
             DataContext = pack;
             CheckInputPackTexturePathes(InputPack);
-            ((ViewModels.PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
+            ((PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
             UnsavedChanges = false;
         }
 
@@ -44,11 +45,11 @@ namespace DolphinDynamicInputTextureCreator
         private Window _edit_host_devices_window;
         private Window _edit_metadata_window;
 
-        private Data.DynamicInputPack InputPack
+        private DynamicInputPackViewModel InputPack
         {
             get
             {
-                return (Data.DynamicInputPack)DataContext;
+                return (DynamicInputPackViewModel)DataContext;
             }
         }
 
@@ -153,7 +154,7 @@ namespace DolphinDynamicInputTextureCreator
             {
                 string input = File.ReadAllText(dialog.FileName);
                 var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
-                SetInputPack(JsonConvert.DeserializeObject<Data.DynamicInputPack>(input, settings));
+                SetInputPack(JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings));
                 _saved_document = dialog.FileName;
                 UpdateEditWindows();
             }
@@ -168,7 +169,7 @@ namespace DolphinDynamicInputTextureCreator
         #region NEW
         private void NewData_Click(object sender, RoutedEventArgs e)
         {
-            SetInputPack(new Data.DynamicInputPack());
+            SetInputPack(new DynamicInputPackViewModel());
             UpdateEditWindows();
             _saved_document = null;
         }
@@ -222,7 +223,7 @@ namespace DolphinDynamicInputTextureCreator
         }
 
         #region Test
-        public void CheckInputPackTexturePathes(Data.DynamicInputPack inputPack)
+        public void CheckInputPackTexturePathes(DynamicInputPackViewModel inputPack)
         {
             foreach (Data.HostDevice device in inputPack.HostDevices)
             {
