@@ -67,18 +67,16 @@ namespace DolphinDynamicInputTextureCreator
 
         private void EditHostDevices_Click(object sender, RoutedEventArgs e)
         {
-            if (_edit_host_devices_window != null)
-            {
-                _edit_host_devices_window.Close();
-            }
+            _edit_host_devices_window?.Close();
 
             _edit_host_devices_window = new Window
             {
                 Title = "Editing Host Devices",
                 ResizeMode = ResizeMode.CanResize,
-                SizeToContent = SizeToContent.Height,
+                SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
-                Width = 500, MinWidth = 500, MinHeight = 400
+                Top = this.Top + 50, Left = this.Left + 70,
+                Width = 620, Height = 550, MinWidth = 500, MinHeight = 400
             };
 
             UpdateEditWindows();
@@ -87,18 +85,16 @@ namespace DolphinDynamicInputTextureCreator
 
         private void EditEmulatedDevices_Click(object sender, RoutedEventArgs e)
         {
-            if (_edit_emulated_devices_window != null)
-            {
-                _edit_emulated_devices_window.Close();
-            }
+            _edit_emulated_devices_window?.Close();
 
             _edit_emulated_devices_window = new Window
             {
                 Title = "Editing Emulated Devices",
                 ResizeMode = ResizeMode.CanResize,
-                SizeToContent = SizeToContent.Height,
+                SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
-                Width= 500, MinWidth = 500, MinHeight = 400
+                Top = this.Top + 50, Left = this.Left + 70,
+                Width = 620, Height = 550, MinWidth = 500, MinHeight = 400
             };
 
             UpdateEditWindows();
@@ -107,17 +103,15 @@ namespace DolphinDynamicInputTextureCreator
 
         private void EditMetadata_Click(object sender, RoutedEventArgs e)
         {
-            if (_edit_metadata_window != null)
-            {
-                _edit_metadata_window.Close();
-            }
+            _edit_metadata_window?.Close();
 
             _edit_metadata_window = new Window
             {
                 Title = "Editing Metadata",
                 ResizeMode = ResizeMode.NoResize,
                 SizeToContent = SizeToContent.WidthAndHeight,
-                Owner = Application.Current.MainWindow
+                Owner = Application.Current.MainWindow,
+                Top = this.Top + 50, Left = this.Left + 70
             };
 
             UpdateEditWindows();
