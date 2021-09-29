@@ -1,25 +1,21 @@
-﻿using DolphinDynamicInputTextureCreator.Other;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace DolphinDynamicInputTextureCreator.Data
 {
     [JsonObject(IsReference = true)]
     public class EmulatedDevice : Other.PropertyChangedBase
     {
+
+        #region PROPERTIES
+
         /// <summary>
         /// The name of the emulated device, ex: "Wiimote1"
         /// </summary>
-        private string _name;
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get => _name;
             set
             {
                 _name = value;
@@ -143,23 +139,21 @@ namespace DolphinDynamicInputTextureCreator.Data
                 }
             }
         }
+        private string _name;
 
         /// <summary>
         /// Emulated keys accounted for by this device
         /// </summary>
-        private ObservableCollection<EmulatedKey> _keys = new ObservableCollection<EmulatedKey>();
         public ObservableCollection<EmulatedKey> EmulatedKeys
         {
-            get
-            {
-                return _keys;
-            }
+            get => _emulated_keys;
             set
             {
-                _keys = value;
+                _emulated_keys = value;
                 OnPropertyChanged(nameof(EmulatedKeys));
             }
         }
+        private ObservableCollection<EmulatedKey> _emulated_keys = new ObservableCollection<EmulatedKey>();
 
         private EmulatedKey _selected_key;
         public EmulatedKey SelectedKey

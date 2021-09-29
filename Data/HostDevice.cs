@@ -1,24 +1,21 @@
-﻿using DolphinDynamicInputTextureCreator.Other;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace DolphinDynamicInputTextureCreator.Data
 {
     [JsonObject(IsReference = true)]
     public class HostDevice : Other.PropertyChangedBase
     {
+
+        #region Properties
+
         /// <summary>
         /// The name of this host device, ex: "DInput/0/Keyboard Mouse"
         /// </summary>
-        private string _name;
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get => _name;
             set
             {
                 _name = value;
@@ -177,24 +174,21 @@ namespace DolphinDynamicInputTextureCreator.Data
                 }
             }
         }
+        private string _name;
 
         /// <summary>
         /// The keys mapped for this device
         /// </summary>
-        private ObservableCollection<HostKey> _host_keys = new ObservableCollection<HostKey>();
-
         public ObservableCollection<HostKey> HostKeys
         {
-            get
-            {
-                return _host_keys;
-            }
+            get => _host_keys;
             set
             {
                 _host_keys = value;
                 OnPropertyChanged(nameof(HostKeys));
             }
         }
+        private ObservableCollection<HostKey> _host_keys = new ObservableCollection<HostKey>();
 
         private ObservableCollection<string> _search_suggestions = new ObservableCollection<string>();
         [JsonIgnore]
@@ -231,5 +225,6 @@ namespace DolphinDynamicInputTextureCreator.Data
             HostKeys.Remove(key);
         }
         #endregion
+
     }
 }

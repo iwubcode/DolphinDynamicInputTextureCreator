@@ -14,7 +14,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         private EmulatedDevice _emulated_device;
         public EmulatedDevice Device
         {
-            get { return _emulated_device; }
+            get => _emulated_device;
             set
             {
                 _emulated_device = value;
@@ -25,7 +25,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         private EmulatedKey _emulated_key;
         public EmulatedKey Key
         {
-            get { return _emulated_key; }
+            get => _emulated_key;
             set
             {
                 _emulated_key = value;
@@ -36,7 +36,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         private DynamicInputTexture _owned_texture;
         public DynamicInputTexture OwnedTexture
         {
-            get { return _owned_texture; }
+            get => _owned_texture;
             set
             {
                 _owned_texture = value;
@@ -48,25 +48,11 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
-        private double _scale_factor;
-        public double ScaleFactor
-        {
-            get { return _scale_factor; }
-            set
-            {
-                _scale_factor = value;
-                OnPropertyChanged(nameof(ScaleFactor));
-                OnPropertyChanged(nameof(ScaledX));
-                OnPropertyChanged(nameof(ScaledY));
-                OnPropertyChanged(nameof(ScaledHeight));
-                OnPropertyChanged(nameof(ScaledWidth));
-            }
-        }
 
         private double _x;
         public double X
         {
-            get { return _x; }
+            get => _x;
             set
             {
                 _x = Math.Round(value, DecimalPlaces);
@@ -87,7 +73,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         private double _y;
         public double Y
         {
-            get { return _y; }
+            get => _y;
             set
             {
                 _y = Math.Round(value, DecimalPlaces);
@@ -108,7 +94,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         private double _height;
         public double Height
         {
-            get { return _height; }
+            get => _height;
             set
             {
                 _height = Math.Round(value, DecimalPlaces);
@@ -127,7 +113,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         private double _width;
         public double Width
         {
-            get { return _width; }
+            get => _width;
             set
             {
                 _width = Math.Round(value, DecimalPlaces);
@@ -143,66 +129,52 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
-        private double GetMinHeight()
-        {
-            return GetMinWidth();
-        }
+        private double GetMinHeight() => GetMinWidth();
 
-        private double GetMinWidth()
+        private double GetMinWidth() => Math.Pow(10.0, -DecimalPlaces);
+
+
+        // part of the ViewModels
+
+        internal double ScaleFactor
         {
-            return Math.Pow(10.0, - DecimalPlaces);
+            get => OwnedTexture.ScaleFactor;
+            set
+            {
+                OnPropertyChanged(nameof(ScaleFactor));
+                OnPropertyChanged(nameof(ScaledX));
+                OnPropertyChanged(nameof(ScaledY));
+                OnPropertyChanged(nameof(ScaledHeight));
+                OnPropertyChanged(nameof(ScaledWidth));
+            }
         }
 
         [JsonIgnore]
         public double ScaledX
         {
-            get
-            {
-                return X * ScaleFactor;
-            }
-            set
-            {
-                X = value / ScaleFactor;
-            }
+            get => X * ScaleFactor;
+            set => X = value / ScaleFactor;
         }
 
         [JsonIgnore]
         public double ScaledY
         {
-            get
-            {
-                return Y * ScaleFactor;
-            }
-            set
-            {
-                Y = value / ScaleFactor;
-            }
+            get => Y * ScaleFactor;
+            set => Y = value / ScaleFactor;
         }
 
         [JsonIgnore]
         public double ScaledWidth
         {
-            get 
-            {
-                return Width * ScaleFactor;
-            }
-            set
-            {
-                Width = value / ScaleFactor;
-            }
+            get => Width * ScaleFactor;
+            set => Width = value / ScaleFactor;
         }
 
         [JsonIgnore]
         public double ScaledHeight
         {
-            get
-            {
-                return Height * ScaleFactor;
-            }
-            set
-            {
-                Height = value / ScaleFactor;
-            }
+            get => Height * ScaleFactor;
+            set => Height = value / ScaleFactor;
         }
     }
 }

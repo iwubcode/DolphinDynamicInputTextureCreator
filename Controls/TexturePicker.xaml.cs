@@ -36,7 +36,7 @@ namespace DolphinDynamicInputTextureCreator.Controls
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             dlg.DefaultExt = ".png";
-            dlg.Filter = "PNG Files (*.png)|*.png";
+            dlg.Filter = "PNG Texture Files (tex1*.png)|tex1_*x*_*.png|PNG Files (*.png)|*.png";
             dlg.Multiselect = true;
 
             Nullable<bool> result = dlg.ShowDialog();
