@@ -18,39 +18,11 @@ namespace DolphinDynamicInputTextureCreator.Controls
     /// </summary>
     public partial class HostKeyList : UserControl
     {
-        private Data.HostDevice HostDevice
-        {
-            get
-            {
-                return (Data.HostDevice)DataContext;
-            }
-        }
+        private ViewModels.HostDeviceKeyViewModel ViewModel => (ViewModels.HostDeviceKeyViewModel)DataContext;
 
         public HostKeyList()
         {
             InitializeComponent();
-        }
-
-        private void AddHostKey_Click(object sender, RoutedEventArgs e)
-        {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            dlg.DefaultExt = ".png";
-            dlg.Filter = "PNG Files (*.png)|*.png";
-            dlg.Multiselect = true;
-
-            Nullable<bool> result = dlg.ShowDialog();
-            if (result == true)
-            {
-                foreach (var filename in dlg.FileNames)
-                {
-                    HostDevice.HostKeys.Add(new Data.HostKey
-                    {
-                        Name = "",
-                        TexturePath = filename
-                    });
-                }
-            }
         }
 
         /// <summary>
@@ -63,7 +35,7 @@ namespace DolphinDynamicInputTextureCreator.Controls
             {
                 if (System.IO.Path.GetExtension(file).ToLower() == ".png")
                 {
-                    HostDevice.HostKeys.Add(new Data.HostKey
+                    ViewModel.HostDevices.Selected.HostKeys.Add(new Data.HostKey
                     {
                         Name = "",
                         TexturePath = file

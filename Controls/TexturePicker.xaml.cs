@@ -18,13 +18,7 @@ namespace DolphinDynamicInputTextureCreator.Controls
     /// </summary>
     public partial class TexturePicker : UserControl
     {
-        private ViewModels.DynamicInputPackViewModel InputPack
-        {
-            get
-            {
-                return (ViewModels.DynamicInputPackViewModel)DataContext;
-            }
-        }
+        private ViewModels.DynamicInputPackViewModel InputPack => (ViewModels.DynamicInputPackViewModel)DataContext;
 
         public TexturePicker()
         {

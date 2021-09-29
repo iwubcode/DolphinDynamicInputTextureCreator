@@ -31,12 +31,16 @@ namespace DolphinDynamicInputTextureCreator
             InputPack = Models.DefaultData.NewInputPack();
         }
 
-        private void SetInputPack(DynamicInputPackViewModel pack)
+        private DynamicInputPackViewModel InputPack
         {
-            DataContext = pack;
-            CheckInputPackTexturePathes(InputPack);
-            ((PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
-            UnsavedChanges = false;
+            get => (DynamicInputPackViewModel)DataContext;
+            set
+            {
+                DataContext = value;
+                CheckInputPackTexturePathes(value);
+                ((PanZoomViewModel)PanZoom.DataContext).InputPack = value;
+                UnsavedChanges = false;
+            }
         }
 
         private string _saved_document = null;
@@ -44,14 +48,6 @@ namespace DolphinDynamicInputTextureCreator
         private Window _edit_emulated_devices_window;
         private Window _edit_host_devices_window;
         private Window _edit_metadata_window;
-
-        private DynamicInputPackViewModel InputPack
-        {
-            get
-            {
-                return (DynamicInputPackViewModel)DataContext;
-            }
-        }
 
         private void ExportToLocation_Click(object sender, RoutedEventArgs e)
         {
@@ -154,7 +150,7 @@ namespace DolphinDynamicInputTextureCreator
             {
                 string input = File.ReadAllText(dialog.FileName);
                 var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
-                SetInputPack(JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings));
+                InputPack = JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings);
                 _saved_document = dialog.FileName;
                 UpdateEditWindows();
             }
@@ -215,13 +211,13 @@ namespace DolphinDynamicInputTextureCreator
         {
             if (_edit_emulated_devices_window != null)
             {
-                var user_control = new Controls.EditEmulatedDevices { DataContext = InputPack };
+                var user_control = new Controls.EditEmulatedDevices { DataContext = new EmulatedDeviceKeysViewModel { InputPack = InputPack } };
                 _edit_emulated_devices_window.Content = user_control;
             }
 
             if (_edit_host_devices_window != null)
             {
-                var user_control = new Controls.EditHostDevices { DataContext = InputPack };
+                var user_control = new Controls.EditHostDevices { DataContext = new HostDeviceKeyViewModel { HostDevices = InputPack.HostDevices } };
                 _edit_host_devices_window.Content = user_control;
             }
 

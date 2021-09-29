@@ -20,11 +20,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
- 
-            <Button Grid.Column="1" Content="Add Host Key(s)" x:Name="AddHostKey" Click="AddHostKey_Click" />
+            <Button Grid.Column="1" Content="Add Host Key(s)" Command="{Binding AddNewKeyDialogCommand}" />
         </Grid>
         <ScrollViewer Grid.Row="1" AllowDrop="True" Drop="AddHostKey_DragEnter">
-            <ItemsControl ItemsSource="{Binding HostKeys}">
+            <ItemsControl ItemsSource="{Binding HostDevices.Selected.HostKeys}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center"  />
@@ -60,8 +59,8 @@
                                               Path=DataContext.DeleteKeyCommand}" CommandParameter="{Binding}"></Button>
                                             </Grid>
                                         </Grid>
-                                        <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},
-                                              Path=DataContext.SearchSuggestions}" />
+                                        <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, Delay=2}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},
+                                              Path=DataContext.HostKeySuggestions.Available}" />
                                     </Grid>
                                 </Grid>
                             </Border>

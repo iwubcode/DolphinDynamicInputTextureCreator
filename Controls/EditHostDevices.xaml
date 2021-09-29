@@ -44,8 +44,8 @@
                 </Grid>
             </Grid>
             <Grid Grid.Column="1">
-                    <local:HostKeyList DataContext="{Binding SelectedHostDevice}"></local:HostKeyList>
                 <Grid Visibility="{Binding HostDevices.ValidSelection, Converter={StaticResource BoolToVis}}">
+                    <local:HostKeyList />
                 </Grid>
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding HostDevices.ValidSelection, Converter={StaticResource InvertBoolToVis}}">
                     <TextBlock Text="Click the 'Add' button to the left to get started." />

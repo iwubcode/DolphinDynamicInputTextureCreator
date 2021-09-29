@@ -49,7 +49,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <local:EmulatedKeyList DataContext="{Binding SelectedEmulatedDevice}"></local:EmulatedKeyList>
+                    <local:EmulatedKeyList/>
                 </Grid>
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding EmulatedDevices.ValidSelection, Converter={StaticResource InvertBoolToVis}}">
                     <TextBlock Text="Click the 'Add' button to the left to get started." />
