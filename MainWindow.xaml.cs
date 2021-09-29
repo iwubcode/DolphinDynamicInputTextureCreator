@@ -34,6 +34,7 @@ namespace DolphinDynamicInputTextureCreator
             DataContext = pack;
             CheckInputPackTexturePathes(InputPack);
             ((ViewModels.PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
+            UnsavedChanges = false;
         }
 
         private string _saved_document = null;
@@ -62,7 +63,7 @@ namespace DolphinDynamicInputTextureCreator
 
         private void QuitProgram_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Close();
         }
 
         private void EditHostDevices_Click(object sender, RoutedEventArgs e)
@@ -131,6 +132,7 @@ namespace DolphinDynamicInputTextureCreator
             {
                 string output = JsonConvert.SerializeObject(InputPack, Formatting.Indented);
                 File.WriteAllText(_saved_document, output);
+                UnsavedChanges = false;
             }
         }
 
@@ -187,6 +189,7 @@ namespace DolphinDynamicInputTextureCreator
                 string output = JsonConvert.SerializeObject(InputPack, Formatting.Indented);
                 File.WriteAllText(dialog.FileName, output);
                 _saved_document = dialog.FileName;
+                UnsavedChanges = false;
             }
         }
 
@@ -264,5 +267,54 @@ namespace DolphinDynamicInputTextureCreator
         {
             PanZoom.ViewModel.FillRegion();
         }
+
+        #region Closing
+
+        public bool UnsavedChanges
+        {
+            get => unsavedChanges;
+            set
+            {
+                unsavedChanges = value;
+
+                if (unsavedChanges)
+                {
+                    InputPack.Textures.CollectionChanged -= ChangesObserved;
+                    InputPack.HostDevices.CollectionChanged -= ChangesObserved;
+                    InputPack.EmulatedDevices.CollectionChanged -= ChangesObserved;
+                }
+                else
+                {
+                    InputPack.Textures.CollectionChanged += ChangesObserved;
+                    InputPack.HostDevices.CollectionChanged += ChangesObserved;
+                    InputPack.EmulatedDevices.CollectionChanged += ChangesObserved;
+                }
+            }
+        }
+        private bool unsavedChanges = false;
+
+        private void ChangesObserved(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => UnsavedChanges = true;
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (unsavedChanges)
+            {
+                MessageBoxResult MessageResult;
+                MessageResult = MessageBox.Show("unsaved changes are lost, do you want to save?", "unsaved changes!", MessageBoxButton.YesNoCancel);
+                switch (MessageResult)
+                {
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.Yes:
+                        SaveData_Click(sender, new RoutedEventArgs());
+                        e.Cancel = unsavedChanges;
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
     }
 }
