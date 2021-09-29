@@ -32,6 +32,20 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         /// <summary>
+        /// the reladive image paht, starting from the packages directory.
+        /// </summary>
+        public string RelativeTexturePath
+        {
+            get => _relative_texture_path;
+            set
+            {
+                _relative_texture_path = value;
+                OnPropertyChanged(nameof(RelativeTexturePath));
+            }
+        }
+        private string _relative_texture_path;
+
+        /// <summary>
         /// The path to the texture before any input modification
         /// </summary>
         private string _texture_path;

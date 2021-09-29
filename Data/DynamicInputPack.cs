@@ -509,6 +509,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                 return SelectedEmulatedDevice != null;
             }
         }
+        #region Export
 
         /// <summary>
         /// Returns true if we are editing a new emulated device entry name
@@ -534,6 +535,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         private string _new_emulated_device_input;
         [JsonIgnore]
         public string NewEmulatedDeviceInput
+        public void OutputToLocation(string location)
         {
             get
             {
@@ -545,14 +547,19 @@ namespace DolphinDynamicInputTextureCreator.Data
                 OnPropertyChanged(nameof(NewEmulatedDeviceInput));
                 OnPropertyChanged(nameof(HasNewEmulatedDeviceInput));
             }
+            WriteJson(Path.Combine(location, GeneratedJsonName + ".json"));
+            WriteImages(location);
+            WriteGameID(location);
         }
 
         /// <summary>
         /// Returns true if the emulated device input has text
+        /// creates a GameID.txt so that the pack is recognized.
         /// </summary>
         /// 
         [JsonIgnore]
         public bool HasNewEmulatedDeviceInput
+        private void WriteGameID(string location)
         {
             get
             {
@@ -564,6 +571,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                 return NewEmulatedDeviceInput.Length > 0;
             }
         }
+            if (GameID.Length < 3) return;
 
         /// <summary>
         /// A list of emulated device name suggestions
@@ -581,6 +589,9 @@ namespace DolphinDynamicInputTextureCreator.Data
                 _emulated_device_suggestions = value;
                 OnPropertyChanged(nameof(EmulatedDeviceSuggestions));
             }
+            location = Path.Combine(location, "GameID");
+            Directory.CreateDirectory(location);
+            File.Create(Path.Combine(location, GameID + ".txt")).Dispose();
         }
         #endregion
 
@@ -588,12 +599,17 @@ namespace DolphinDynamicInputTextureCreator.Data
         private ICommand _add_emulated_device_command;
         [JsonIgnore]
         public ICommand AddEmulatedDeviceCommand
+        private void WriteImages(string location)
         {
             get
+            foreach (HostDevice device in HostDevices)
             {
                 if (_add_emulated_device_command == null)
+                foreach (HostKey key in device.HostKeys)
                 {
                     _add_emulated_device_command = new RelayCommand(AddEmulatedDevice);
+                    //exports the images for the default_host_controls
+                    WriteImage(location, key);
                 }
                 return _add_emulated_device_command;
             }
@@ -614,16 +630,26 @@ namespace DolphinDynamicInputTextureCreator.Data
         public ICommand DeleteEmulatedDeviceCommand
         {
             get
+            foreach (DynamicInputTexture texture in Textures)
             {
                 if (_delete_emulated_device_command == null)
+                //exports the images for the output_textures
+                WriteImage(location, texture);
+                foreach (HostDevice device in texture.HostDevices)
                 {
                     _delete_emulated_device_command = new RelayCommand(param => DeleteEmulatedDevice((EmulatedDevice)param), param => CanDeleteEmulatedtDevice);
+                    foreach (HostKey key in device.HostKeys)
+                    {
+                        //exports the images for the host_controls
+                        WriteImage(location, key);
+                    }
                 }
                 return _delete_emulated_device_command;
             }
         }
 
         private void DeleteEmulatedDevice(EmulatedDevice device)
+        private void WriteImage(string location, Interfaces.IExportableImage image)
         {
             int i = EmulatedDevices.IndexOf(device);
             EmulatedDevices.Remove(device);
@@ -650,6 +676,9 @@ namespace DolphinDynamicInputTextureCreator.Data
                 SelectedRegionBrush.SelectedEmulatedKey = null;
             }
         }
+            // Unlikely that we get here but skip textures that don't exist
+            if (!File.Exists(image.TexturePath))
+                return;
 
         private ICommand _ok_new_emulated_device_command;
         [JsonIgnore]
@@ -664,6 +693,9 @@ namespace DolphinDynamicInputTextureCreator.Data
                 return _ok_new_emulated_device_command;
             }
         }
+            //check the output Path
+            image.RelativeTexturePath = CheckRelativeTexturePath(image);
+            string output_location = Path.Combine(location, image.RelativeTexturePath);
 
         private void OkNewEmulatedDevice(object obj)
         {
@@ -675,25 +707,39 @@ namespace DolphinDynamicInputTextureCreator.Data
             NewEmulatedDeviceInput = "";
             SelectedEmulatedDevice = EmulatedDevices[EmulatedDevices.Count - 1];
             IsEditingNewEmulatedDeviceName = false;
+            // Prevents the file from trying to overwrite itself.
+            if (output_location == image.TexturePath)
+                return;
 
             if (was_empty)
             {
                 SelectedRegionBrush.SelectedEmulatedDevice = SelectedEmulatedDevice;
             }
+            //write the image
+            const bool overwrite = true;
+            Directory.CreateDirectory(Path.GetDirectoryName(output_location));
+            File.Copy(image.TexturePath, output_location, overwrite);
         }
 
         private ICommand _cancel_new_emulated_device_command;
         [JsonIgnore]
         public ICommand CancelNewEmulatedDeviceCommand
+        #region JSON WRITER HELPERS
+        private string CheckRelativeTexturePath(Interfaces.IExportableImage image, HostDevice device, DynamicInputTexture texture = null)
         {
             get
+            string relativepath = device.Name.Replace("/", "_");
+            if (texture != null)
             {
                 if (_cancel_new_emulated_device_command == null)
                 {
                     _cancel_new_emulated_device_command = new RelayCommand(CancelEmulatedHostDevice);
                 }
                 return _cancel_new_emulated_device_command;
+                string texturename = Path.GetFileNameWithoutExtension(texture.TextureHash);
+                relativepath = Path.Combine(texturename, relativepath);
             }
+            return CheckRelativeTexturePath(image, relativepath);
         }
 
         private void CancelEmulatedHostDevice(object obj)
@@ -739,78 +785,36 @@ namespace DolphinDynamicInputTextureCreator.Data
             EditingTexture = null;
         }
         #endregion
-
-        public void OutputToLocation(string location)
+        private string CheckRelativeTexturePath(Interfaces.IExportableImage image, string relativepath = "")
         {
-            WriteJson(Path.Combine(location, GeneratedJsonName+".json"));
-            WriteImages(location);
-            WriteGameID(location);
+            if (image.RelativeTexturePath != null)
+                return image.RelativeTexturePath;
+
+            return Path.Combine(relativepath, Path.GetFileName(image.TexturePath));
         }
 
-        #region JSON WRITER HELPERS
-        private string GetImageName(string texture_name)
+        private void WriteHostControls(JsonWriter writer, IList<HostDevice> hostDevices, DynamicInputTexture texture = null)
         {
-            string name = Path.GetFileNameWithoutExtension(texture_name);
-            string extension = Path.GetExtension(texture_name);
-            return name + extension;
-        }
-
-        private string GetHostDeviceKeyTextureLocation(string root_location, HostDevice device, HostKey key)
-        {
-            string device_location = Path.Combine(root_location, device.Name.Replace("/", "_"));
-            return Path.Combine(device_location, Path.GetFileName(key.TexturePath));
-        }
-        #endregion
-
-        /// <summary>
-        /// creates a GameID.txt so that the pack is recognized.
-        /// </summary>
-        private void WriteGameID(string location)
-        {
-            if (GameID.Length < 3) return;
-
-            location = Path.Combine(location, "GameID");
-            Directory.CreateDirectory(location);
-            File.Create(Path.Combine(location, GameID + ".txt")).Dispose();
-        }
-
-        private void WriteImages(string location)
-        {
-            foreach (DynamicInputTexture texture in _textures)
+            writer.WriteStartObject();
+            foreach (var device in hostDevices)
             {
-                string destImagePath = Path.Combine(location, GetImageName(texture.TexturePath));
-
-                // Unlikely that we get here but skip textures that don't exist
-                if (!File.Exists(texture.TexturePath))
-                {
+                // Skip devices with no mapped keys
+                if (device.HostKeys.Count == 0)
                     continue;
-                }
 
-                // Prevents the file from trying to overwrite itself.
-                if (texture.TexturePath == destImagePath)
-                {
-                    continue;
-                }
-
-                const bool overwrite = true;
-                File.Copy(texture.TexturePath, destImagePath, overwrite);
-            }
-
-            foreach (var device in _host_devices)
-            {
+                writer.WritePropertyName(device.Name);
+                writer.WriteStartObject();
                 foreach (var key in device.HostKeys)
                 {
-                    // skip if the file does not exist.
-                    if (!File.Exists(key.TexturePath))
-                        continue;
-
-                    const bool overwrite = true;
-                    var texture_location = GetHostDeviceKeyTextureLocation(location, device, key);
-                    Directory.CreateDirectory(Path.GetDirectoryName(texture_location));
-                    File.Copy(key.TexturePath, texture_location, overwrite);
+                    writer.WritePropertyName(key.Name);
+                    key.RelativeTexturePath = CheckRelativeTexturePath(key, device, texture);
+                    writer.WriteValue(key.RelativeTexturePath);
                 }
+                writer.WriteEndObject();
             }
+            writer.WriteEndObject();
         }
+        #endregion
 
         private void WriteJson(string file)
         {
@@ -821,6 +825,15 @@ namespace DolphinDynamicInputTextureCreator.Data
                 writer.Formatting = Formatting.Indented;
 
                 writer.WriteStartObject();
+
+                #region DefaultHOST    
+                // Only create if devices are assigned.   
+                if (HostDevices.Count != 0)
+                {
+                    writer.WritePropertyName("default_host_controls");
+                    WriteHostControls(writer, HostDevices);
+                }
+                #endregion
 
                 #region GENERAL PROPERTIES
                 if (GeneratedFolderName.Length > 0)
@@ -836,7 +849,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                 #region OUTPUT TEXTURES
                 writer.WritePropertyName("output_textures");
                 writer.WriteStartObject();
-                foreach (DynamicInputTexture texture in _textures)
+                foreach (DynamicInputTexture texture in Textures)
                 {
                     // Unlikely that we get here but skip textures that don't exist
                     if (!File.Exists(texture.TexturePath))
@@ -848,7 +861,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                     writer.WriteStartObject();
 
                     writer.WritePropertyName("image");
-                    writer.WriteValue(GetImageName(texture.TexturePath));
+                    writer.WriteValue(CheckRelativeTexturePath(texture));
 
                     #region EMULATED KEYS
                     writer.WritePropertyName("emulated_controls");
@@ -891,28 +904,10 @@ namespace DolphinDynamicInputTextureCreator.Data
 
                     #region HOST    
                     // Only create if devices are assigned.   
-                    if (_host_devices.Count != 0)
+                    if (texture.HostDevices.Count != 0)
                     {
                         writer.WritePropertyName("host_controls");
-                        writer.WriteStartObject();
-                        foreach (var device in _host_devices)
-                        {
-                            // Skip devices with no mapped keys
-                            if (device.HostKeys.Count == 0)
-                            {
-                                continue;
-                            }
-
-                            writer.WritePropertyName(device.Name);
-                            writer.WriteStartObject();
-                            foreach (var key in device.HostKeys)
-                            {
-                                writer.WritePropertyName(key.Name);
-                                writer.WriteValue(GetHostDeviceKeyTextureLocation("", device, key));
-                            }
-                            writer.WriteEndObject();
-                        }
-                        writer.WriteEndObject();
+                        WriteHostControls(writer, texture.HostDevices, texture);
                     }
                     #endregion
 
@@ -924,6 +919,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                 writer.WriteEndObject();
             }
         }
+        #endregion
 
         /// <summary>
         /// Given a texture will return a mapping between each emulated device name and map of key name to list of regions
