@@ -23,6 +23,11 @@
                 <Separator />
                 <MenuItem Header="_Export Dolphin Output to Location..." Name="ExportToLocation" Click="ExportToLocation_Click"/>
                 <Separator />
+                <MenuItem Header="_Save Startup Settings">
+                    <MenuItem Header="_Save Suggestions"  Click="SaveStartupSuggestions_Click"/>
+                    <MenuItem Header="_Save as Default Pack"  Click="SaveAsDefaultPack_Click"/>
+                </MenuItem>
+                <Separator />
                 <MenuItem Header="_Quit" Name="QuitProgram" Click="QuitProgram_Click"/>
             </MenuItem>
             <MenuItem Header="_Edit">

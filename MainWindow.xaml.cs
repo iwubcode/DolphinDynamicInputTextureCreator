@@ -28,7 +28,7 @@ namespace DolphinDynamicInputTextureCreator
         {
             InitializeComponent();
             this.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            SetInputPack(new DynamicInputPackViewModel());
+            InputPack = Models.DefaultData.NewInputPack();
         }
 
         private void SetInputPack(DynamicInputPackViewModel pack)
@@ -169,7 +169,7 @@ namespace DolphinDynamicInputTextureCreator
         #region NEW
         private void NewData_Click(object sender, RoutedEventArgs e)
         {
-            SetInputPack(new DynamicInputPackViewModel());
+            InputPack = Models.DefaultData.NewInputPack();
             UpdateEditWindows();
             _saved_document = null;
         }
@@ -193,6 +193,16 @@ namespace DolphinDynamicInputTextureCreator
                 _saved_document = dialog.FileName;
                 UnsavedChanges = false;
             }
+        }
+
+        private void SaveStartupSuggestions_Click(object sender, RoutedEventArgs e)
+        {
+            Models.DefaultData.SaveSettings();
+        }
+
+        private void SaveAsDefaultPack_Click(object sender, RoutedEventArgs e)
+        {
+            Models.DefaultData.SaveInputPack(InputPack);
         }
 
         private void SaveDataAs_CanExecute(object sender, CanExecuteRoutedEventArgs e)

@@ -87,26 +87,13 @@ namespace DolphinDynamicInputTextureCreator.Data
         private bool _preserve_aspect_ratio = true;
 
         /// <summary>
-        /// Suggestions for possible host device names
         /// The game id used by dolphin
         /// </summary>
-        private ObservableCollection<string> _host_device_suggestions = new ObservableCollection<string>();
-        [JsonIgnore]
-        public ObservableCollection<string> HostDeviceSuggestions
         public string GameID
         {
-            get
-            {
-                return _host_device_suggestions;
-            }
             get => _game_id;
             set
             {
-                _host_device_suggestions = value;
-                OnPropertyChanged(nameof(HostDeviceSuggestions));
-            }
-        }
-        #endregion
                 if (value.Length <= 6)
                 {
                     _game_id = value.ToUpper();
@@ -119,21 +106,6 @@ namespace DolphinDynamicInputTextureCreator.Data
 
         #endregion
 
-        /// <summary>
-        /// The currently selected emulated device
-        /// </summary>
-        private EmulatedDevice _selected_emulated_device;
-        public EmulatedDevice SelectedEmulatedDevice
-        {
-            get { return _selected_emulated_device; }
-            set
-            {
-                _selected_emulated_device = value;
-                OnPropertyChanged(nameof(SelectedEmulatedDevice));
-                OnPropertyChanged(nameof(IsEmulatedDeviceHelpVisible));
-                OnPropertyChanged(nameof(AreEmulatedDeviceDetailsVisible));
-            }
-        }
         #region Export
 
         public void OutputToLocation(string location)
@@ -213,43 +185,6 @@ namespace DolphinDynamicInputTextureCreator.Data
             return CheckRelativeTexturePath(image, relativepath);
         }
 
-
-        #region CONSTRUCTOR
-        public DynamicInputPack()
-        {
-            List<string> host_device_suggestions = new List<string>();
-            host_device_suggestions.Add("XInput/0/Gamepad");
-            host_device_suggestions.Add("XInput/1/Gamepad");
-            host_device_suggestions.Add("XInput/2/Gamepad");
-            host_device_suggestions.Add("XInput/3/Gamepad");
-
-            host_device_suggestions.Add("DInput/0/Keyboard Mouse");
-            host_device_suggestions.Add("Bluetooth/0/Wii Remote");
-            host_device_suggestions.Sort();
-            HostDeviceSuggestions = new ObservableCollection<string>(host_device_suggestions);
-
-            List<string> emulated_device_suggestions = new List<string>();
-            emulated_device_suggestions.Add("Wiimote1");
-            emulated_device_suggestions.Add("Wiimote2");
-            emulated_device_suggestions.Add("Wiimote3");
-            emulated_device_suggestions.Add("Wiimote4");
-
-            emulated_device_suggestions.Add("GCPad1");
-            emulated_device_suggestions.Add("GCPad2");
-            emulated_device_suggestions.Add("GCPad3");
-            emulated_device_suggestions.Add("GCPad4");
-
-            emulated_device_suggestions.Add("GBA1");
-            emulated_device_suggestions.Add("GBA2");
-            emulated_device_suggestions.Add("GBA3");
-            emulated_device_suggestions.Add("GBA4");
-
-            //emulated_device_suggestions.Sort(); is more enjoyable without :)
-            EmulatedDeviceSuggestions = new ObservableCollection<string>(emulated_device_suggestions);
-
-            EditingTexture = null;
-        }
-        #endregion
         private string CheckRelativeTexturePath(Interfaces.IExportableImage image, string relativepath = "")
         {
             if (image.RelativeTexturePath != null)

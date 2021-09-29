@@ -33,6 +33,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             set
             {
                 base.HostDevices = _host_devices = value;
+                HostDeviceSuggestions.SetTargetList(HostDevices);
                 OnPropertyChanged(nameof(HostDevices));
             }
         }
@@ -47,6 +48,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             set
             {
                 emulatedDevices = value;
+                EmulatedDeviceSuggestions.SetTargetList(EmulatedDevices);
                 OnPropertyChanged(nameof(ShouldGetHashFromTextureFilename));
             }
         }
@@ -81,14 +83,35 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         }
 
         #endregion
+		
+        #region Suggestions
 
-        #region Constructor
-
-        public DynamicInputPackViewModel()
+        /// <summary>
+        /// Suggestions for possible host device names
+        /// </summary>
+        [JsonIgnore]
+        public SuggestionList<HostDevice> HostDeviceSuggestions
         {
-            StaticData.EmulatedDevices.Suggestions.ForEach((I) => I.GetDevieName(4, EmulatedDeviceSuggestions));
-            StaticData.HostDevices.Suggestions.ForEach((I) => I.GetDevieName(4, HostDeviceSuggestions));
+            get
+            {
+                return _host_device_suggestions ??= new SuggestionList<HostDevice>((device) => device.Name, StaticData.Default.StartupSettings.GetAllHostDevicesNameSuggestions(4));
+            }
         }
+        private SuggestionList<HostDevice> _host_device_suggestions;
+
+
+        /// <summary>
+        /// Suggestions for possible emulated device names
+        /// </summary>
+        [JsonIgnore]
+        public SuggestionList<EmulatedDevice> EmulatedDeviceSuggestions
+        {
+            get
+            {
+                return _emulated_device_suggestions ??= new SuggestionList<EmulatedDevice>((device) => device.Name, StaticData.Default.StartupSettings.GetAllEmulatedDeviceNameSuggestions(4));
+            }
+        }
+        private SuggestionList<EmulatedDevice> _emulated_device_suggestions;
 
         #endregion
 
@@ -115,7 +138,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         private VisibilityCommand _input_new_host_device;
 
         [JsonIgnore]
-        public ICommand InputNewHostDeviceOKCommand => new RelayCommand<string>(OkNewHostDevice, StaticData.HostDevices.Regex.IsMatch);
+        public ICommand InputNewHostDeviceOKCommand => new RelayCommand<string>(OkNewHostDevice, StaticData.Default.StartupSettings.HostDevicesRegex.IsMatch);
 
         private void OkNewHostDevice(string name)
         {
@@ -136,7 +159,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         private VisibilityCommand _input_new_emulated_device;
 
         [JsonIgnore]
-        public ICommand InputNewEmulatedDeviceOKCommand => new RelayCommand<string>(OkNewEmulatedDevice, StaticData.EmulatedDevices.Regex.IsMatch);
+        public ICommand InputNewEmulatedDeviceOKCommand => new RelayCommand<string>(OkNewEmulatedDevice, StaticData.Default.StartupSettings.EmulatedDeviceRegex.IsMatch);
 
         private void OkNewEmulatedDevice(string name)
         {
