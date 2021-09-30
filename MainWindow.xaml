@@ -4,6 +4,7 @@
         xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
         xmlns:controls="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
         xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator"
+        Closing="Window_Closing" 
         Title="Dolphin Dynamic Input Texture Creator" MinHeight="600" MinWidth="800">
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="NewData_CanExecute" Executed="NewData_Click" />

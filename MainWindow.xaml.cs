@@ -26,6 +26,7 @@ namespace DolphinDynamicInputTextureCreator
         public MainWindow()
         {
             InitializeComponent();
+            this.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             SetInputPack(new Data.DynamicInputPack());
         }
 
@@ -34,6 +35,7 @@ namespace DolphinDynamicInputTextureCreator
             DataContext = pack;
             CheckInputPackTexturePathes(InputPack);
             ((ViewModels.PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
+            UnsavedChanges = false;
         }
 
         private string _saved_document = null;
@@ -62,23 +64,21 @@ namespace DolphinDynamicInputTextureCreator
 
         private void QuitProgram_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Close();
         }
 
         private void EditHostDevices_Click(object sender, RoutedEventArgs e)
         {
-            if (_edit_host_devices_window != null)
-            {
-                _edit_host_devices_window.Close();
-            }
+            _edit_host_devices_window?.Close();
 
             _edit_host_devices_window = new Window
             {
                 Title = "Editing Host Devices",
                 ResizeMode = ResizeMode.CanResize,
-                SizeToContent = SizeToContent.Height,
+                SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
-                Width = 500, MinWidth = 500, MinHeight = 400
+                Top = this.Top + 50, Left = this.Left + 70,
+                Width = 620, Height = 550, MinWidth = 500, MinHeight = 400
             };
 
             UpdateEditWindows();
@@ -87,18 +87,16 @@ namespace DolphinDynamicInputTextureCreator
 
         private void EditEmulatedDevices_Click(object sender, RoutedEventArgs e)
         {
-            if (_edit_emulated_devices_window != null)
-            {
-                _edit_emulated_devices_window.Close();
-            }
+            _edit_emulated_devices_window?.Close();
 
             _edit_emulated_devices_window = new Window
             {
                 Title = "Editing Emulated Devices",
                 ResizeMode = ResizeMode.CanResize,
-                SizeToContent = SizeToContent.Height,
+                SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
-                Width= 500, MinWidth = 500, MinHeight = 400
+                Top = this.Top + 50, Left = this.Left + 70,
+                Width = 620, Height = 550, MinWidth = 500, MinHeight = 400
             };
 
             UpdateEditWindows();
@@ -107,17 +105,15 @@ namespace DolphinDynamicInputTextureCreator
 
         private void EditMetadata_Click(object sender, RoutedEventArgs e)
         {
-            if (_edit_metadata_window != null)
-            {
-                _edit_metadata_window.Close();
-            }
+            _edit_metadata_window?.Close();
 
             _edit_metadata_window = new Window
             {
                 Title = "Editing Metadata",
                 ResizeMode = ResizeMode.NoResize,
                 SizeToContent = SizeToContent.WidthAndHeight,
-                Owner = Application.Current.MainWindow
+                Owner = Application.Current.MainWindow,
+                Top = this.Top + 50, Left = this.Left + 70
             };
 
             UpdateEditWindows();
@@ -137,6 +133,7 @@ namespace DolphinDynamicInputTextureCreator
             {
                 string output = JsonConvert.SerializeObject(InputPack, Formatting.Indented);
                 File.WriteAllText(_saved_document, output);
+                UnsavedChanges = false;
             }
         }
 
@@ -193,6 +190,7 @@ namespace DolphinDynamicInputTextureCreator
                 string output = JsonConvert.SerializeObject(InputPack, Formatting.Indented);
                 File.WriteAllText(dialog.FileName, output);
                 _saved_document = dialog.FileName;
+                UnsavedChanges = false;
             }
         }
 
@@ -270,5 +268,54 @@ namespace DolphinDynamicInputTextureCreator
         {
             PanZoom.ViewModel.FillRegion();
         }
+
+        #region Closing
+
+        public bool UnsavedChanges
+        {
+            get => unsavedChanges;
+            set
+            {
+                unsavedChanges = value;
+
+                if (unsavedChanges)
+                {
+                    InputPack.Textures.CollectionChanged -= ChangesObserved;
+                    InputPack.HostDevices.CollectionChanged -= ChangesObserved;
+                    InputPack.EmulatedDevices.CollectionChanged -= ChangesObserved;
+                }
+                else
+                {
+                    InputPack.Textures.CollectionChanged += ChangesObserved;
+                    InputPack.HostDevices.CollectionChanged += ChangesObserved;
+                    InputPack.EmulatedDevices.CollectionChanged += ChangesObserved;
+                }
+            }
+        }
+        private bool unsavedChanges = false;
+
+        private void ChangesObserved(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => UnsavedChanges = true;
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (unsavedChanges)
+            {
+                MessageBoxResult MessageResult;
+                MessageResult = MessageBox.Show("unsaved changes are lost, do you want to save?", "unsaved changes!", MessageBoxButton.YesNoCancel);
+                switch (MessageResult)
+                {
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.Yes:
+                        SaveData_Click(sender, new RoutedEventArgs());
+                        e.Cancel = unsavedChanges;
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
     }
 }
