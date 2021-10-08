@@ -95,6 +95,59 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         [JsonIgnore]
         public ICommand ResetScaleFactorCommand => new RelayCommand((x) => Textures.Selected.SetInitialZoom());
 
+        [JsonIgnore]
+        public ICommand FillRegionCommand => new ViewModels.Commands.RelayCommand((x) => FillRegion(), (x) => CanFillRegion());
+
+        #region FillRegion
+
+        /// <summary>
+        /// adds a filled region.
+        /// </summary>
+        public void FillRegion()
+        {
+            if (Textures.Selected.Regions.Count > 0)
+            {
+                foreach (Data.RectRegion r in Textures.Selected?.Regions)
+                {
+                    if (r.X == 0 && r.Y == 0 &&
+                        r.Width == r.OwnedTexture.ImageWidth &&
+                        r.Height == r.OwnedTexture.ImageHeight)
+                    {
+                        r.Device = SelectedRegionBrush.SelectedEmulatedDevice;
+                        r.Key = SelectedRegionBrush.SelectedEmulatedKey;
+                        return;
+                    }
+                }
+            }
+
+            Data.RectRegion f = new Data.RectRegion() { X = 0, Y = 0, Height = Textures.Selected.ImageHeight, Width = Textures.Selected.ImageWidth, Device = SelectedRegionBrush.SelectedEmulatedDevice, Key = SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = Textures.Selected };
+            Textures.Selected.Regions.Add(f);
+        }
+
+        private bool CanFillRegion()
+        {
+            if (!Textures.ValidSelection || SelectedRegionBrush.SelectedEmulatedDevice == null || SelectedRegionBrush.SelectedEmulatedKey == null)
+                return false;
+
+            if (Textures.Selected.Regions.Count > 0)
+            {
+                foreach (Data.RectRegion r in Textures.Selected.Regions)
+                {
+                    if (r.X == 0 && r.Y == 0 &&
+                        r.Width == r.OwnedTexture.ImageWidth &&
+                        r.Height == r.OwnedTexture.ImageHeight)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
         #endregion
 
         #endregion
