@@ -164,7 +164,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             string output_location = Path.Combine(location, image.RelativeTexturePath);
 
             // Prevents the file from trying to overwrite itself.
-            if (output_location == image.TexturePath)
+            if (Path.GetFullPath(output_location) == Path.GetFullPath(image.TexturePath))
                 return;
 
             //write the image
