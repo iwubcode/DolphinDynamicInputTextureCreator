@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace DolphinDynamicInputTextureCreator.Other
 {
-    public class PropertyChangedBase : INotifyPropertyChanged
+    public abstract class PropertyChangedBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -14,8 +14,7 @@ namespace DolphinDynamicInputTextureCreator.Other
         {
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
-                PropertyChangedEventHandler handler = PropertyChanged;
-                if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }));
         }
     }

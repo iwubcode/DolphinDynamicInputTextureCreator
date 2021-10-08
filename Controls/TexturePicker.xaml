@@ -29,7 +29,7 @@
                             <Button HorizontalAlignment="Center">
                                 <Button.InputBindings>
                                     <MouseBinding Gesture="LeftDoubleClick"  Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
-                                              Path=DataContext.EditTextureCommand}" CommandParameter="{Binding}" />
+                                              Path=DataContext.Textures.SelectCommand}" CommandParameter="{Binding}" />
                                 </Button.InputBindings>
                                 <Button.Template>
                                     <ControlTemplate>
@@ -58,7 +58,7 @@
                                                                 <ColumnDefinition Width="Auto" />
                                                             </Grid.ColumnDefinitions>
                                                             <Button Content="X" Grid.Column="1" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
-                                              Path=DataContext.DeleteTextureCommand}" CommandParameter="{Binding}"></Button>
+                                              Path=DataContext.Textures.RemoveCommand}" CommandParameter="{Binding}"></Button>
                                                         </Grid>
                                                     </Grid>
                                                     <TextBox Grid.Row="1" Padding="2" Margin="1" HorizontalAlignment="Center" MinWidth="50" TextWrapping="Wrap" Text="{Binding TextureHash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

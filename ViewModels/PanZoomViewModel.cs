@@ -37,8 +37,8 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// <summary>
         /// The input pack that the editing texture and the regions are pulled from
         /// </summary>
-        private DynamicInputPack _dynamic_input_pack;
-        public DynamicInputPack InputPack
+        private DynamicInputPackViewModel _dynamic_input_pack;
+        public DynamicInputPackViewModel InputPack
         {
             get
             {
@@ -73,17 +73,19 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         public void FillRegion()
         {
-            if (InputPack.SelectedRegionBrush.SelectedEmulatedDevice == null || InputPack.SelectedRegionBrush.SelectedEmulatedKey == null)
+            if (InputPack.Textures.Selected == null ||
+                InputPack.SelectedRegionBrush.SelectedEmulatedDevice == null ||
+                InputPack.SelectedRegionBrush.SelectedEmulatedKey == null)
             {
                 return;
             }
 
-            Data.RectRegion f = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = 0, Y = 0, Height = InputPack.EditingTexture.ImageHeight, Width = InputPack.EditingTexture.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
+            Data.RectRegion f = new Data.RectRegion() { X = 0, Y = 0, Height = InputPack.Textures.Selected.ImageHeight, Width = InputPack.Textures.Selected.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.Textures.Selected };
 
             //one fill region is enough
-            if (InputPack.EditingTexture.Regions.Count > 0)
+            if (InputPack.Textures.Selected.Regions.Count > 0)
             {
-                foreach (Data.RectRegion r in InputPack.EditingTexture.Regions)
+                foreach (Data.RectRegion r in InputPack.Textures.Selected.Regions)
                 {
                     if (r.X == f.X & r.Y == f.Y & r.Width == f.Width & r.Height == f.Height)
                     {
@@ -95,8 +97,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 return;
             }
 
-
-            InputPack.EditingTexture.Regions.Add(f);
+            InputPack.Textures.Selected.Regions.Add(f);
 
         }
 
@@ -112,7 +113,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             }
 
             //prevents a region from being created in another region.
-            foreach (Data.RectRegion r in InputPack.EditingTexture.Regions)
+            foreach (Data.RectRegion r in InputPack.Textures.Selected.Regions)
             {
                 if (p.X >= r.X && p.X < (r.X + r.Width) &&
                     p.Y >= r.Y && p.Y < (r.Y + r.Height))
@@ -122,8 +123,8 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 }
             }
 
-            _currently_creating_region = new Data.RectRegion() { ScaleFactor = InputPack.EditingTexture.ScaleFactor, X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.EditingTexture };
-            InputPack.EditingTexture.Regions.Add(_currently_creating_region);
+            _currently_creating_region = new Data.RectRegion() { X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.Textures.Selected };
+            InputPack.Textures.Selected.Regions.Add(_currently_creating_region);
 
         }
 
@@ -181,7 +182,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         {
             if (_currently_creating_region.Width == 1 && _currently_creating_region.Height == 1)
             {
-                InputPack.EditingTexture.Regions.Remove(_currently_creating_region);
+                InputPack.Textures.Selected.Regions.Remove(_currently_creating_region);
             }
         }
 
@@ -210,8 +211,8 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             double diff_y = _last_pan_position.Value.Y - p.Y;
             _last_pan_position = p;
 
-            OffsetX = (OffsetX + ((diff_x * -1) * InputPack.EditingTexture.ScaleFactor));
-            OffsetY = (OffsetY + ((diff_y * -1) * InputPack.EditingTexture.ScaleFactor));
+            OffsetX += (diff_x * -1) * InputPack.Textures.Selected.ScaleFactor;
+            OffsetY += (diff_y * -1) * InputPack.Textures.Selected.ScaleFactor;
         }
 
         /// <summary>

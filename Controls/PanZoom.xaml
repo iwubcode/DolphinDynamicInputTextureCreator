@@ -12,9 +12,13 @@
         <converters:ScaleFactorToPercentageValueConverter x:Key="ScaleFactorToPercentageValueConverter"/>
         <converters:PathToImageValueConverter x:Key="PathToImageValueConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:ConverterCombinationConverter x:Key="InvertBoolToVis">
+            <converters:InvertBoolConverter />
+            <BooleanToVisibilityConverter />
+        </converters:ConverterCombinationConverter>
         <ContextMenu x:Key="ItemContextMenu">
             <MenuItem Header="Delete" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
-                                              Path=DataContext.InputPack.EditingTexture.DeleteRegionCommand}" CommandParameter="{Binding}" />
+                                              Path=DataContext.InputPack.DeleteSelectedRegionCommand}" CommandParameter="{Binding}" />
         </ContextMenu>
         <DataTemplate DataType="{x:Type data:RectRegion}">
             <Grid>
@@ -33,12 +37,12 @@
                 </Path>
                 <Viewbox Grid.Row="0">
                     <StackPanel>
-                        <Label Content="{Binding Device.Name}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
+                        <Label Content="{Binding Device.Name, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="4" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="{Binding Key.Name}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
+                        <Label Content="{Binding Key.Name, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="4" Color="Black"/>
                             </Label.Effect>
@@ -47,27 +51,27 @@
                 </Viewbox>
                 <Viewbox Grid.Row="1" >
                     <StackPanel Orientation="Horizontal" Margin="1,0">
-                        <Label  Content="{Binding X}" ContentStringFormat="0.#" Foreground="White" Padding="0" >
+                        <Label  Content="{Binding X, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White" Padding="0" >
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="{Binding Y}" ContentStringFormat="0.#" Foreground="White" Padding="6,0" >
+                        <Label Content="{Binding Y, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White" Padding="6,0" >
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="{Binding Width}"  ContentStringFormat="0.#" Foreground="White"  Padding="0">
+                        <Label Content="{Binding Width, Mode=OneWay}"  ContentStringFormat="0.#" Foreground="White"  Padding="0">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="x"  ContentStringFormat="0.#" Foreground="White"  Padding="1,0">
+                        <Label Content="x" Foreground="White"  Padding="1,0">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="{Binding Height}" ContentStringFormat="0.#" Foreground="White"  Padding="0">
+                        <Label Content="{Binding Height, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White"  Padding="0">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
@@ -109,7 +113,6 @@
             <Setter Property="Canvas.Top" Value="{Binding ScaledY}"/>
             <Setter Property="Height" Value="{Binding ScaledHeight}"/>
             <Setter Property="Width" Value="{Binding ScaledWidth}"/>
-
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
@@ -121,7 +124,7 @@
 
     </UserControl.Resources>
     <Grid>
-        <Grid Visibility="{Binding InputPack.IsEditingTexture, Converter={StaticResource BoolToVis}}">
+        <Grid Visibility="{Binding InputPack.Textures.ValidSelection, Converter={StaticResource BoolToVis}}">
             <ScrollViewer VerticalScrollBarVisibility="Visible"
                   HorizontalScrollBarVisibility="Visible" x:Name="scr"
                   ScrollChanged="ScrollChanged" Background="DarkGray">
@@ -141,15 +144,15 @@
                             </Grid.Background>
                             <Grid.LayoutTransform>
                                 <TransformGroup>
-                                    <ScaleTransform ScaleX="{Binding InputPack.EditingTexture.ScaleFactor}" ScaleY="{Binding InputPack.EditingTexture.ScaleFactor}"/>
+                                    <ScaleTransform ScaleX="{Binding InputPack.Textures.Selected.ScaleFactor}" ScaleY="{Binding InputPack.Textures.Selected.ScaleFactor}"/>
                                 </TransformGroup>
                             </Grid.LayoutTransform>
-                            <Image Source="{Binding InputPack.EditingTexture.TexturePath, Converter={StaticResource PathToImageValueConverter}}"  Width="{Binding InputPack.EditingTexture.ImageWidth}" Height="{Binding InputPack.EditingTexture.ImageHeight}" Stretch="Fill" x:Name="Img" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            <Image Source="{Binding InputPack.Textures.Selected.TexturePath, Converter={StaticResource PathToImageValueConverter}}"  Width="{Binding InputPack.Textures.Selected.ImageWidth}" Height="{Binding InputPack.Textures.Selected.ImageHeight}" Stretch="Fill" x:Name="Img" RenderOptions.BitmapScalingMode="NearestNeighbor"
                                 VerticalAlignment="Top" HorizontalAlignment="Left" UseLayoutRounding="True" SnapsToDevicePixels="True">
                             </Image>
                         </Grid>
 
-                        <ListBox x:Name="lb" ItemsSource="{Binding InputPack.EditingTexture.Regions}"
+                        <ListBox x:Name="lb" ItemsSource="{Binding InputPack.Textures.Selected.Regions}"
                                  Width="{Binding ActualWidth, ElementName=Img}"
                                  Height="{Binding ActualHeight,ElementName=Img}"
                                  VerticalAlignment="Top" HorizontalAlignment="Left"
@@ -166,13 +169,13 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <TextBlock Text="Zoom = " />
-                        <TextBlock Text="{Binding InputPack.EditingTexture.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" />
+                        <TextBlock Text="{Binding InputPack.Textures.Selected.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" />
                     </StackPanel>
-                    <Button Grid.Row="1" Content="Reset" Command="{Binding InputPack.EditingTexture.ResetScaleFactorCommand}" />
+                    <Button Grid.Row="1" Content="Reset" Command="{Binding InputPack.ResetScaleFactorCommand}" />
                 </Grid>
             </Border>
         </Grid>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding InputPack.IsEditingTextureHelpAvailable, Converter={StaticResource BoolToVis}}">
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding InputPack.Textures.ValidSelection, Converter={StaticResource InvertBoolToVis}}">
             <TextBlock TextWrapping="Wrap" Text="Click the 'Add Texture' buton on the left to get started.  Once added, double click on a texture to begin placing emulated regions." />
         </Grid>
     </Grid>

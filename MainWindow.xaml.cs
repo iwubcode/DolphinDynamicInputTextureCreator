@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DolphinDynamicInputTextureCreator.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,15 +28,19 @@ namespace DolphinDynamicInputTextureCreator
         {
             InitializeComponent();
             this.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            SetInputPack(new Data.DynamicInputPack());
+            InputPack = Models.DefaultData.NewInputPack();
         }
 
-        private void SetInputPack(Data.DynamicInputPack pack)
+        private DynamicInputPackViewModel InputPack
         {
-            DataContext = pack;
-            CheckInputPackTexturePathes(InputPack);
-            ((ViewModels.PanZoomViewModel)PanZoom.DataContext).InputPack = pack;
-            UnsavedChanges = false;
+            get => (DynamicInputPackViewModel)DataContext;
+            set
+            {
+                DataContext = value;
+                CheckInputPackTexturePathes(value);
+                ((PanZoomViewModel)PanZoom.DataContext).InputPack = value;
+                UnsavedChanges = false;
+            }
         }
 
         private string _saved_document = null;
@@ -43,14 +48,6 @@ namespace DolphinDynamicInputTextureCreator
         private Window _edit_emulated_devices_window;
         private Window _edit_host_devices_window;
         private Window _edit_metadata_window;
-
-        private Data.DynamicInputPack InputPack
-        {
-            get
-            {
-                return (Data.DynamicInputPack)DataContext;
-            }
-        }
 
         private void ExportToLocation_Click(object sender, RoutedEventArgs e)
         {
@@ -147,13 +144,13 @@ namespace DolphinDynamicInputTextureCreator
         private void OpenData_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.OpenFileDialog();
-            dialog.Filter = "JSON Files (*.json)|*.json";
+            dialog.Filter = "DIT Files (*.dit)|*.dit|JSON Files (*.json)|*.json";
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 string input = File.ReadAllText(dialog.FileName);
                 var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
-                SetInputPack(JsonConvert.DeserializeObject<Data.DynamicInputPack>(input, settings));
+                InputPack = JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings);
                 _saved_document = dialog.FileName;
                 UpdateEditWindows();
             }
@@ -168,7 +165,7 @@ namespace DolphinDynamicInputTextureCreator
         #region NEW
         private void NewData_Click(object sender, RoutedEventArgs e)
         {
-            SetInputPack(new Data.DynamicInputPack());
+            InputPack = Models.DefaultData.NewInputPack();
             UpdateEditWindows();
             _saved_document = null;
         }
@@ -183,7 +180,7 @@ namespace DolphinDynamicInputTextureCreator
         private void SaveAsData_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.SaveFileDialog();
-            dialog.Filter = "JSON Files (*.json)|*.json";
+            dialog.Filter = "DIT Files (*.dit)|*.dit|JSON Files (*.json)|*.json";
             System.Windows.Forms.DialogResult result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -192,6 +189,16 @@ namespace DolphinDynamicInputTextureCreator
                 _saved_document = dialog.FileName;
                 UnsavedChanges = false;
             }
+        }
+
+        private void SaveStartupSuggestions_Click(object sender, RoutedEventArgs e)
+        {
+            Models.DefaultData.SaveSettings();
+        }
+
+        private void SaveAsDefaultPack_Click(object sender, RoutedEventArgs e)
+        {
+            Models.DefaultData.SaveInputPack(InputPack);
         }
 
         private void SaveDataAs_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -204,13 +211,13 @@ namespace DolphinDynamicInputTextureCreator
         {
             if (_edit_emulated_devices_window != null)
             {
-                var user_control = new Controls.EditEmulatedDevices { DataContext = InputPack };
+                var user_control = new Controls.EditEmulatedDevices { DataContext = new EmulatedDeviceKeysViewModel { InputPack = InputPack } };
                 _edit_emulated_devices_window.Content = user_control;
             }
 
             if (_edit_host_devices_window != null)
             {
-                var user_control = new Controls.EditHostDevices { DataContext = InputPack };
+                var user_control = new Controls.EditHostDevices { DataContext = new HostDeviceKeyViewModel { HostDevices = InputPack.HostDevices } };
                 _edit_host_devices_window.Content = user_control;
             }
 
@@ -222,7 +229,7 @@ namespace DolphinDynamicInputTextureCreator
         }
 
         #region Test
-        public void CheckInputPackTexturePathes(Data.DynamicInputPack inputPack)
+        public void CheckInputPackTexturePathes(DynamicInputPackViewModel inputPack)
         {
             foreach (Data.HostDevice device in inputPack.HostDevices)
             {

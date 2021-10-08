@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,45 +11,50 @@ namespace DolphinDynamicInputTextureCreator.Data
         /// <summary>
         /// The currently selected emulated device for this "brush"
         /// </summary>
-        private EmulatedDevice _selected_emulated_device;
         public EmulatedDevice SelectedEmulatedDevice
         {
-            get { return _selected_emulated_device; }
+            get => _selected_emulated_device;
             set
             {
                 _selected_emulated_device = value;
                 OnPropertyChanged(nameof(SelectedEmulatedDevice));
+
+                if (value?.EmulatedKeys.Count > 0)
+                    SelectedEmulatedKey ??= value.EmulatedKeys[0];
             }
         }
+        private EmulatedDevice _selected_emulated_device;
 
         /// <summary>
         /// The currently selected emulated key for this "brush"
         /// </summary>
-        private EmulatedKey _selected_emulated_key;
+        [JsonIgnore]
         public EmulatedKey SelectedEmulatedKey
         {
-            get { return _selected_emulated_key; }
+            get => _selected_emulated_key;
             set
             {
                 _selected_emulated_key = value;
                 OnPropertyChanged(nameof(SelectedEmulatedKey));
             }
         }
+        private EmulatedKey _selected_emulated_key;
 
         /// <summary>
         /// whether subpixels are used.
         /// </summary>
-        private bool _subpixel;
         public bool Subpixel
         {
-            get { return _subpixel; }
+            get => _subpixel;
             set
             {
                 _subpixel = value;
-                RectRegion.DecimalPlaces = value ? 1 : 0;
+                RectRegion.DecimalPlaces = value ? 2 : 0;
                 OnPropertyChanged(nameof(Subpixel));
             }
         }
+        private bool _subpixel;
+
         #endregion
     }
 }

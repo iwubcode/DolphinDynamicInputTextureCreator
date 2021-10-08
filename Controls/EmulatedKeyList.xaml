@@ -23,7 +23,7 @@
             <Button Grid.Column="1" Content="Add All" Command="{Binding AddAllKeyCommand}" />
         </Grid>
         <ScrollViewer Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding EmulatedKeys}">
+            <ItemsControl ItemsSource="{Binding EmulatedDevices.Selected.EmulatedKeys}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center"  />
@@ -42,8 +42,8 @@
                                         <Button Content="X" Grid.Column="1" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EmulatedKeyList}},
                                               Path=DataContext.DeleteKeyCommand}" CommandParameter="{Binding}"></Button>
                                     </Grid>
-                                    <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EmulatedKeyList}},
-                                              Path=DataContext.SearchSuggestions}" />
+                                    <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, Delay=1}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EmulatedKeyList}},
+                                              Path=DataContext.EmulatedKeySuggestions.Available}"  />
                                 </StackPanel>
                             </Border>
                         </Grid>

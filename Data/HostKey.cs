@@ -5,18 +5,18 @@ using System.Windows.Input;
 
 namespace DolphinDynamicInputTextureCreator.Data
 {
-    public class HostKey : Other.PropertyChangedBase
+    public class HostKey : Other.PropertyChangedBase, Interfaces.IDeviceKey, Interfaces.IExportableImage
     {
+
+        #region Properties
+
         /// <summary>
         /// The name of the key on the host machine, ex: "`Shoulder L`"
         /// </summary>
         private string _name;
         public string Name
         {
-            get
-            {
-                return _name;
-            }
+            get => _name;
             set
             {
                 _name = value;
@@ -31,15 +31,29 @@ namespace DolphinDynamicInputTextureCreator.Data
         private string _texture_path;
         public string TexturePath
         {
-            get
-            {
-                return _texture_path;
-            }
+            get => _texture_path;
             set
             {
                 _texture_path = value;
                 OnPropertyChanged(nameof(TexturePath));
             }
         }
+
+        /// <summary>
+        /// the reladive image paht, starting from the packages directory.
+        /// </summary>
+        private string _relative_texture_path;
+        public string RelativeTexturePath
+        {
+            get => _relative_texture_path;
+            set
+            {
+                _relative_texture_path = value;
+                OnPropertyChanged(nameof(RelativeTexturePath));
+            }
+        }
+
+        #endregion
+
     }
 }

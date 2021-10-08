@@ -4,12 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
              mc:Ignorable="d" 
              MinHeight="300"
              MinWidth="400"
              >
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:ConverterCombinationConverter x:Key="InvertBoolToVis">
+            <converters:InvertBoolConverter />
+            <BooleanToVisibilityConverter />
+        </converters:ConverterCombinationConverter>
     </UserControl.Resources>
     <Grid>
         <Grid>
@@ -22,7 +27,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListBox ItemsSource="{Binding HostDevices}" SelectedItem="{Binding SelectedHostDevice}" Grid.Row="0" Margin="0 0 0 1">
+                <ListBox ItemsSource="{Binding HostDevices}" SelectedItem="{Binding HostDevices.Selected}" Grid.Row="0" Margin="0 0 0 1">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" />
@@ -34,20 +39,20 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Button Content="Add" Command="{Binding AddHostDeviceCommand}" Grid.Column="0" Margin="0 0 2 0" />
-                    <Button Content="Delete" Command="{Binding DeleteHostDeviceCommand}" CommandParameter="{Binding SelectedHostDevice}" Grid.Column="1" Margin="2 0 2 0" />
+                    <Button Content="Add" Command="{Binding InputNewHostDevice.SetToVisibleCommand}" Grid.Column="0" Margin="0 0 2 0"  CommandParameter="{Binding ElementName=NewInput}" />
+                    <Button Content="Delete" Command="{Binding HostDevices.RemoveSelectedCommand}" Grid.Column="1" Margin="2 0 2 0" />
                 </Grid>
             </Grid>
             <Grid Grid.Column="1">
-                <Grid Visibility="{Binding AreHostDeviceDetailsVisible, Converter={StaticResource BoolToVis}}">
-                    <local:HostKeyList DataContext="{Binding SelectedHostDevice}"></local:HostKeyList>
+                <Grid Visibility="{Binding HostDevices.ValidSelection, Converter={StaticResource BoolToVis}}">
+                    <local:HostKeyList />
                 </Grid>
-                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsHostDeviceHelpVisible, Converter={StaticResource BoolToVis}}">
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding HostDevices.ValidSelection, Converter={StaticResource InvertBoolToVis}}">
                     <TextBlock Text="Click the 'Add' button to the left to get started." />
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Visibility="{Binding IsEditingNewHostDeviceName, Converter={StaticResource BoolToVis}}">
+        <Grid Visibility="{Binding InputNewHostDevice.Visibility, Mode=OneWay}">
             <Grid Background="Black" Opacity="0.5"/>
             <Border
             MinWidth="250"
@@ -59,10 +64,10 @@
             VerticalAlignment="Center">
                 <StackPanel>
                     <TextBlock Margin="2" Text="Host Device Name:" FontWeight="Bold" FontFamily="Cambria" />
-                    <ComboBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding NewHostDeviceInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextSearch.TextPath="" ItemsSource="{Binding HostDeviceSuggestions}" />
+                    <ComboBox x:Name="NewInput" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" TextSearch.TextPath="" ItemsSource="{Binding HostDeviceSuggestions.Available}" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="2">
-                        <Button Content="Ok" Command="{Binding OkNewHostDeviceCommand}" IsEnabled="{Binding HasNewHostDeviceInput}" />
-                        <Button Content="Cancel" Command="{Binding CancelNewHostDeviceCommand}" />
+                        <Button Content="Ok" Command="{Binding InputNewHostDeviceOKCommand}" CommandParameter="{Binding ElementName=NewInput, Path=Text}" />
+                        <Button Content="Cancel" Command="{Binding InputNewHostDevice.SetToCollapsCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
