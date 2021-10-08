@@ -94,7 +94,7 @@
                         </Style>
                     </ComboBox.Style>
                 </ComboBox>
-                <Button Margin="5,0,5,0" MinWidth="35" Content="Fill Region" VerticalAlignment="Center" Click="ButtonFill_Click"/>
+                <Button Margin="5,0,5,0" MinWidth="35" Content="Fill Region" VerticalAlignment="Center" Command="{Binding FillRegionCommand}"/>
                 <CheckBox Margin="5 0 5 0" Content="Use subpixel?" IsChecked="{Binding SelectedRegionBrush.Subpixel}" VerticalAlignment="Center" />
             </StackPanel>
             <controls:PanZoom x:Name="PanZoom" Grid.Row="1"></controls:PanZoom>

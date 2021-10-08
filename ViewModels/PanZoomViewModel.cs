@@ -69,39 +69,6 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         private System.Nullable<Point> _last_pan_position;
 
         /// <summary>
-        /// adds a filled region.
-        /// </summary>
-        public void FillRegion()
-        {
-            if (InputPack.Textures.Selected == null ||
-                InputPack.SelectedRegionBrush.SelectedEmulatedDevice == null ||
-                InputPack.SelectedRegionBrush.SelectedEmulatedKey == null)
-            {
-                return;
-            }
-
-            Data.RectRegion f = new Data.RectRegion() { X = 0, Y = 0, Height = InputPack.Textures.Selected.ImageHeight, Width = InputPack.Textures.Selected.ImageWidth, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.Textures.Selected };
-
-            //one fill region is enough
-            if (InputPack.Textures.Selected.Regions.Count > 0)
-            {
-                foreach (Data.RectRegion r in InputPack.Textures.Selected.Regions)
-                {
-                    if (r.X == f.X & r.Y == f.Y & r.Width == f.Width & r.Height == f.Height)
-                    {
-                        r.Device = f.Device;
-                        r.Key = f.Key;
-                    }
-                }
-
-                return;
-            }
-
-            InputPack.Textures.Selected.Regions.Add(f);
-
-        }
-
-        /// <summary>
         /// Given a point, will create a new region if we did not click on a separate region
         /// </summary>
         /// <param name="p"></param>

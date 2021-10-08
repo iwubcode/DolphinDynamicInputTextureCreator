@@ -271,10 +271,6 @@ namespace DolphinDynamicInputTextureCreator
         }
         #endregion
 
-        private void ButtonFill_Click(object sender, RoutedEventArgs e)
-        {
-            PanZoom.ViewModel.FillRegion();
-        }
 
         #region Closing
 
