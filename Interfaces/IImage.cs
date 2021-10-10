@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DolphinDynamicInputTextureCreator.Interfaces
 {
-    interface IExportableImage
+    public interface IImage
     {
         /// <summary>
         /// the absulute paht to image file.

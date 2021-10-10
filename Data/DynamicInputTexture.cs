@@ -8,7 +8,7 @@ using System.Linq;
 namespace DolphinDynamicInputTextureCreator.Data
 {
     [JsonObject(IsReference = true)]
-    public class DynamicInputTexture : Other.PropertyChangedBase, Interfaces.IExportableImage
+    public class DynamicInputTexture : Other.PropertyChangedBase, Interfaces.IImage
     {
 
         #region PROPERTIES

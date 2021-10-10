@@ -2,6 +2,7 @@
 using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
 using Newtonsoft.Json;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DolphinDynamicInputTextureCreator.ViewModels
