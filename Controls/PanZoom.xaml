@@ -16,6 +16,9 @@
             <converters:InvertBoolConverter />
             <BooleanToVisibilityConverter />
         </converters:ConverterCombinationConverter>
+        <converters:BoolToSolidColorBrushConverter x:Key="BoolToMainColorBrushConverter" FalseValue="White" TrueValue="#242424"/>
+        <converters:BoolToSolidColorBrushConverter x:Key="BoolToSecondaryColorBrushConverter" FalseValue="#b9b9b9" TrueValue="#373737"/>
+        <converters:BoolToColorConverter x:Key="BoolToResizerColorBrushConverter" FalseValue="Black" TrueValue="LightBlue"/>
         <ContextMenu x:Key="ItemContextMenu">
             <MenuItem Header="Delete" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
                                               Path=DataContext.InputPack.DeleteSelectedRegionCommand}" CommandParameter="{Binding}" />
@@ -23,7 +26,9 @@
         <DataTemplate DataType="{x:Type data:RectRegion}">
             <Grid>
                 <Grid.Background>
-                    <SolidColorBrush Color="Black" Opacity="0.25" />
+                    <SolidColorBrush Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
+                        Path=DataContext.InputPack.SelectedRegionBrush.UseDarkBackground, NotifyOnTargetUpdated=True,
+Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                 </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="8*"/>
@@ -136,8 +141,8 @@
                                       ViewportUnits="Absolute">
                                     <DrawingBrush.Drawing>
                                         <DrawingGroup>
-                                            <GeometryDrawing Brush="White" Geometry="M0,0 L0,0 0,10 10,10 10,0 Z"/>
-                                            <GeometryDrawing Brush="#b9b9b9" Geometry="M0,0 L0,0 0,5, 10,5 10,10 5,10 5,0 Z"/>
+                                            <GeometryDrawing Brush="{Binding InputPack.SelectedRegionBrush.UseDarkBackground, Converter={StaticResource BoolToMainColorBrushConverter}}" Geometry="M0,0 L0,0 0,10 10,10 10,0 Z"/>
+                                            <GeometryDrawing Brush="{Binding InputPack.SelectedRegionBrush.UseDarkBackground, Converter={StaticResource BoolToSecondaryColorBrushConverter}}" Geometry="M0,0 L0,0 0,5, 10,5 10,10 5,10 5,0 Z"/>
                                         </DrawingGroup>
                                     </DrawingBrush.Drawing>
                                 </DrawingBrush>
