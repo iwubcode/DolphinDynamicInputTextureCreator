@@ -129,8 +129,8 @@
                   HorizontalScrollBarVisibility="Visible" x:Name="scr"
                   ScrollChanged="ScrollChanged" Background="DarkGray">
                 <Grid MouseDown="Grid_MouseDown" MouseUp="Grid_MouseUp" MouseMove="Grid_MouseMove" MouseWheel="Grid_MouseWheel">
-                    <Grid>
-                        <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Grid>
                             <Grid.Background>
                                 <DrawingBrush TileMode="Tile" Viewport="0,0,2,2" 
                                       ViewportUnits="Absolute">
@@ -153,9 +153,6 @@
                         </Grid>
 
                         <ListBox x:Name="lb" ItemsSource="{Binding InputPack.Textures.Selected.Regions}"
-                                 Width="{Binding ActualWidth, ElementName=Img}"
-                                 Height="{Binding ActualHeight,ElementName=Img}"
-                                 VerticalAlignment="Top" HorizontalAlignment="Left"
                                  Style="{StaticResource RectRegionListBoxStyle}"
                                  ItemContainerStyle="{StaticResource RectRegionItemStyle}"/>
                     </Grid>
