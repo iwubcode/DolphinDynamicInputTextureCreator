@@ -40,6 +40,22 @@
                                                     <RowDefinition />
                                                     <RowDefinition />
                                                 </Grid.RowDefinitions>
+                                                <Grid.Triggers>
+                                                    <EventTrigger RoutedEvent="MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard Storyboard.TargetProperty="Opacity" Storyboard.Target="{Binding ElementName=MenuGrid}" >
+                                                                <DoubleAnimation To="1" Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="MouseLeave" >
+                                                        <BeginStoryboard>
+                                                            <Storyboard Storyboard.TargetProperty="Opacity" Storyboard.Target="{Binding ElementName=MenuGrid}" >
+                                                                <DoubleAnimation To="0" Duration="0:0:0.4"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </Grid.Triggers>
                                                 <Viewbox Grid.Row="0">
                                                     <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="NearestNeighbor" />
                                                 </Viewbox>
