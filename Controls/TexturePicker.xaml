@@ -74,13 +74,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <CheckBox Grid.Row="0" IsChecked="{Binding ShouldGetHashFromTextureFilename, Mode=TwoWay}" Content="Get hash from filename?" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10 0 0 0" />
-            <Button Grid.Row="1" Name="AddTexture" Click="AddTexture_Click">Add Texture(s)</Button>
-        </Grid>
+        <Button Grid.Row="1" Name="AddTexture" Click="AddTexture_Click">Add Texture(s)</Button>
     </Grid>
 </UserControl>
