@@ -36,7 +36,7 @@
                 <MenuItem Header="_Metadata..." Name="EditMetadata" Click="EditMetadata_Click"   />
             </MenuItem>
         </Menu>
-        <Grid DockPanel.Dock="Left" MinWidth="200">
+        <Grid DockPanel.Dock="Left" Width="200">
             <controls:TexturePicker></controls:TexturePicker>
         </Grid>
         <Grid>

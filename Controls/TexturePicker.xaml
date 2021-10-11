@@ -27,7 +27,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0 0 0 2">
-                            <Button HorizontalAlignment="Center">
+                            <Button>
                                 <Button.InputBindings>
                                     <MouseBinding Gesture="LeftDoubleClick"  Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
                                               Path=DataContext.Textures.SelectCommand}" CommandParameter="{Binding}" />
@@ -35,35 +35,23 @@
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Border BorderThickness="1" BorderBrush="Black" Padding="2" Background="DarkGray">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <Grid Grid.Column="0" HorizontalAlignment="Center" Width="150">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition />
-                                                        <RowDefinition />
-                                                    </Grid.RowDefinitions>
-                                                    <Viewbox Grid.Row="0" HorizontalAlignment="Center">
-                                                        <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="NearestNeighbor" />
-                                                    </Viewbox>
-                                                    <Grid Grid.Row="0">
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="*" />
-                                                            <RowDefinition Height="9*" />
-                                                        </Grid.RowDefinitions>
-                                                        <Grid Grid.Row="0">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="9*" />
-                                                                <ColumnDefinition Width="Auto" />
-                                                            </Grid.ColumnDefinitions>
-                                                            <Button Content="X" Grid.Column="1" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
+                                            <Grid Grid.Column="0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <Viewbox Grid.Row="0">
+                                                    <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                                                </Viewbox>
+                                                <Grid x:Name="MenuGrid" Grid.Row="0" Height="20" VerticalAlignment="Top" Opacity="0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="9*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button Content="X" Grid.Column="1" Width="20" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
                                               Path=DataContext.Textures.RemoveCommand}" CommandParameter="{Binding}"></Button>
-                                                        </Grid>
-                                                    </Grid>
-                                                    <TextBox Grid.Row="1" Padding="2" Margin="1" HorizontalAlignment="Center" MinWidth="50" TextWrapping="Wrap" Text="{Binding TextureHash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="{Binding HashProperties.IsValid, Converter={StaticResource BoolToBrushConverter}}"/>
                                                 </Grid>
+                                                <TextBox Grid.Row="1" Padding="2" Margin="1" HorizontalAlignment="Center" MinWidth="50" TextWrapping="Wrap" Text="{Binding TextureHash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="{Binding HashProperties.IsValid, Converter={StaticResource BoolToBrushConverter}}"/>
                                             </Grid>
                                         </Border>
                                     </ControlTemplate>
