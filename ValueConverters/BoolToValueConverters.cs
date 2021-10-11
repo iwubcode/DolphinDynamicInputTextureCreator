@@ -10,6 +10,10 @@ namespace DolphinDynamicInputTextureCreator.ValueConverters
     [ValueConversion(typeof(bool), typeof(System.Windows.Media.SolidColorBrush))]
     public class BoolToSolidColorBrushConverter : BoolToValueConverter<System.Windows.Media.SolidColorBrush> {}
 
+
+    [ValueConversion(typeof(bool), typeof(System.Windows.Media.Color))]
+    public class BoolToColorConverter : BoolToValueConverter<System.Windows.Media.Color> { }
+
     public abstract class BoolToValueConverter<T> : IValueConverter
     {
         public T TrueValue { get; set; }

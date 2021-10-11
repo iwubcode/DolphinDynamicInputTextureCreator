@@ -55,6 +55,21 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
         private bool _subpixel;
 
+        /// <summary>
+        /// false = Bright canvas.
+        /// true = Dark canvas.
+        /// </summary>
+        public bool UseDarkBackground
+        {
+            get => _use_dark_background;
+            set
+            {
+                _use_dark_background = value;
+                OnPropertyChanged(nameof(UseDarkBackground));
+            }
+        }
+        private bool _use_dark_background = false;
+
         #endregion
     }
 }
