@@ -18,6 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\CanvasDark.png" />
+    <None Remove="Assets\CanvasLight.png" />
+    <None Remove="Assets\Grid.png" />
+    <None Remove="Assets\Subpixel.png" />
     <None Remove="Design\Images\a.png" />
     <None Remove="Design\Images\b.png" />
     <None Remove="Design\Images\c.png" />
@@ -31,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\CanvasDark.png" />
+    <Resource Include="Assets\CanvasLight.png" />
+    <Resource Include="Assets\Grid.png" />
+    <Resource Include="Assets\Subpixel.png" />
     <Resource Include="Design\Images\a.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
