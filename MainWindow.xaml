@@ -15,6 +15,10 @@
             <Image x:Key="Import" Source="Assets/Import.png" />
             <Image x:Key="Export" Source="Assets/Export.png" />
             <Image x:Key="Close" Source="Assets/Close.png" />
+            <Image x:Key="CanvasDark" Source="Assets/CanvasDark.png" />
+            <Image x:Key="CanvasLight" Source="Assets/CanvasLight.png" />
+            <Image x:Key="Subpixel" Source="Assets/Subpixel.png" />
+            <Image x:Key="Grid" Source="Assets/Grid.png" />
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
@@ -106,8 +110,34 @@
                     </ComboBox.Style>
                 </ComboBox>
                 <Button Margin="5,0,5,0" MinWidth="35" Content="Fill Region" VerticalAlignment="Center" Command="{Binding FillRegionCommand}"/>
-                <CheckBox Margin="5 0 5 0" Content="Use subpixel?" IsChecked="{Binding SelectedRegionBrush.Subpixel}" VerticalAlignment="Center" />
-                <CheckBox Margin="5 0 5 0" Content="Dark Canvas?" IsChecked="{Binding SelectedRegionBrush.UseDarkBackground}" VerticalAlignment="Center" />
+                <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.UseDarkBackground}" >
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Content" Value="{DynamicResource CanvasLight}" />
+                            <Setter Property="ToolTip" Value="Use the Light Canvas." />
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter Property="Content" Value="{DynamicResource CanvasDark}" />
+                                    <Setter Property="ToolTip" Value="Use the Dark Canvas." />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+                <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.Subpixel}">
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Content" Value="{DynamicResource Grid}" />
+                            <Setter Property="ToolTip" Value="Use the default pixel grid." />
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter Property="Content" Value="{DynamicResource Subpixel}" />
+                                    <Setter Property="ToolTip" Value="Use no pixel grid, allows the selection of sub pixels" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
             </StackPanel>
             <controls:PanZoom x:Name="PanZoom" Grid.Row="1"></controls:PanZoom>
         </Grid>
