@@ -6,6 +6,17 @@
         xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator"
         Closing="Window_Closing" 
         Title="Dolphin Dynamic Input Texture Creator" MinHeight="600" MinWidth="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Image x:Key="SaveAs" Source="Assets/SaveAs.png" />
+            <Image x:Key="Save" Source="Assets/Save.png" />
+            <Image x:Key="Open" Source="Assets/Open.png" />
+            <Image x:Key="New" Source="Assets/New.png" />
+            <Image x:Key="Import" Source="Assets/Import.png" />
+            <Image x:Key="Export" Source="Assets/Export.png" />
+            <Image x:Key="Close" Source="Assets/Close.png" />
+        </ResourceDictionary>
+    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="NewData_CanExecute" Executed="NewData_Click" />
         <CommandBinding Command="Open" CanExecute="OpenData_CanExecute" Executed="OpenData_Click" />
@@ -15,20 +26,20 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" Command="New" />
-                <MenuItem Header="_Open..." Command="Open" />
+                <MenuItem Header="_New" Command="New" Icon="{DynamicResource New}" />
+                <MenuItem Header="_Open..." Command="Open" Icon="{DynamicResource Open}" />
                 <Separator />
-                <MenuItem Header="_Save" Command="Save" />
-                <MenuItem Header="_Save As..." Command="{x:Static local:MainWindow.SaveAsCmd}" />
+                <MenuItem Header="_Save" Command="Save"  Icon="{DynamicResource Save}"/>
+                <MenuItem Header="_Save As..." Command="{x:Static local:MainWindow.SaveAsCmd}" Icon="{DynamicResource SaveAs}"/>
                 <Separator />
-                <MenuItem Header="_Export Dolphin Output to Location..." Name="ExportToLocation" Click="ExportToLocation_Click"/>
+                <MenuItem Header="_Export Dolphin Output to Location..." Name="ExportToLocation" Click="ExportToLocation_Click" Icon="{DynamicResource Export}" />
                 <Separator />
                 <MenuItem Header="_Save Startup Settings">
                     <MenuItem Header="_Save Suggestions"  Click="SaveStartupSuggestions_Click"/>
                     <MenuItem Header="_Save as Default Pack"  Click="SaveAsDefaultPack_Click"/>
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="_Quit" Name="QuitProgram" Click="QuitProgram_Click"/>
+                <MenuItem Header="_Quit" Name="QuitProgram" Click="QuitProgram_Click" Icon="{DynamicResource Close}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Emulated Devices..." Name="EditEmulatedDevices" Click="EditEmulatedDevices_Click"  />
