@@ -64,8 +64,40 @@
                                                         <ColumnDefinition Width="9*" />
                                                         <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
-                                                    <Button Content="X" Grid.Column="1" Width="20" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}},
-                                              Path=DataContext.Textures.RemoveCommand}" CommandParameter="{Binding}"></Button>
+                                                    <Button Grid.Column="1" Width="20" Cursor="Hand" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}}, Path=DataContext.Textures.RemoveCommand}" CommandParameter="{Binding}">
+                                                        <Button.Style>
+                                                            <Style TargetType="{x:Type Button}">
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="Button">
+                                                                            <Border>
+                                                                                <Grid Background="Transparent">
+                                                                                    <ContentPresenter/>
+                                                                                </Grid>
+                                                                            </Border>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Setter Property="Content">
+                                                                    <Setter.Value>
+                                                                        <Path Fill="Red" Stretch="Uniform"  Data="{DynamicResource Delete}"/>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Style.Resources>
+                                                                    <Geometry x:Key ="Delete">M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z</Geometry>
+                                                                </Style.Resources>
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Content">
+                                                                            <Setter.Value>
+                                                                                <Path Fill="DarkRed" Stretch="Uniform"  Data="{DynamicResource Delete}"/>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
                                                 </Grid>
                                                 <TextBox Grid.Row="1" Padding="2" Margin="1" HorizontalAlignment="Center" MinWidth="50" TextWrapping="Wrap" Text="{Binding TextureHash, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderBrush="{Binding HashProperties.IsValid, Converter={StaticResource BoolToBrushConverter}}"/>
                                             </Grid>
