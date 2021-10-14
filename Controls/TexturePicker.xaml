@@ -56,8 +56,8 @@
                                                         </BeginStoryboard>
                                                     </EventTrigger>
                                                 </Grid.Triggers>
-                                                <Viewbox Grid.Row="0">
-                                                    <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" HorizontalAlignment="Center" RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                                                <Viewbox Grid.Row="0" HorizontalAlignment="Stretch" MaxHeight="500">
+                                                    <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" Stretch="UniformToFill" MinWidth="10" MinHeight="10" MaxHeight="60" RenderOptions.BitmapScalingMode="NearestNeighbor" />
                                                 </Viewbox>
                                                 <Grid x:Name="MenuGrid" Grid.Row="0" Height="20" VerticalAlignment="Top" Opacity="0">
                                                     <Grid.ColumnDefinitions>
