@@ -21,7 +21,7 @@
         <converters:BoolToColorConverter x:Key="BoolToResizerColorBrushConverter" FalseValue="Black" TrueValue="LightBlue"/>
         <ContextMenu x:Key="ItemContextMenu">
             <MenuItem Header="Delete" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
-                                              Path=DataContext.InputPack.DeleteSelectedRegionCommand}" CommandParameter="{Binding}" />
+                                              Path=DataContext.InputPack.DeleteSelectedRegionCommand}" CommandParameter="{Binding}" Icon="{StaticResource Icon.Delete}" />
         </ContextMenu>
         <DataTemplate DataType="{x:Type data:RectRegion}">
             <Grid>
