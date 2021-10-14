@@ -8,6 +8,7 @@
         Title="Dolphin Dynamic Input Texture Creator" MinHeight="600" MinWidth="800">
     <Window.Resources>
         <ResourceDictionary>
+            <!-- These icons were obtained via the MaterialDesignIcon pack.  They are licensed under the Apache 2.0 license, see license under 3rdparty for full details -->
             <Path x:Key="Save" Fill="RoyalBlue" Stretch="Uniform" Data="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" />
             <Path x:Key="SaveAs" Fill="RoyalBlue" Stretch="UniformToFill" Data="M10,19L10.14,18.86C8.9,18.5 8,17.36 8,16A3,3 0 0,1 11,13C12.36,13 13.5,13.9 13.86,15.14L20,9V7L16,3H4C2.89,3 2,3.9 2,5V19A2,2 0 0,0 4,21H10V19M4,5H14V9H4V5M20.04,12.13C19.9,12.13 19.76,12.19 19.65,12.3L18.65,13.3L20.7,15.35L21.7,14.35C21.92,14.14 21.92,13.79 21.7,13.58L20.42,12.3C20.31,12.19 20.18,12.13 20.04,12.13M18.07,13.88L12,19.94V22H14.06L20.12,15.93L18.07,13.88Z" />
             <Path x:Key="New" Fill="CornflowerBlue" Stretch="Uniform" Data="M13,9H18.5L13,3.5V9M6,2H14L20,8V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M11,15V12H9V15H6V17H9V20H11V17H14V15H11Z" />
