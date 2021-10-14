@@ -21,6 +21,12 @@
             <Path x:Key="HostDevices" Fill="Sienna" Stretch="Uniform" Data="M7.97,16L5,19C4.67,19.3 4.23,19.5 3.75,19.5A1.75,1.75 0 0,1 2,17.75V17.5L3,10.12C3.21,7.81 5.14,6 7.5,6H16.5C18.86,6 20.79,7.81 21,10.12L22,17.5V17.75A1.75,1.75 0 0,1 20.25,19.5C19.77,19.5 19.33,19.3 19,19L16.03,16H7.97M7,8V10H5V11H7V13H8V11H10V10H8V8H7M16.5,8A0.75,0.75 0 0,0 15.75,8.75A0.75,0.75 0 0,0 16.5,9.5A0.75,0.75 0 0,0 17.25,8.75A0.75,0.75 0 0,0 16.5,8M14.75,9.75A0.75,0.75 0 0,0 14,10.5A0.75,0.75 0 0,0 14.75,11.25A0.75,0.75 0 0,0 15.5,10.5A0.75,0.75 0 0,0 14.75,9.75M18.25,9.75A0.75,0.75 0 0,0 17.5,10.5A0.75,0.75 0 0,0 18.25,11.25A0.75,0.75 0 0,0 19,10.5A0.75,0.75 0 0,0 18.25,9.75M16.5,11.5A0.75,0.75 0 0,0 15.75,12.25A0.75,0.75 0 0,0 16.5,13A0.75,0.75 0 0,0 17.25,12.25A0.75,0.75 0 0,0 16.5,11.5Z" />
             <Path x:Key="Metadata" Fill="Sienna" Stretch="Uniform" Data="M3,9H17V7H3V9M3,13H17V11H3V13M3,17H17V15H3V17M19,17H21V15H19V17M19,7V9H21V7H19M19,13H21V11H19V13Z" />
 
+            <Path x:Key="Grid" Fill="Gray" Stretch="Uniform" Data="M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M16,16V20H20V16H16M14,20V16H10V20H14M8,20V16H4V20H8M8,14V10H4V14H8M8,8V4H4V8H8M10,14H14V10H10V14M4,2H20A2,2 0 0,1 22,4V20A2,2 0 0,1 20,22H4C2.92,22 2,21.1 2,20V4A2,2 0 0,1 4,2Z" />
+            <Path x:Key="NoGrid" Fill="Gray" Stretch="Uniform" Data="m16 16-14.365-.037C.773 15.961 0 15.228 0 14.353V.055zM6.424 1.613v2.93L4.827 2.95V1.613h-1.34L1.8 0h12.6c.882 0 1.6.719 1.6 1.598v12.516l-1.595-1.593v-1.353h-1.34l-1.597-1.593h2.937V6.39h-3.192v2.93L9.616 7.728V6.39h-1.34L6.678 4.798h2.937V1.613H6.424m4.789 0v3.185h3.192V1.613h-3.192m0 12.74h.981l-.981-.98v.98M1.635 4.798h.982l-.982-.98v.98m4.789 4.777h.981l-.981-.98v.98m3.192 4.778V11.78l-.614-.613H6.424v3.185h3.192m-4.789 0v-3.185H1.635v3.185h3.192m0-4.778V7.003l-.614-.613H1.635v3.185z" />
+            <Path x:Key="CanvasDark" Fill="Gray" Stretch="Uniform" Data="M22,16A2,2 0 0,1 20,18H8C6.89,18 6,17.1 6,16V4C6,2.89 6.89,2 8,2H20A2,2 0 0,1 22,4V16M16,20V22H4A2,2 0 0,1 2,20V7H4V20H16Z" />
+            <Path x:Key="CanvasLight" Fill="Gray" Stretch="Uniform" Data="M20,16V4H8V16H20M22,16A2,2 0 0,1 20,18H8C6.89,18 6,17.1 6,16V4C6,2.89 6.89,2 8,2H20A2,2 0 0,1 22,4V16M16,20V22H4A2,2 0 0,1 2,20V7H4V20H16Z" />
+            <Path x:Key="FillRegion" Fill="Gray" Stretch="Uniform" Data="M19,11.5C19,11.5 17,13.67 17,15A2,2 0 0,0 19,17A2,2 0 0,0 21,15C21,13.67 19,11.5 19,11.5M5.21,10L10,5.21L14.79,10M16.56,8.94L7.62,0L6.21,1.41L8.59,3.79L3.44,8.94C2.85,9.5 2.85,10.47 3.44,11.06L8.94,16.56C9.23,16.85 9.62,17 10,17C10.38,17 10.77,16.85 11.06,16.56L16.56,11.06C17.15,10.47 17.15,9.5 16.56,8.94Z" />
+
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
@@ -111,9 +117,41 @@
                         </Style>
                     </ComboBox.Style>
                 </ComboBox>
-                <Button Margin="5,0,5,0" MinWidth="35" Content="Fill Region" VerticalAlignment="Center" Command="{Binding FillRegionCommand}"/>
-                <CheckBox Margin="5 0 5 0" Content="Use subpixel?" IsChecked="{Binding SelectedRegionBrush.Subpixel}" VerticalAlignment="Center" />
-                <CheckBox Margin="5 0 5 0" Content="Dark Canvas?" IsChecked="{Binding SelectedRegionBrush.UseDarkBackground}" VerticalAlignment="Center" />
+                <Button Margin="5,0,5,0" MinWidth="35" Content="{DynamicResource FillRegion}" VerticalAlignment="Center" Command="{Binding FillRegionCommand}">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="ToolTip" Value="Fill Region" />
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.UseDarkBackground}" >
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Content" Value="{DynamicResource CanvasLight}" />
+                            <Setter Property="ToolTip" Value="Use the Light Canvas." />
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter Property="Content" Value="{DynamicResource CanvasDark}" />
+                                    <Setter Property="ToolTip" Value="Use the Dark Canvas." />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+                <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.Subpixel}">
+                    <ToggleButton.Style>
+                        <Style TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Content" Value="{DynamicResource Grid}" />
+                            <Setter Property="ToolTip" Value="Use the default pixel grid." />
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter Property="Content" Value="{DynamicResource NoGrid}" />
+                                    <Setter Property="ToolTip" Value="Use no pixel grid, allows the selection of sub pixels" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
             </StackPanel>
             <controls:PanZoom x:Name="PanZoom" Grid.Row="1"></controls:PanZoom>
         </Grid>
