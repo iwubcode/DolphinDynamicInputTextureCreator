@@ -71,6 +71,7 @@ namespace DolphinDynamicInputTextureCreator
             _edit_host_devices_window = new Window
             {
                 Title = "Editing Host Devices",
+                Icon = (ImageSource)FindResource("Image.HostDevices"),
                 ResizeMode = ResizeMode.CanResize,
                 SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
@@ -89,6 +90,7 @@ namespace DolphinDynamicInputTextureCreator
             _edit_emulated_devices_window = new Window
             {
                 Title = "Editing Emulated Devices",
+                Icon = (ImageSource)FindResource("Image.EmulatedDevices"),
                 ResizeMode = ResizeMode.CanResize,
                 SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
@@ -107,6 +109,7 @@ namespace DolphinDynamicInputTextureCreator
             _edit_metadata_window = new Window
             {
                 Title = "Editing Metadata",
+                Icon = (ImageSource)FindResource("Image.Metadata"),
                 ResizeMode = ResizeMode.NoResize,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 Owner = Application.Current.MainWindow,
