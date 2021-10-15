@@ -66,18 +66,7 @@
                                                     </Grid.ColumnDefinitions>
                                                     <Button Grid.Column="1" Width="20" Cursor="Hand" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TexturePicker}}, Path=DataContext.Textures.RemoveCommand}" CommandParameter="{Binding}">
                                                         <Button.Style>
-                                                            <Style TargetType="{x:Type Button}">
-                                                                <Setter Property="Template">
-                                                                    <Setter.Value>
-                                                                        <ControlTemplate TargetType="Button">
-                                                                            <Border>
-                                                                                <Grid Background="Transparent">
-                                                                                    <ContentPresenter/>
-                                                                                </Grid>
-                                                                            </Border>
-                                                                        </ControlTemplate>
-                                                                    </Setter.Value>
-                                                                </Setter>
+                                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource blank}">
                                                                 <Setter Property="Content" >
                                                                     <Setter.Value>
                                                                         <Path Fill="DarkRed" Data="{DynamicResource Geometry.Delete}" Style="{StaticResource DropShadow}"/>
