@@ -2,6 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!--#region Icon Styles-->
+    <Style TargetType="Path" x:Key="DropShadow">
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect x:Name="Shadow" Color="Black" Opacity="0.5" ShadowDepth="1" BlurRadius="1" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="Path">
         <Setter Property="Stretch" Value="Uniform"/>
         <Style.Triggers>
@@ -13,30 +22,30 @@
     <!--#endregion-->
     
     <!--#region Menu-->
-    <Path x:Key="Icon.Save" Fill="RoyalBlue" Stretch="Uniform" Data="{StaticResource Geometry.Save}" />
-    <Path x:Key="Icon.SaveAs" Fill="RoyalBlue" Stretch="UniformToFill" Data="{StaticResource Geometry.SaveAs}" />
-    <Path x:Key="Icon.New" Fill="CornflowerBlue" Stretch="Uniform" Data="{StaticResource Geometry.New}" />
-    <Path x:Key="Icon.Open" Fill="CornflowerBlue" Stretch="Uniform" Data="{StaticResource Geometry.Open}" />
-    <Path x:Key="Icon.Import" Fill="DarkBlue" Stretch="Uniform" Data="{StaticResource Geometry.Import}" />
-    <Path x:Key="Icon.Export" Fill="DarkBlue" Stretch="Uniform" Data="{StaticResource Geometry.Export}" />
-    <Path x:Key="Icon.Setting" Fill="Black" Stretch="UniformToFill" Data="{StaticResource Geometry.Setting}" />
-    <Path x:Key="Icon.Close" Fill="DarkRed" Stretch="Uniform" Data="{StaticResource Geometry.Close}" />
+    <Path x:Key="Icon.Save" Fill="RoyalBlue" Data="{StaticResource Geometry.Save}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.SaveAs" Fill="RoyalBlue" Stretch="UniformToFill" Data="{StaticResource Geometry.SaveAs}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.New" Fill="CornflowerBlue" Data="{StaticResource Geometry.New}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.Open" Fill="CornflowerBlue" Data="{StaticResource Geometry.New}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.Import" Fill="DarkBlue" Data="{StaticResource Geometry.Import}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.Export" Fill="DarkBlue" Data="{StaticResource Geometry.Export}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.Setting" Fill="Black" Data="{StaticResource Geometry.Setting}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.Close" Fill="DarkRed" Data="{StaticResource Geometry.Close}" Style="{StaticResource DropShadow}" />
 
-    <Path x:Key="Icon.EmulatedDevices" Fill="Sienna" Stretch="Uniform" Data="{StaticResource Geometry.EmulatedDevices}" />
-    <Path x:Key="Icon.HostDevices" Fill="Sienna" Stretch="Uniform" Data="{StaticResource Geometry.HostDevices}" />
-    <Path x:Key="Icon.Metadata" Fill="Sienna" Stretch="Uniform" Data="{StaticResource Geometry.Metadata}" />
+    <Path x:Key="Icon.EmulatedDevices" Fill="Sienna" Data="{StaticResource Geometry.EmulatedDevices}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.HostDevices" Fill="Sienna" Data="{StaticResource Geometry.HostDevices}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.Metadata" Fill="Sienna" Data="{StaticResource Geometry.Metadata}" Style="{StaticResource DropShadow}" />
     <!--#endregion-->
 
     <!--#region Tools-->
-    <Path x:Key="Icon.Grid" Fill="Gray" Stretch="Uniform" Data="{StaticResource Geometry.Grid}" />
-    <Path x:Key="Icon.NoGrid" Fill="Gray" Stretch="Uniform" Data="{StaticResource Geometry.NoGrid}" />
-    <Path x:Key="Icon.CanvasDark" Fill="Gray" Stretch="Uniform" Data="{StaticResource Geometry.CanvasDark}" />
-    <Path x:Key="Icon.CanvasLight" Fill="Gray" Stretch="Uniform" Data="{StaticResource Geometry.CanvasLight}" />
-    <Path x:Key="Icon.FillRegion" Fill="Gray" Stretch="Uniform" Data="{StaticResource Geometry.FillRegion}" />
+    <Path x:Key="Icon.Grid" Fill="Gray" Data="{StaticResource Geometry.Grid}" />
+    <Path x:Key="Icon.NoGrid" Fill="Gray" Data="{StaticResource Geometry.NoGrid}" />
+    <Path x:Key="Icon.CanvasDark" Fill="Gray" Data="{StaticResource Geometry.CanvasDark}" />
+    <Path x:Key="Icon.CanvasLight" Fill="Gray" Data="{StaticResource Geometry.CanvasLight}" />
+    <Path x:Key="Icon.FillRegion" Fill="Gray" Data="{StaticResource Geometry.FillRegion}" />
     <!--#endregion-->
 
     <!--#region other-->
-    <Path x:Key="Icon.Delete" Fill="DarkRed" Stretch="Uniform"  Data="{DynamicResource Geometry.Delete}"/>
+    <Path x:Key="Icon.Delete" Fill="DarkRed" Stretch="Uniform"  Data="{DynamicResource Geometry.Delete}" Style="{StaticResource DropShadow}"/>
     <!--#endregion-->
 
     <!--#region Windows Icons-->
