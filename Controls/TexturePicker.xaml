@@ -80,18 +80,14 @@
                                                                 </Setter>
                                                                 <Setter Property="Content">
                                                                     <Setter.Value>
-                                                                        <Path Fill="DarkRed" Stretch="Uniform"  Data="{DynamicResource Delete}"/>
+                                                                        <Path Fill="DarkRed" Stretch="Uniform"  Data="{DynamicResource Geometry.Delete}"/>
                                                                     </Setter.Value>
                                                                 </Setter>
-                                                                <!-- This icon was obtained via the MaterialDesignIcon pack.  It is licensed under the Apache 2.0 license, see license under 3rdparty for full details -->
-                                                                <Style.Resources>
-                                                                    <Geometry x:Key ="Delete">M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z</Geometry>
-                                                                </Style.Resources>
                                                                 <Style.Triggers>
                                                                     <Trigger Property="IsMouseOver" Value="True">
                                                                         <Setter Property="Content">
                                                                             <Setter.Value>
-                                                                                <Path Fill="Red" Stretch="Uniform"  Data="{DynamicResource Delete}"/>
+                                                                                <Path Fill="Red" Stretch="Uniform"  Data="{DynamicResource Geometry.Delete}"/>
                                                                             </Setter.Value>
                                                                         </Setter>
                                                                     </Trigger>

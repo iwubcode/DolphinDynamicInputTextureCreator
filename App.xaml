@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="resources\icongeometry.xaml"/>
+                <ResourceDictionary Source="resources\icons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
