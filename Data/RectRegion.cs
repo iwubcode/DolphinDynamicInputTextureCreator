@@ -59,7 +59,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                 if (_x < 0)
                     _x = 0;
 
-                if (OwnedTexture != null)
+                if (OwnedTexture != null && OwnedTexture.ImageWidth != 0)
                 {
                     if (_x + Width > OwnedTexture.ImageWidth)
                         _x = OwnedTexture.ImageWidth - Width;
@@ -80,7 +80,7 @@ namespace DolphinDynamicInputTextureCreator.Data
                 if (_y < 0)
                     _y = 0;
 
-                if (OwnedTexture != null)
+                if (OwnedTexture != null && OwnedTexture.ImageHeight != 0)
                 {
                     if (_y + Height > OwnedTexture.ImageHeight)
                         _y = OwnedTexture.ImageHeight - Height;
@@ -98,7 +98,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             set
             {
                 _height = Math.Round(value, DecimalPlaces);
-                if (OwnedTexture != null)
+                if (OwnedTexture != null && OwnedTexture.ImageHeight != 0)
                 {
                     if ((_height + Y) > OwnedTexture.ImageHeight)
                         _height = OwnedTexture.ImageHeight - Y;
@@ -117,7 +117,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             set
             {
                 _width = Math.Round(value, DecimalPlaces);
-                if (OwnedTexture != null)
+                if (OwnedTexture != null && OwnedTexture.ImageWidth != 0)
                 {
                     if ((_width + X) > OwnedTexture.ImageWidth)
                         _width = OwnedTexture.ImageWidth - X;

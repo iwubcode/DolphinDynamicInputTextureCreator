@@ -153,7 +153,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             }
         }
 
-        private void WriteImage(string location, Interfaces.IExportableImage image)
+        private void WriteImage(string location, Interfaces.IImage image)
         {
             // Unlikely that we get here but skip textures that don't exist
             if (!File.Exists(image.TexturePath))
@@ -174,7 +174,7 @@ namespace DolphinDynamicInputTextureCreator.Data
         }
 
         #region JSON WRITER HELPERS
-        private string CheckRelativeTexturePath(Interfaces.IExportableImage image, HostDevice device, DynamicInputTexture texture = null)
+        private string CheckRelativeTexturePath(Interfaces.IImage image, HostDevice device, DynamicInputTexture texture = null)
         {
             string relativepath = device.Name.Replace("/", "_");
             if (texture != null)
@@ -185,7 +185,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             return CheckRelativeTexturePath(image, relativepath);
         }
 
-        private string CheckRelativeTexturePath(Interfaces.IExportableImage image, string relativepath = "")
+        private string CheckRelativeTexturePath(Interfaces.IImage image, string relativepath = "")
         {
             if (image.RelativeTexturePath != null)
                 return image.RelativeTexturePath;
@@ -319,6 +319,50 @@ namespace DolphinDynamicInputTextureCreator.Data
                 writer.WriteEndObject();
             }
         }
+        #endregion
+
+        #region Checks
+
+        /// <summary>
+        /// Check if all images exist.
+        /// Calls DynamicInputTextureEvents.ImageNotExist
+        /// </summary>
+        /// <returns>true = Error-free</returns>
+        public bool CheckImagePaths()
+        {
+            foreach (HostDevice device in HostDevices)
+            {
+                if (!CheckTexturePathes(device.HostKeys, device.Name))
+                    return false;
+            }
+
+            if (!CheckTexturePathes(Textures))
+                return false;
+
+            foreach (DynamicInputTexture texture in Textures)
+            {
+                foreach (HostDevice device in texture.HostDevices)
+                {
+                    if (!CheckTexturePathes(device.HostKeys, $"{texture.TextureHash} {device.Name}"))
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        private bool CheckTexturePathes<T>(IList<T> imagelist, string details = "") where T : Interfaces.IImage
+        {
+            foreach (var image in imagelist)
+            {
+                if (!File.Exists(image.TexturePath))
+                {
+                    if (DynamicInputTextureEvents.ImageNotExist == null || !DynamicInputTextureEvents.ImageNotExist(image, details != "" ? details : Path.GetFileName(image.TexturePath) ))
+                        return false;
+                }
+            }
+            return true;
+        }
+
         #endregion
 
         /// <summary>

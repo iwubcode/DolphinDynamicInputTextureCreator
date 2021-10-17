@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace DolphinDynamicInputTextureCreator.Data
 {
-    public class HostKey : Other.PropertyChangedBase, Interfaces.IDeviceKey, Interfaces.IExportableImage
+    public class HostKey : Other.PropertyChangedBase, Interfaces.IDeviceKey, Interfaces.IImage
     {
 
         #region Properties
