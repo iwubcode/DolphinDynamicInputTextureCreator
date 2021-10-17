@@ -34,6 +34,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 emulatedDevices = value;
                 EmulatedDeviceSuggestions.SetTargetList(EmulatedDevices);
                 EmulatedDevices.SelectedChanged = (Device) => UpdateAvailableSuggestions();
+                UpdateAvailableSuggestions();
                 OnPropertyChanged(nameof(EmulatedDevices));
             }
         }
@@ -68,7 +69,6 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 EmulatedKeySuggestions.SetTargetList(EmulatedDevices.Selected.EmulatedKeys);
             }
         }
-
 
         #endregion
 
