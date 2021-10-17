@@ -164,7 +164,7 @@ namespace DolphinDynamicInputTextureCreator.Data
             string output_location = Path.Combine(location, image.RelativeTexturePath);
 
             // Prevents the file from trying to overwrite itself.
-            if (output_location == image.TexturePath)
+            if (Path.GetFullPath(output_location) == Path.GetFullPath(image.TexturePath))
                 return;
 
             //write the image
@@ -363,6 +363,253 @@ namespace DolphinDynamicInputTextureCreator.Data
             return true;
         }
 
+        #endregion
+		
+        #region Import
+
+        #region JSON Read HELPERS
+        private void ReadHostControls(JsonReader reader, string path, IList<HostDevice> hostDevices)
+        {
+            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            {
+                if (reader.TokenType == JsonToken.PropertyName)
+                {
+                    HostDevice Device = new HostDevice { Name = reader.Value.ToString() };
+
+                    reader.Read();
+                    switch (reader.TokenType)
+                    {
+                        case JsonToken.StartObject: // V1
+                            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+                            {
+                                if (reader.TokenType == JsonToken.PropertyName)
+                                {
+                                    HostKey key = new HostKey();
+                                    key.Name = reader.Value.ToString();
+                                    key.RelativeTexturePath = reader.ReadAsString();
+                                    key.TexturePath = Path.Combine(path, key.RelativeTexturePath);
+                                    Device.HostKeys.Add(key);
+                                }
+                            }
+                            break;
+                        case JsonToken.StartArray: // V2
+                            while (reader.Read() && reader.TokenType != JsonToken.EndArray)
+                            {
+                                if (reader.TokenType == JsonToken.StartObject)
+                                {
+                                    ReadV2Hostkey(reader, path, Device);
+                                }
+                            }
+                            break;
+                        default:
+                            return;
+                    }
+                    hostDevices.Add(Device);
+                }
+            }
+        }
+
+        private void ReadV2Hostkey(JsonReader reader, string path, HostDevice device)
+        {
+            HostKey key = new HostKey();
+            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            {
+                switch (reader.Value)
+                {
+                    case "keys":
+                        if (!reader.Read() || reader.TokenType != JsonToken.StartArray)
+                            break;
+
+                        while (reader.Read() && reader.TokenType != JsonToken.EndArray)
+                        {
+                            //multi key not implemented
+                            if (key.Name == null)
+                                key.Name = reader.Value.ToString();
+                        }
+                        break;
+                    case "image":
+                        key.RelativeTexturePath = reader.ReadAsString();
+                        key.TexturePath = Path.Combine(path, key.RelativeTexturePath);
+                        break;
+                    case "tag":
+                        //not implemented
+                        return;
+                }
+            }
+            device.HostKeys.Add(key);
+        }
+
+        private void ReadEmulatedControls(JsonReader reader, DynamicInputTexture texture)
+        {
+            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            {
+                if (reader.TokenType == JsonToken.PropertyName)
+                {
+                    EmulatedDevice emulatedDevice = new EmulatedDevice { Name = reader.Value.ToString() };
+
+                    reader.Read();
+                    switch (reader.TokenType)
+                    {
+                        case JsonToken.StartObject: // V1
+                            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+                            {
+                                if (reader.TokenType == JsonToken.PropertyName)
+                                {
+                                    EmulatedKey emulatedkey = new EmulatedKey { Name = reader.Value.ToString() };
+                                    if (!emulatedDevice.EmulatedKeys.Contains(emulatedkey))
+                                        emulatedDevice.EmulatedKeys.Add(emulatedkey);
+
+                                    if (reader.Read() && reader.TokenType == JsonToken.StartArray)
+                                    {
+                                        while (reader.Read() && reader.TokenType == JsonToken.StartArray)
+                                        {
+                                            RectRegion Region = new RectRegion { Device = emulatedDevice, Key = emulatedkey, OwnedTexture = texture, ScaleFactor = 1 };
+                                            if (ReadRectRegion(reader, Region))
+                                            {
+                                                texture.Regions.Add(Region);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case JsonToken.StartArray: // V2
+                            while (reader.Read() && reader.TokenType != JsonToken.EndArray)
+                            {
+                                ReadV2EmulatedKey(reader, emulatedDevice, texture);
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private bool ReadRectRegion(JsonReader reader, RectRegion Region)
+        {
+            if (reader.TokenType == JsonToken.StartArray)
+            {
+                try
+                {
+                    Region.X = reader.ReadAsDouble().Value;
+                    Region.Y = reader.ReadAsDouble().Value;
+                    Region.Width = reader.ReadAsDouble().Value - Region.X;
+                    Region.Height = reader.ReadAsDouble().Value - Region.Y;
+                }
+                catch (JsonReaderException)
+                {
+                    return false;
+                }
+                finally
+                {
+                    while (reader.TokenType != JsonToken.EndArray && reader.Read()) { }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void ReadV2EmulatedKey(JsonReader reader, EmulatedDevice emulatedDevice, DynamicInputTexture texture)
+        {
+            EmulatedKey emulatedkey = new EmulatedKey();
+            while (reader.Read() && reader.TokenType != JsonToken.EndObject)
+            {
+                switch (reader.Value)
+                {
+                    case "key":
+                        emulatedkey.Name = reader.ReadAsString();
+                        break;
+                    case "region":
+                        RectRegion Region = new RectRegion { Device = emulatedDevice, Key = emulatedkey, OwnedTexture = texture, ScaleFactor = 1 };
+                        if (reader.Read() && ReadRectRegion(reader, Region))
+                        {
+                            texture.Regions.Add(Region);
+                        }
+                        break;
+                    case "tag":
+                        //not implemented
+                        break;
+                    case "bind_type":
+                        //not implemented
+                        break;
+                    case "copy_type":
+                        //not implemented
+                        break;
+                    case "sub_entries":
+                        //not implemented
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        public void ImportFromLocation(string file) => ReadJson(file);
+        private void ReadJson(string file)
+        {
+            string path = Path.GetDirectoryName(file);
+            GeneratedJsonName = Path.GetFileNameWithoutExtension(file);
+            using (FileStream fs = File.Open(file, FileMode.Open))
+            using (StreamReader sr = new StreamReader(fs))
+            using (JsonReader Reader = new JsonTextReader(sr))
+            {
+                while (Reader.Read())
+                {
+                    if (Reader.TokenType == JsonToken.PropertyName)
+                    {
+                        switch (Reader.Value)
+                        {
+                            case "specification":
+                                break;
+                            case "default_host_controls":
+                                ReadHostControls(Reader, path, HostDevices);
+                                break;
+                            case "generated_folder_name":
+                                GeneratedFolderName = Reader.ReadAsString();
+                                break;
+                            case "preserve_aspect_ratio":
+                                PreserveAspectRatio = Reader.ReadAsBoolean().Value;
+                                break;
+                            case "output_textures":
+                                while (Reader.Read() && Reader.TokenType != JsonToken.EndObject)
+                                {
+                                    if (Reader.TokenType == JsonToken.PropertyName)
+                                    {
+                                        DynamicInputTexture texture = new DynamicInputTexture { TextureHash = Reader.Value.ToString() };
+                                        while (Reader.Read() && Reader.TokenType != JsonToken.EndObject)
+                                        {
+                                            if (Reader.TokenType == JsonToken.PropertyName)
+                                            {
+                                                switch (Reader.Value)
+                                                {
+                                                    case "image":
+                                                        texture.RelativeTexturePath = Reader.ReadAsString();
+                                                        texture.TexturePath = Path.Combine(path, texture.RelativeTexturePath);
+                                                        break;
+                                                    case "host_controls":
+                                                        ReadHostControls(Reader, path, texture.HostDevices);
+                                                        break;
+                                                    case "emulated_controls":
+                                                        ReadEmulatedControls(Reader, texture);
+                                                        break;
+                                                    case "preserve_aspect_ratio":
+                                                        //not implemented
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                        Textures.Add(texture);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+		
         #endregion
 
         /// <summary>

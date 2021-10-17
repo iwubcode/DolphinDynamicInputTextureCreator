@@ -154,17 +154,53 @@ namespace DolphinDynamicInputTextureCreator
             {
                 string input = File.ReadAllText(dialog.FileName);
                 var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
-                InputPack = JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings);
+                try
+                {
+                    InputPack = JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings);
+                }
+                catch (JsonReaderException JRE)
+                {
+                    MessageBox.Show(String.Format("JSON parse error reading file '{0}' was found on line '{1}'", dialog.FileName, JRE.LineNumber), "Open Error!");
+                    return;
+                }
                 _saved_document = dialog.FileName;
                 UpdateEditWindows();
             }
         }
 
+        #endregion
+
+        #region Import
+
+        private void ImportData_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new System.Windows.Forms.OpenFileDialog();
+            dialog.Filter = "JSON Files (*.json)|*.json";
+            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                DynamicInputPackViewModel inputPack = new DynamicInputPackViewModel();
+                try
+                {
+                    inputPack.ImportFromLocation(dialog.FileName);
+                }
+                catch (JsonReaderException JRE)
+                {
+                    MessageBox.Show(String.Format("JSON parse error reading file '{0}' was found on line '{1}'", dialog.FileName, JRE.LineNumber), "Import Error!");
+                    return;
+                }
+                InputPack = inputPack;
+                _saved_document = null;
+                UpdateEditWindows();
+            }
+        }
+
+        #endregion
+
         private void OpenData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
         }
-        #endregion
 
         #region NEW
         private void NewData_Click(object sender, RoutedEventArgs e)
