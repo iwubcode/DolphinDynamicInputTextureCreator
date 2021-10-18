@@ -23,8 +23,7 @@ namespace DolphinDynamicInputTextureCreator.Models
 
         private static string GetSettingsFilePath(string filename)
         {
-            string settings_path = Assembly.GetExecutingAssembly().Location;
-            settings_path = Path.GetDirectoryName(settings_path);
+            string settings_path = Directory.GetCurrentDirectory();
             settings_path = Path.Combine(settings_path, filename);
             return settings_path;
         }
