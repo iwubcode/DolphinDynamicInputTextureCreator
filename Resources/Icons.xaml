@@ -48,22 +48,4 @@
     <Path x:Key="Icon.Delete" Fill="DarkRed" Stretch="Uniform"  Data="{DynamicResource Geometry.Delete}" Style="{StaticResource DropShadow}"/>
     <!--#endregion-->
 
-    <!--#region Windows Icons-->
-    <DrawingImage x:Key="Image.EmulatedDevices">
-        <DrawingImage.Drawing>
-            <GeometryDrawing Geometry="{StaticResource Geometry.EmulatedDevices}" Brush="Sienna"/>
-        </DrawingImage.Drawing>
-    </DrawingImage>
-    <DrawingImage x:Key="Image.HostDevices">
-        <DrawingImage.Drawing>
-            <GeometryDrawing Geometry="{StaticResource Geometry.HostDevices}" Brush="Sienna"/>
-        </DrawingImage.Drawing>
-    </DrawingImage>
-    <DrawingImage x:Key="Image.Metadata">
-        <DrawingImage.Drawing>
-            <GeometryDrawing Geometry="{StaticResource Geometry.Metadata}" Brush="Sienna"/>
-        </DrawingImage.Drawing>
-    </DrawingImage>
-    <!--#endregion-->
-
 </ResourceDictionary>

@@ -66,7 +66,7 @@ namespace DolphinDynamicInputTextureCreator
             _edit_host_devices_window = new Window
             {
                 Title = "Editing Host Devices",
-                Icon = (ImageSource)FindResource("Image.HostDevices"),
+                Icon = ResourceShapePathToImage("Icon.HostDevices"),
                 ResizeMode = ResizeMode.CanResize,
                 SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
@@ -85,7 +85,7 @@ namespace DolphinDynamicInputTextureCreator
             _edit_emulated_devices_window = new Window
             {
                 Title = "Editing Emulated Devices",
-                Icon = (ImageSource)FindResource("Image.EmulatedDevices"),
+                Icon = ResourceShapePathToImage("Icon.EmulatedDevices"),
                 ResizeMode = ResizeMode.CanResize,
                 SizeToContent = SizeToContent.Manual,
                 Owner = Application.Current.MainWindow,
@@ -104,7 +104,7 @@ namespace DolphinDynamicInputTextureCreator
             _edit_metadata_window = new Window
             {
                 Title = "Editing Metadata",
-                Icon = (ImageSource)FindResource("Image.Metadata"),
+                Icon = ResourceShapePathToImage("Icon.Metadata"),
                 ResizeMode = ResizeMode.NoResize,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 Owner = Application.Current.MainWindow,
@@ -113,6 +113,11 @@ namespace DolphinDynamicInputTextureCreator
 
             UpdateEditWindows();
             _edit_metadata_window.Show();
+        }
+
+        private ImageSource ResourceShapePathToImage(object resourceKey)
+        {
+            return ValueConverters.ShapePathToImageConverter.ConvertToDrawingImage((System.Windows.Shapes.Path)FindResource(resourceKey));
         }
 
         public static RoutedUICommand SaveAsCmd = new RoutedUICommand("Save as...", "SaveAsCmd", typeof(MainWindow));
