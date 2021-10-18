@@ -167,7 +167,7 @@ namespace DolphinDynamicInputTextureCreator
 
         #region Export Import
 
-        private void ExportToLocation_Click(object sender, RoutedEventArgs e)
+        private void ExportData_Click(object sender, RoutedEventArgs e)
         {
             Dialogs.DialogExportToLocation(InputPack);
         }
