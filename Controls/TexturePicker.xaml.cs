@@ -27,24 +27,7 @@ namespace DolphinDynamicInputTextureCreator.Controls
 
         private void AddTexture_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-
-            dlg.DefaultExt = ".png";
-            dlg.Filter = "PNG Texture Files (tex1*.png)|tex1_*x*_*.png|PNG Files (*.png)|*.png";
-            dlg.Multiselect = true;
-
-            Nullable<bool> result = dlg.ShowDialog();
-            if (result == true)
-            {
-                foreach (var filename in dlg.FileNames)
-                {
-                    InputPack.Textures.Add(new Data.DynamicInputTexture
-                    {
-                        TextureHash = InputPack.ShouldGetHashFromTextureFilename ? System.IO.Path.GetFileName(filename) : "hash value",
-                        TexturePath = filename
-                    });
-                }
-            }
+            ViewModels.Dialogs.DialogAddTexture(InputPack);
         }
 
         /// <summary>
@@ -59,7 +42,7 @@ namespace DolphinDynamicInputTextureCreator.Controls
                 {
                     InputPack.Textures.Add(new Data.DynamicInputTexture
                     {
-                        TextureHash = InputPack.ShouldGetHashFromTextureFilename ? System.IO.Path.GetFileName(file) : "hash value",
+                        TextureHash = System.IO.Path.GetFileName(file),
                         TexturePath = file
                     });
                 }
