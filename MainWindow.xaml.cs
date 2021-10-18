@@ -37,6 +37,9 @@ namespace DolphinDynamicInputTextureCreator
             get => (DynamicInputPackViewModel)DataContext;
             set
             {
+                if (value == null)
+                    return;
+
                 value.CheckImagePaths();
                 DataContext = value;
                 ((PanZoomViewModel)PanZoom.DataContext).InputPack = value;
@@ -49,16 +52,6 @@ namespace DolphinDynamicInputTextureCreator
         private Window _edit_emulated_devices_window;
         private Window _edit_host_devices_window;
         private Window _edit_metadata_window;
-
-        private void ExportToLocation_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                InputPack.OutputToLocation(dialog.SelectedPath);
-            }
-        }
 
         private void QuitProgram_Click(object sender, RoutedEventArgs e)
         {
@@ -123,6 +116,20 @@ namespace DolphinDynamicInputTextureCreator
 
         public static RoutedUICommand SaveAsCmd = new RoutedUICommand("Save as...", "SaveAsCmd", typeof(MainWindow));
 
+        #region NEW
+        private void NewData_Click(object sender, RoutedEventArgs e)
+        {
+            InputPack = Models.DefaultData.NewInputPack();
+            UpdateEditWindows();
+            _saved_document = null;
+        }
+
+        private void NewData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+        #endregion
+
         #region SAVE
         private void SaveData_Click(object sender, RoutedEventArgs e)
         {
@@ -145,50 +152,32 @@ namespace DolphinDynamicInputTextureCreator
         #endregion
 
         #region OPEN
+
         private void OpenData_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.OpenFileDialog();
-            dialog.Filter = "DIT Files (*.dit)|*.dit|JSON Files (*.json)|*.json";
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                string input = File.ReadAllText(dialog.FileName);
-                var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
-                try
-                {
-                    InputPack = JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings);
-                }
-                catch (JsonReaderException JRE)
-                {
-                    MessageBox.Show(String.Format("JSON parse error reading file '{0}' was found on line '{1}'", dialog.FileName, JRE.LineNumber), "Open Error!");
-                    return;
-                }
-                _saved_document = dialog.FileName;
-                UpdateEditWindows();
-            }
+            InputPack = Dialogs.DialogOpenDIT(ref _saved_document);
+            UpdateEditWindows();
         }
 
+        private void OpenData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
         #endregion
 
-        #region Import
+        #region Export Import
+
+        private void ExportToLocation_Click(object sender, RoutedEventArgs e)
+        {
+            Dialogs.DialogExportToLocation(InputPack);
+        }
 
         private void ImportData_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.OpenFileDialog();
-            dialog.Filter = "JSON Files (*.json)|*.json";
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
+            DynamicInputPackViewModel inputPack = Dialogs.DialogImportFromLocation(Models.DefaultData.NewInputPack());
+
+            if (inputPack != null)
             {
-                DynamicInputPackViewModel inputPack = new DynamicInputPackViewModel();
-                try
-                {
-                    inputPack.ImportFromLocation(dialog.FileName);
-                }
-                catch (JsonReaderException JRE)
-                {
-                    MessageBox.Show(String.Format("JSON parse error reading file '{0}' was found on line '{1}'", dialog.FileName, JRE.LineNumber), "Import Error!");
-                    return;
-                }
                 InputPack = inputPack;
                 _saved_document = null;
                 UpdateEditWindows();
@@ -197,36 +186,13 @@ namespace DolphinDynamicInputTextureCreator
 
         #endregion
 
-        private void OpenData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        #region NEW
-        private void NewData_Click(object sender, RoutedEventArgs e)
-        {
-            InputPack = Models.DefaultData.NewInputPack();
-            UpdateEditWindows();
-            _saved_document = null;
-        }
-
-        private void NewData_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-        #endregion
-
         #region SAVE AS
+
         private void SaveAsData_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.SaveFileDialog();
-            dialog.Filter = "DIT Files (*.dit)|*.dit|JSON Files (*.json)|*.json";
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
+            bool result = Dialogs.DialogSaveDIT(InputPack, ref _saved_document);
+            if (result)
             {
-                string output = JsonConvert.SerializeObject(InputPack, Formatting.Indented);
-                File.WriteAllText(dialog.FileName, output);
-                _saved_document = dialog.FileName;
                 UnsavedChanges = false;
             }
         }
@@ -245,6 +211,7 @@ namespace DolphinDynamicInputTextureCreator
         {
             e.CanExecute = true;
         }
+
         #endregion
 
         private void UpdateEditWindows()
@@ -299,9 +266,7 @@ namespace DolphinDynamicInputTextureCreator
         {
             if (unsavedChanges)
             {
-                MessageBoxResult MessageResult;
-                MessageResult = MessageBox.Show("unsaved changes are lost, do you want to save?", "unsaved changes!", MessageBoxButton.YesNoCancel);
-                switch (MessageResult)
+                switch (MessageBox.Show("unsaved changes are lost, do you want to save?", "unsaved changes!", MessageBoxButton.YesNoCancel))
                 {
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;

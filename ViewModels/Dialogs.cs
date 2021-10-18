@@ -1,13 +1,14 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Windows;
 
 namespace DolphinDynamicInputTextureCreator.ViewModels
 {
     public static class Dialogs
     {
+        #region MessageDialogs
 
         public static bool ImageNotExistMessage(Interfaces.IImage image, string details)
         {
@@ -20,14 +21,14 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             return false;
         }
 
-        #region Dialogs
-
         #endregion
+
+        #region FileDialogs
 
         public static bool DialogForNewPath(Interfaces.IImage image)
         {
-            var dialog = new OpenFileDialog();
-            dialog.FileName = System.IO.Path.GetFileName(image.TexturePath);
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.FileName = Path.GetFileName(image.TexturePath);
             dialog.DefaultExt = ".png";
             dialog.Filter = "Original Name |" + dialog.FileName;
             dialog.Filter += "|PNG Files (*.png)|*.png";
@@ -39,6 +40,95 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             return false;
         }
 
+        public static void DialogAddTexture(in DynamicInputPackViewModel pack)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.DefaultExt = ".png";
+            dialog.Filter = "PNG Texture Files (tex1*.png)|tex1_*x*_*.png|PNG Files (*.png)|*.png";
+            dialog.Multiselect = true;
+
+            if (dialog.ShowDialog() == true)
+            {
+                foreach (var filename in dialog.FileNames)
+                {
+                    pack.Textures.Add(new Data.DynamicInputTexture
+                    {
+                        TextureHash = Path.GetFileName(filename),
+                        TexturePath = filename
+                    });
+                }
+            }
+        }
+
+        public static bool DialogSaveDIT(in DynamicInputPackViewModel pack, ref string savepath)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "DIT Files (*.dit)|*.dit|JSON Files (*.json)|*.json";
+            if (dialog.ShowDialog() == true)
+            {
+                string output = JsonConvert.SerializeObject(pack, Formatting.Indented);
+                File.WriteAllText(dialog.FileName, output);
+                savepath = dialog.FileName;
+                return true;
+            }
+            return false;
+        }
+
+        public static DynamicInputPackViewModel DialogOpenDIT(ref string savepath)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "DIT Files (*.dit)|*.dit|JSON Files (*.json)|*.json";
+            if (dialog.ShowDialog() == true)
+            {
+                string input = File.ReadAllText(dialog.FileName);
+                var settings = new JsonSerializerSettings() { ObjectCreationHandling = ObjectCreationHandling.Replace };
+                try
+                {
+                    savepath = dialog.FileName;
+                    return JsonConvert.DeserializeObject<DynamicInputPackViewModel>(input, settings);
+                }
+                catch (JsonReaderException JRE)
+                {
+                    MessageBox.Show(String.Format("JSON parse error reading file '{0}' was found on line '{1}'", dialog.FileName, JRE.LineNumber), "Open Error!");
+                }
+            }
+            return null;
+        }
+
+
+        public static DynamicInputPackViewModel DialogImportFromLocation() => DialogImportFromLocation(new DynamicInputPackViewModel());
+        public static DynamicInputPackViewModel DialogImportFromLocation(DynamicInputPackViewModel pack)
+        {
+
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "JSON Files (*.json)|*.json";
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    pack.ImportFromLocation(dialog.FileName);
+                    return pack;
+                }
+                catch (JsonReaderException JRE)
+                {
+                    MessageBox.Show(String.Format("JSON parse error reading file '{0}' was found on line '{1}'", dialog.FileName, JRE.LineNumber), "Import Error!");
+                }
+            }
+            return null;
+        }
+
+        public static bool DialogExportToLocation(in DynamicInputPackViewModel pack)
+        {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                pack.OutputToLocation(dialog.SelectedPath);
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
 
     }
 }

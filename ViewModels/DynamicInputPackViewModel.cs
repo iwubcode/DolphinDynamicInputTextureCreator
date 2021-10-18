@@ -88,7 +88,6 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         }
 
         #endregion
-		
         #region Commands
 
         #region SelectedTexture
