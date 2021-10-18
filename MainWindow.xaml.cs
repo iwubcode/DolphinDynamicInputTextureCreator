@@ -266,7 +266,7 @@ namespace DolphinDynamicInputTextureCreator
         {
             if (unsavedChanges)
             {
-                switch (MessageBox.Show("unsaved changes are lost, do you want to save?", "unsaved changes!", MessageBoxButton.YesNoCancel))
+               switch (MessageBox.Show("The project has unsaved changes, do you want to save?", "unsaved changes!", MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
                 {
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;

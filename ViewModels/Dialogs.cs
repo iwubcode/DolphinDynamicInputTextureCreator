@@ -13,7 +13,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         public static bool ImageNotExistMessage(Interfaces.IImage image, string details)
         {
             MessageBoxResult MessageResult;
-            MessageResult = MessageBox.Show(string.Format("'{0}'\nThe image '{1}' could not be found!\nSearch for the picture?", image.TexturePath, details), "Image could not be found!", MessageBoxButton.YesNo);
+            MessageResult = MessageBox.Show(string.Format("'{0}'\nThe image '{1}' could not be found!\nSearch for the picture?", image.TexturePath, details), "Image could not be found!", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (MessageResult == MessageBoxResult.Yes)
             {
                 return DialogForNewPath(image);
