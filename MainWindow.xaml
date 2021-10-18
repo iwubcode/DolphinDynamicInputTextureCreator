@@ -21,8 +21,8 @@
                 <MenuItem Header="_Save" Command="Save"  Icon="{DynamicResource Icon.Save}"/>
                 <MenuItem Header="_Save As..." Command="{x:Static local:MainWindow.SaveAsCmd}" Icon="{DynamicResource Icon.SaveAs}"/>
                 <Separator />
-                <MenuItem Header="_Export Dolphin Output to Location..." Name="ExportToLocation" Click="ExportToLocation_Click" Icon="{DynamicResource Icon.Export}" />
-                <MenuItem Header="_Import Dolphin Output from Location..." Click="ImportData_Click" Icon="{DynamicResource Icon.Import}" />
+                <MenuItem Header="_Export as Dolphin pack..." Click="ExportData_Click" Icon="{DynamicResource Icon.Export}" />
+                <MenuItem Header="_Import from Dolphin pack..." Click="ImportData_Click" Icon="{DynamicResource Icon.Import}" />
                 <Separator />
                 <MenuItem Header="_Save Startup Settings" Icon="{DynamicResource Icon.Setting}">
                     <MenuItem Header="_Save Suggestions"  Click="SaveStartupSuggestions_Click"/>
