@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DolphinDynamicInputTexture.Data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -35,7 +36,7 @@ namespace DolphinDynamicInputTextureCreator.Controls
             {
                 if (System.IO.Path.GetExtension(file).ToLower() == ".png")
                 {
-                    ViewModel.HostDevices.Selected.HostKeys.Add(new Data.HostKey
+                    ViewModel.HostDevices.Selected.HostKeys.Add(new HostKey
                     {
                         Name = "",
                         TexturePath = file

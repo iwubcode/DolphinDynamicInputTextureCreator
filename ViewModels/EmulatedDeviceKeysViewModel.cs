@@ -1,6 +1,5 @@
-﻿using DolphinDynamicInputTextureCreator.Data;
+﻿using DolphinDynamicInputTexture.Data;
 using DolphinDynamicInputTextureCreator.Models.Suggestions;
-using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
 using System.Text.RegularExpressions;
 using System.Windows.Input;

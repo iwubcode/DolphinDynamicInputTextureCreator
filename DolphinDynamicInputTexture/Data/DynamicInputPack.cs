@@ -1,15 +1,10 @@
-﻿using DolphinDynamicInputTextureCreator.Other;
-using DolphinDynamicInputTextureCreator.ViewModels.Commands;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
-using System.Windows.Input;
-using System.Windows.Media;
+//using System.Windows.Media;
 
-namespace DolphinDynamicInputTextureCreator.Data
+namespace DolphinDynamicInputTexture.Data
 {
     public class DynamicInputPack : Other.PropertyChangedBase
     {

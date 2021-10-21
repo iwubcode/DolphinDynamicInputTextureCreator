@@ -1,4 +1,4 @@
-﻿using DolphinDynamicInputTextureCreator.Data;
+﻿using DolphinDynamicInputTexture.Data;
 using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
 using Newtonsoft.Json;
@@ -110,7 +110,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         {
             if (Textures.Selected.Regions.Count > 0)
             {
-                foreach (Data.RectRegion r in Textures.Selected?.Regions)
+                foreach (RectRegion r in Textures.Selected?.Regions)
                 {
                     if (r.X == 0 && r.Y == 0 &&
                         r.Width == r.OwnedTexture.ImageWidth &&
@@ -123,7 +123,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 }
             }
 
-            Data.RectRegion f = new Data.RectRegion() { X = 0, Y = 0, Height = Textures.Selected.ImageHeight, Width = Textures.Selected.ImageWidth, Device = SelectedRegionBrush.SelectedEmulatedDevice, Key = SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = Textures.Selected };
+            RectRegion f = new RectRegion() { X = 0, Y = 0, Height = Textures.Selected.ImageHeight, Width = Textures.Selected.ImageWidth, Device = SelectedRegionBrush.SelectedEmulatedDevice, Key = SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = Textures.Selected };
             Textures.Selected.Regions.Add(f);
         }
 
@@ -134,7 +134,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
 
             if (Textures.Selected.Regions.Count > 0)
             {
-                foreach (Data.RectRegion r in Textures.Selected.Regions)
+                foreach (RectRegion r in Textures.Selected.Regions)
                 {
                     if (r.X == 0 && r.Y == 0 &&
                         r.Width == r.OwnedTexture.ImageWidth &&

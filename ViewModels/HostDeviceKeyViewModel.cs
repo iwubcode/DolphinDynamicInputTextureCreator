@@ -1,4 +1,4 @@
-﻿using DolphinDynamicInputTextureCreator.Data;
+﻿using DolphinDynamicInputTexture.Data;
 using DolphinDynamicInputTextureCreator.Models.Suggestions;
 using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
@@ -89,7 +89,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                     string name = Path.GetFileNameWithoutExtension(file);
                     name = HostKeySuggestions.Available.Contains(name) ? name : "";
 
-                    HostDevices.Selected.HostKeys.Add(new Data.HostKey { Name = name, TexturePath = file });
+                    HostDevices.Selected.HostKeys.Add(new HostKey { Name = name, TexturePath = file });
                 }
             }
         }

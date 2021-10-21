@@ -1,5 +1,4 @@
-﻿
-namespace DolphinDynamicInputTextureCreator.Interfaces
+﻿namespace DolphinDynamicInputTexture.Interfaces
 {
     public interface IDeviceKey
     {

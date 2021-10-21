@@ -1,4 +1,4 @@
-﻿namespace DolphinDynamicInputTextureCreator.Data
+﻿namespace DolphinDynamicInputTexture.Data
 {
     public class EmulatedKey : Other.PropertyChangedBase, Interfaces.IDeviceKey
     {

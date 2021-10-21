@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 ﻿using System;
 
-namespace DolphinDynamicInputTextureCreator.Data
+namespace DolphinDynamicInputTexture.Data
 {
     public class RectRegion : Other.PropertyChangedBase
     {

@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 
-namespace DolphinDynamicInputTextureCreator.Data
+namespace DolphinDynamicInputTexture.Data
 {
     [JsonObject(IsReference = true)]
     public class DynamicInputTexture : Other.PropertyChangedBase, Interfaces.IImage
