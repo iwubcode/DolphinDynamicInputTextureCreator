@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using DolphinDynamicInputTexture.Interfaces;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 
 namespace DolphinDynamicInputTexture.Data
 {
@@ -82,16 +82,50 @@ namespace DolphinDynamicInputTexture.Data
         /// <summary>
         /// Regions in the texture that are applicable for replacement
         /// </summary>
-        public ObservableCollection<RectRegion> Regions
+        public ObservableCollection<InputRegion> Regions
         {
-            get => _regions;
+            get => _regions ??= Regions = new ObservableCollection<InputRegion>();
             set
             {
+                if (_regions != null)
+                {
+                    _regions.CollectionChanged -= OnCollectionOfRegionsChanged;
+                }
+                if (value.Count > 0)
+                {
+                    foreach (InputRegion Region in value)
+                    {
+                        Region.RegionRect.OwnedTexture = this;
+                        foreach (InputRegion SubEntrie in Region.SubEntries)
+                        {
+                            SubEntrie.RegionRect.OwnedTexture = this;
+                        }
+                    }
+                }
                 _regions = value;
+                _regions.CollectionChanged += OnCollectionOfRegionsChanged;
                 OnPropertyChanged(nameof(Regions));
             }
         }
-        private ObservableCollection<RectRegion> _regions = new ObservableCollection<RectRegion>();
+        private ObservableCollection<InputRegion> _regions;
+
+        /// <summary>
+        /// connects all regions with this texture.
+        /// </summary>
+        private void OnCollectionOfRegionsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (InputRegion Region in e.NewItems)
+                {
+                    Region.RegionRect.OwnedTexture = this;
+                    foreach (InputRegion SubEntrie in Region.SubEntries)
+                    {
+                        SubEntrie.RegionRect.OwnedTexture = this;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// The texture width
@@ -104,6 +138,7 @@ namespace DolphinDynamicInputTexture.Data
             {
                 _image_width = value;
                 OnPropertyChanged(nameof(ImageWidth));
+                OnPropertyChanged(nameof(ImageWidthScaling));
             }
         }
         private int _image_width;
@@ -118,10 +153,42 @@ namespace DolphinDynamicInputTexture.Data
             private set
             {
                 _image_height = value;
-                OnPropertyChanged(nameof(ImageWidth));
+                OnPropertyChanged(nameof(ImageHeight));
+                OnPropertyChanged(nameof(ImageHeightScaling));
             }
         }
         private int _image_height;
+
+        /// <summary>
+        /// Scaling of the width in relation to the original width of the texture dump.
+        /// </summary>
+        public double ImageWidthScaling
+        {
+            get
+            {
+                if (HashProperties != null && HashProperties.IsValid)
+                {
+                    return ImageWidth / HashProperties.ImageWidth;
+                }
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Scaling of the height in relation to the original height of the texture dump.
+        /// </summary>
+        public double ImageHeightScaling
+        {
+            get
+            {
+                if (HashProperties != null && HashProperties.IsValid)
+                {
+                    return ImageHeight / HashProperties.ImageHeight;
+                }
+                return 0;
+            }
+        }
+
         #endregion
 
         #region Update
@@ -135,48 +202,9 @@ namespace DolphinDynamicInputTexture.Data
                     ImageHeight = bmp.Height;
                     ImageWidth = bmp.Width;
                 }
-                //Automatically select suitable zoom. (ViewModels)
-                if (ScaleFactor == 1)
-                {
-                    SetInitialZoom();
-                }
             }
         }
 
         #endregion
-
-        // part of the ViewModels
-
-        /// <summary>
-        /// The scale factor for how much to zoom the current texture and regions
-        /// </summary>
-        [JsonIgnore]
-        public double ScaleFactor
-        {
-            get => _scale_factor;
-            set
-            {
-                _scale_factor = Smooth(value, 2);
-                OnPropertyChanged(nameof(ScaleFactor));
-                Regions.ToList().ForEach(x => x.ScaleFactor = _scale_factor);
-            }
-        }
-        private double _scale_factor = 1;
-
-        private double Smooth(double value, int accuracy)
-        {
-            double factor = ((int)value * 10).ToString().Length;
-            factor = Math.Pow(10, factor);
-            return Math.Round(value / factor, accuracy + 1) * factor;
-        }
-
-        public void SetInitialZoom(double absolutescale = 600)
-        {
-            if (ImageHeight <= 0 || ImageWidth <= 0)
-                return;
-
-            absolutescale /= (ImageHeight + ImageWidth) / 2;
-            ScaleFactor = absolutescale;
-        }
     }
 }

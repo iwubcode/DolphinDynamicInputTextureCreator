@@ -1,55 +1,29 @@
-using Newtonsoft.Json;
-﻿using System;
+﻿using DolphinDynamicInputTexture.Interfaces;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DolphinDynamicInputTexture.Data
 {
-    public class RectRegion : Other.PropertyChangedBase
+    public class InputRegionRect : Other.PropertyChangedBase, IRectRegion
     {
-
         /// <summary>
         /// this determines the sub pixel value, 0 uses only full pixels.
         /// </summary>
         public static int DecimalPlaces { get; set; } = 0;
 
-        private EmulatedDevice _emulated_device;
-        public EmulatedDevice Device
-        {
-            get => _emulated_device;
-            set
-            {
-                _emulated_device = value;
-                OnPropertyChanged(nameof(Device));
-            }
-        }
-
-        private EmulatedKey _emulated_key;
-        public EmulatedKey Key
-        {
-            get => _emulated_key;
-            set
-            {
-                _emulated_key = value;
-                OnPropertyChanged(nameof(Key));
-            }
-        }
-
-        private DynamicInputTexture _owned_texture;
-        public DynamicInputTexture OwnedTexture
+        DynamicInputTexture IRectRegion.OwnedTexture
         {
             get => _owned_texture;
             set
             {
                 _owned_texture = value;
+                OnPropertyChanged(nameof(IRectRegion.OwnedTexture));
                 OnPropertyChanged(nameof(OwnedTexture));
-                OnPropertyChanged(nameof(X));
-                OnPropertyChanged(nameof(Y));
-                OnPropertyChanged(nameof(Height));
-                OnPropertyChanged(nameof(Width));
             }
         }
+        public DynamicInputTexture OwnedTexture => _owned_texture;
+        private DynamicInputTexture _owned_texture;
 
-
-        private double _x;
         public double X
         {
             get => _x;
@@ -66,11 +40,10 @@ namespace DolphinDynamicInputTexture.Data
                 }
 
                 OnPropertyChanged(nameof(X));
-                OnPropertyChanged(nameof(ScaledX));
             }
         }
+        private double _x;
 
-        private double _y;
         public double Y
         {
             get => _y;
@@ -87,11 +60,10 @@ namespace DolphinDynamicInputTexture.Data
                 }
 
                 OnPropertyChanged(nameof(Y));
-                OnPropertyChanged(nameof(ScaledY));
             }
         }
+        private double _y;
 
-        private double _height;
         public double Height
         {
             get => _height;
@@ -106,11 +78,10 @@ namespace DolphinDynamicInputTexture.Data
                 if (_height <= 0)
                     _height = GetMinHeight();
                 OnPropertyChanged(nameof(Height));
-                OnPropertyChanged(nameof(ScaledHeight));
             }
         }
+        private double _height;
 
-        private double _width;
         public double Width
         {
             get => _width;
@@ -125,56 +96,60 @@ namespace DolphinDynamicInputTexture.Data
                 if (_width <= 0)
                     _width = GetMinWidth();
                 OnPropertyChanged(nameof(Width));
-                OnPropertyChanged(nameof(ScaledWidth));
             }
         }
+        private double _width;
 
-        private double GetMinHeight() => GetMinWidth();
+        public double BottomY => Y + Height;
 
-        private double GetMinWidth() => Math.Pow(10.0, -DecimalPlaces);
+        public double RightX => X + Width;
 
+        protected double GetMinHeight() => GetMinWidth();
 
-        // part of the ViewModels
+        protected double GetMinWidth() => Math.Pow(10.0, -DecimalPlaces);
 
-        internal double ScaleFactor
+        public InputRegionRect() { }
+
+        public InputRegionRect(double x, double y, double width, double height)
         {
-            get => OwnedTexture.ScaleFactor;
-            set
-            {
-                OnPropertyChanged(nameof(ScaleFactor));
-                OnPropertyChanged(nameof(ScaledX));
-                OnPropertyChanged(nameof(ScaledY));
-                OnPropertyChanged(nameof(ScaledHeight));
-                OnPropertyChanged(nameof(ScaledWidth));
-            }
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
         }
 
-        [JsonIgnore]
-        public double ScaledX
+        public InputRegionRect(IRectRegion Rect) : this(Rect.X, Rect.Y, Rect.Width, Rect.Height) { }
+
+        public object Clone() => this.MemberwiseClone();
+
+        public bool Equals([AllowNull] IRectRegion other)
         {
-            get => X * ScaleFactor;
-            set => X = value / ScaleFactor;
+            return other != null && Equals(other.X, other.Y, other.Width, other.Height);
         }
 
-        [JsonIgnore]
-        public double ScaledY
+        public bool Equals(double x, double y, double width, double height)
         {
-            get => Y * ScaleFactor;
-            set => Y = value / ScaleFactor;
+            return x == X & y == Y & width == Width & height == Height;
         }
 
-        [JsonIgnore]
-        public double ScaledWidth
+        public bool OnTexture()
         {
-            get => Width * ScaleFactor;
-            set => Width = value / ScaleFactor;
+            return OwnedTexture != null && X >= 0 && Y >= 0 && RightX <= OwnedTexture.ImageWidth && BottomY <= OwnedTexture.ImageHeight;
         }
 
-        [JsonIgnore]
-        public double ScaledHeight
+        public bool IntersectsWith(IRectRegion other)
         {
-            get => Height * ScaleFactor;
-            set => Height = value / ScaleFactor;
+            return !(X > other.RightX || Y > other.BottomY || RightX < other.X || BottomY < other.Y);
+        }
+
+        public bool Contains(IRectRegion other)
+        {
+            return other.X >= X && other.Y >= Y && other.RightX <= RightX && other.BottomY <= BottomY;
+        }
+
+        public bool Contains(double x, double y)
+        {
+            return x >= X && x <= RightX && y >= Y && y <= BottomY;
         }
     }
 }

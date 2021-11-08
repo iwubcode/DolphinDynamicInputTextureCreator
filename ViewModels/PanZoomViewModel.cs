@@ -1,4 +1,5 @@
 ﻿using DolphinDynamicInputTexture.Data;
+using DolphinDynamicInputTextureCreator.Models;
 using System;
 using System.Windows;
 
@@ -65,7 +66,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             }
         }
 
-        private RectRegion _currently_creating_region;
+        private InputRegion _currently_creating_region;
         private System.Nullable<Point> _last_pan_position;
 
         /// <summary>
@@ -80,19 +81,17 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             }
 
             //prevents a region from being created in another region.
-            foreach (RectRegion r in InputPack.Textures.Selected.Regions)
+            foreach (InputRegion r in InputPack.Textures.Selected.Regions)
             {
-                if (p.X >= r.X && p.X < (r.X + r.Width) &&
-                    p.Y >= r.Y && p.Y < (r.Y + r.Height))
+                if (r.RegionRect.Contains(p.X,p.Y))
                 {
                     _currently_creating_region = null;
                     return;
                 }
             }
 
-            _currently_creating_region = new RectRegion() { X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.Textures.Selected };
+            _currently_creating_region = InputPack.SelectedRegionBrush.GetNewRegion(p.X, p.Y, 2, 2, InputPack);
             InputPack.Textures.Selected.Regions.Add(_currently_creating_region);
-
         }
 
         /// <summary>
@@ -106,11 +105,11 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 return;
             }
 
-            double diff_x = _currently_creating_region.X - p.X;
-            double diff_y = _currently_creating_region.Y - p.Y;
+            double diff_x = _currently_creating_region.RegionRect.X - p.X;
+            double diff_y = _currently_creating_region.RegionRect.Y - p.Y;
 
-            double left = _currently_creating_region.X;
-            double top = _currently_creating_region.Y;
+            double left = _currently_creating_region.RegionRect.X;
+            double top = _currently_creating_region.RegionRect.Y;
             if (diff_x > 0)
             {
                 left = p.X;
@@ -124,10 +123,12 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             double width = Math.Abs(diff_x);
             double height = Math.Abs(diff_y);
 
-            _currently_creating_region.X = left;
-            _currently_creating_region.Y = top;
-            _currently_creating_region.Width = width;
-            _currently_creating_region.Height = height;
+            _currently_creating_region.RegionRect.X = left;
+            _currently_creating_region.RegionRect.Y = top;
+            _currently_creating_region.RegionRect.Width = width;
+            _currently_creating_region.RegionRect.Height = height;
+            ((UIRegionRect)_currently_creating_region.RegionRect).UpdateScale();
+
         }
 
         /// <summary>
@@ -147,7 +148,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         private void RemoveSmallRegion()
         {
-            if (_currently_creating_region.Width == 1 && _currently_creating_region.Height == 1)
+            if (_currently_creating_region.RegionRect.Width == 1 && _currently_creating_region.RegionRect.Height == 1)
             {
                 InputPack.Textures.Selected.Regions.Remove(_currently_creating_region);
             }
@@ -178,8 +179,8 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             double diff_y = _last_pan_position.Value.Y - p.Y;
             _last_pan_position = p;
 
-            OffsetX += (diff_x * -1) * InputPack.Textures.Selected.ScaleFactor;
-            OffsetY += (diff_y * -1) * InputPack.Textures.Selected.ScaleFactor;
+            OffsetX += (diff_x * -1) * InputPack.ScaleFactor;
+            OffsetY += (diff_y * -1) * InputPack.ScaleFactor;
         }
 
         /// <summary>

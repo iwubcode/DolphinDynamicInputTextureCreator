@@ -8,7 +8,7 @@ namespace DolphinDynamicInputTexture.Data
     /// </summary>
     public class DolphinTextureHash
     {
-        public enum ImageFormat:int { Unknown = -1, I4 = 0, I8 = 1, IA4 = 2, IA8 = 3, RGB565 = 4, RGB5A3 = 5, RGBA32 = 6, C4 = 8, C8 = 9, C14X2 = 10, CMPR = 14 }
+        public enum ImageFormat : int { Unknown = -1, I4 = 0, I8 = 1, IA4 = 2, IA8 = 3, RGB565 = 4, RGB5A3 = 5, RGBA32 = 6, C4 = 8, C8 = 9, C14X2 = 10, CMPR = 14 }
 
         #region Properties
 
@@ -102,7 +102,7 @@ namespace DolphinDynamicInputTexture.Data
                 else
                 {
                     MipmapLevel = 0;
-                } 
+                }
                 HashValue = match.Groups["H"].Value;
                 Format = (ImageFormat)Int32.Parse(match.Groups["F"].Value);
             }

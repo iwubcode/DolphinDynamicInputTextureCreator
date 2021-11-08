@@ -1,9 +1,12 @@
 ﻿namespace DolphinDynamicInputTexture.Interfaces
 {
-    public interface IDeviceKey
+    /// <summary>
+    /// Has a name.
+    /// </summary>
+    public interface IName
     {
         /// <summary>
-        /// The name of the key.
+        /// name of the element.
         /// </summary>
         string Name { get; set; }
     }

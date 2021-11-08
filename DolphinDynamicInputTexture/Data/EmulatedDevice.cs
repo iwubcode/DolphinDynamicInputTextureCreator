@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using DolphinDynamicInputTexture.Interfaces;
+using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DolphinDynamicInputTexture.Data
 {
     [JsonObject(IsReference = true)]
-    public class EmulatedDevice : Other.PropertyChangedBase
+    public class EmulatedDevice : Other.PropertyChangedBase, IName, IEquatable<EmulatedDevice>
     {
 
         #region PROPERTIES
@@ -36,6 +39,11 @@ namespace DolphinDynamicInputTexture.Data
             }
         }
         private ObservableCollection<EmulatedKey> _emulated_keys = new ObservableCollection<EmulatedKey>();
+
+        public bool Equals([AllowNull] EmulatedDevice other)
+        {
+            return other != null && other.Name == Name;
+        }
 
         #endregion
 

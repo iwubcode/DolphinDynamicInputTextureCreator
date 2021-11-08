@@ -1,8 +1,6 @@
 ﻿using DolphinDynamicInputTexture.Data;
+using DolphinDynamicInputTextureCreator.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DolphinDynamicInputTextureCreator.ViewModels
 {
@@ -50,7 +48,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             set
             {
                 _subpixel = value;
-                RectRegion.DecimalPlaces = value ? 2 : 0;
+                InputRegionRect.DecimalPlaces = value ? 2 : 0;
                 OnPropertyChanged(nameof(Subpixel));
             }
         }
@@ -70,6 +68,24 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             }
         }
         private bool _use_dark_background = false;
+
+        /// <summary>
+        /// Update the region with the current brush. 
+        /// </summary>
+        /// <param name="region">InputRegion to update</param>
+        public void UpdateRegion(InputRegion region)
+        {
+            region.Device = SelectedEmulatedDevice;
+            region.Key = SelectedEmulatedKey;
+        }
+        /// <summary>
+        /// creates a new region with this brush
+        /// </summary>
+        /// <returns>New Region</returns>
+        public InputRegion GetNewRegion(double x, double y, double width, double height,DynamicInputPackViewModel input_pack)
+        {
+            return new InputRegion() { RegionRect = new UIRegionRect(x, y, width, height) { Pack = input_pack }, Device = SelectedEmulatedDevice, Key = SelectedEmulatedKey };
+        }
 
         #endregion
     }
