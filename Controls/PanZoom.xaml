@@ -47,8 +47,14 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="4" Color="Black"/>
                             </Label.Effect>
                         </Label>
+                        <Label Content="{Binding Key.Name, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="4" Color="Black"/>
+                            </Label.Effect>
+                        </Label>
+                        <Label Content="{Binding Tag.Name, Mode=OneWay}" FontSize="8" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Plum" >
+                            <Label.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
                     </StackPanel>

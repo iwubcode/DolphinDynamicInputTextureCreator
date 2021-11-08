@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="DolphinDynamicInputTextureCreator.Controls.EditTags"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Add Tag" Command="{Binding AddTagCommand}" />
+            <Button Grid.Column="1" Content="Add All" Command="{Binding AddAllTagsCommand}" />
+        </Grid>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Tags}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid MinWidth="140" MaxWidth="200" MinHeight="30" Margin="5">
+                            <Border BorderThickness="1" BorderBrush="Black" Padding="2" Background="DarkGray">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="14"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button Grid.Column="1" Style="{StaticResource delete}" VerticalAlignment="Center" Width="12" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EditTags}},
+                                              Path=DataContext.DeleteTagCommand}" CommandParameter="{Binding}" />
+
+                                    <ComboBox IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, Delay=2}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:EditTags}},
+                                              Path=DataContext.TagsSuggestions.Available}" />
+                                    
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

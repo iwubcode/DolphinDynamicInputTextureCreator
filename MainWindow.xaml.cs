@@ -1,22 +1,10 @@
 ﻿using DolphinDynamicInputTexture.Data;
 using DolphinDynamicInputTextureCreator.ViewModels;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DolphinDynamicInputTextureCreator
 {
@@ -53,6 +41,7 @@ namespace DolphinDynamicInputTextureCreator
         private Window _edit_emulated_devices_window;
         private Window _edit_host_devices_window;
         private Window _edit_metadata_window;
+        private Window _edit_tags_window;
 
         private void QuitProgram_Click(object sender, RoutedEventArgs e)
         {
@@ -113,6 +102,26 @@ namespace DolphinDynamicInputTextureCreator
 
             UpdateEditWindows();
             _edit_metadata_window.Show();
+        }
+
+        private void EditTags_Click(object sender, RoutedEventArgs e)
+        {
+            _edit_tags_window?.Close();
+
+            _edit_tags_window = new Window
+            {
+                Title = "Editing Tags",
+                Icon = ResourceShapePathToImage("Icon.EditTags"),
+                ResizeMode = ResizeMode.CanResize,
+                SizeToContent = SizeToContent.Manual,
+                Owner = Application.Current.MainWindow,
+                Top = this.Top + 50, Left = this.Left + 70,
+                Width = 340, Height = 300,
+                MinWidth = 190, MinHeight = 300
+            };
+
+            UpdateEditWindows();
+            _edit_tags_window.Show();
         }
 
         private ImageSource ResourceShapePathToImage(object resourceKey)
@@ -230,7 +239,7 @@ namespace DolphinDynamicInputTextureCreator
 
             if (_edit_host_devices_window != null)
             {
-                var user_control = new Controls.EditHostDevices { DataContext = new HostDeviceKeyViewModel { HostDevices = InputPack.HostDevices } };
+                var user_control = new Controls.EditHostDevices { DataContext = new HostDeviceKeyViewModel { HostDevices = InputPack.HostDevices, Tags = InputPack.Tags } };
                 _edit_host_devices_window.Content = user_control;
             }
 
@@ -238,6 +247,12 @@ namespace DolphinDynamicInputTextureCreator
             {
                 var user_control = new Controls.Metadata { DataContext = InputPack };
                 _edit_metadata_window.Content = user_control;
+            }
+
+            if (_edit_tags_window != null)
+            {
+                var user_control = new Controls.EditTags { DataContext = new TagsViewModel { Tags= InputPack.Tags } };
+                _edit_tags_window.Content = user_control;
             }
         }
 

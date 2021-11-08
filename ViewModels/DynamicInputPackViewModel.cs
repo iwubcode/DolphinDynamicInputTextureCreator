@@ -63,6 +63,22 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         private new UICollection<EmulatedDevice> _emulated_devices;
 
         /// <summary>
+        /// The Tags mapped in this pack
+        /// </summary>
+        public UICollection<Tag> Tags
+        {
+            get => _tags ??= Tags = new UICollection<Tag>(base._tags);
+            set
+            {
+                base._tags = _tags = value;
+                Tags.Select(Selection.First);
+                SelectedRegionBrush.SelectedTag = Tags.Selected;
+                OnPropertyChanged(nameof(Tags));
+            }
+        }
+        private new UICollection<Tag> _tags;
+
+        /// <summary>
         /// The current emulated device / key "brush" chosen for writing regions to the texture
         /// </summary>
         private RegionBrush _selected_region_brush = new RegionBrush();

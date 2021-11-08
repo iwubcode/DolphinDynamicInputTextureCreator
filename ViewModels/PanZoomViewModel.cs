@@ -75,7 +75,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// <param name="p"></param>
         public void StartCreatingRegion(Point p)
         {
-            if (InputPack.SelectedRegionBrush.SelectedEmulatedDevice == null || InputPack.SelectedRegionBrush.SelectedEmulatedKey == null)
+            if (!InputPack.SelectedRegionBrush.IsValid())
             {
                 return;
             }

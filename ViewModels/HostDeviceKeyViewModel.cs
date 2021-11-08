@@ -3,6 +3,7 @@ using DolphinDynamicInputTextureCreator.Models.Suggestions;
 using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
@@ -32,6 +33,20 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
 
         private static Regex _host_devices_regex = new Regex(@"\A[^\/\\?:<>|]+\/\d\/[^\/\\?:<>|]+\Z");
 
+        /// <summary>
+        /// The Tags mapped in this pack
+        /// </summary>
+        public ObservableCollection<Tag> Tags
+        {
+            get => _tags;
+            set
+            {
+                _tags = value;
+                OnPropertyChanged(nameof(Tags));
+            }
+        }
+        private ObservableCollection<Tag> _tags;
+
         #endregion
 
         #region Suggestions
@@ -44,7 +59,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// <summary>
         /// possible key Suggestions for the Selected host device.
         /// </summary>
-        public SuggestionList<HostKey> HostKeySuggestions { get; set; } = new SuggestionList<HostKey>((key) => key.Name);
+        public ObservableCollection<string> HostKeySuggestions { get; set; } = new ObservableCollection<string>();
 
         private void UpdateAvailableSuggestions()
         {
@@ -57,8 +72,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             {
                 if (Models.DefaultData.Suggestions.HostDevicesKeys.ContainsKey(splitname[i]))
                 {
-                    HostKeySuggestions = new SuggestionList<HostKey>((key) => key.Name, Models.DefaultData.Suggestions.HostDevicesKeys[splitname[i]]);
-                    HostKeySuggestions.SetTargetList(HostDevices.Selected.HostKeys);
+                    HostKeySuggestions = new ObservableCollection<string>(Models.DefaultData.Suggestions.HostDevicesKeys[splitname[i]]);
                     break;
                 }
             }
@@ -87,7 +101,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 foreach (var file in dlg.FileNames)
                 {
                     string name = Path.GetFileNameWithoutExtension(file);
-                    name = HostKeySuggestions.Available.Contains(name) ? name : "";
+                    name = HostKeySuggestions.Contains(name) ? name : "";
 
                     HostDevices.Selected.HostKeys.Add(new HostKey { Name = name, TexturePath = file });
                 }
