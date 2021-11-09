@@ -42,6 +42,8 @@
     <Path x:Key="Icon.CanvasDark" Fill="Gray" Data="{StaticResource Geometry.CanvasDark}" />
     <Path x:Key="Icon.CanvasLight" Fill="Gray" Data="{StaticResource Geometry.CanvasLight}" />
     <Path x:Key="Icon.FillRegion" Fill="Gray" Data="{StaticResource Geometry.FillRegion}" />
+    <Path x:Key="Icon.UpdateRegion" Fill="CornflowerBlue" Data="{StaticResource Geometry.Refresh}"/>
+    <Path x:Key="Icon.RemoveRegion" Fill="DarkRed" Data="{StaticResource Geometry.Delete}"/>
     <!--#endregion-->
 
     <!--#region other-->

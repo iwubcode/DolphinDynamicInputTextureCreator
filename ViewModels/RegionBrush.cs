@@ -87,6 +87,10 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             return new InputRegion() { RegionRect = new UIRegionRect(x, y, width, height) { Pack = input_pack }, Device = SelectedEmulatedDevice, Key = SelectedEmulatedKey };
         }
 
+        public bool IsValid()
+        {
+            return SelectedEmulatedDevice != null && SelectedEmulatedKey != null;
+        }
         #endregion
     }
 }

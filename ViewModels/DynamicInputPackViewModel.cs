@@ -1,4 +1,5 @@
 ﻿using DolphinDynamicInputTexture.Data;
+using DolphinDynamicInputTexture.Propertys;
 using DolphinDynamicInputTextureCreator.Models;
 using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
@@ -76,6 +77,22 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         }
 
         /// <summary>
+        /// The currently selected Region.
+        /// </summary>
+        [JsonIgnore]
+        public InputRegion SelectedRegion
+        {
+            get => _selected_region;
+            set
+            {
+                _selected_region = value;
+                OnPropertyChanged(nameof(SelectedRegion));
+                OnPropertyChanged(nameof(IsRegionSelected));
+            }
+        }
+        private InputRegion _selected_region;
+
+        /// <summary>
         /// When adding a new texture, whether the hash should be pulled off of the filename
         /// </summary>
         private bool _should_get_hash_from_texture_filename = true;
@@ -108,41 +125,41 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         public void FillRegion()
         {
-            if (Textures.Selected.Regions.Count > 0)
+            InputRegion f = SelectedRegionBrush.GetNewRegion(0, 0, Textures.Selected.ImageWidth, Textures.Selected.ImageHeight, this);
+            if (Textures.Selected.Regions.Count == 0)
             {
-                foreach (InputRegion r in Textures.Selected?.Regions)
-                {
-                    if (r.RegionRect.Equals(new InputRegionRect(0, 0, Textures.Selected.ImageWidth, Textures.Selected.ImageHeight)))
-                    {
-                        SelectedRegionBrush.UpdateRegion(r);
-                        return;
-                    }
-                }
+                Textures.Selected.Regions.Add(f);
+            }
+            else
+            {
+                SelectedRegion.RegionRect = f.RegionRect;
             }
 
-            InputRegion f = SelectedRegionBrush.GetNewRegion(0, 0, Textures.Selected.ImageWidth, Textures.Selected.ImageHeight, this);
-            Textures.Selected.Regions.Add(f);
         }
 
         private bool CanFillRegion()
         {
-            if (!Textures.ValidSelection || SelectedRegionBrush.SelectedEmulatedDevice == null || SelectedRegionBrush.SelectedEmulatedKey == null)
+            if (!Textures.ValidSelection || !SelectedRegionBrush.IsValid())
                 return false;
 
-            if (Textures.Selected.Regions.Count > 0)
-            {
-                foreach (InputRegion r in Textures.Selected.Regions)
-                {
-                    if (r.RegionRect.Equals(new InputRegionRect(0,0, Textures.Selected.ImageWidth, Textures.Selected.ImageHeight)))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            return true;
+            return Textures.Selected.Regions.Count == 0 || Textures.Selected.Regions.Count == 1 & IsRegionSelected && !SelectedRegion.RegionRect.Equals(new InputRegionRect(0, 0, SelectedRegion.RegionRect.OwnedTexture.ImageWidth, SelectedRegion.RegionRect.OwnedTexture.ImageHeight));
         }
+
+        #endregion
+
+        #region SelectedRegion
+
+        [JsonIgnore]
+        public ICommand DeleteSelectedRegionCommand => new RelayCommand(x => Textures.Selected.Regions.Remove(SelectedRegion), x => IsRegionSelected);
+
+        [JsonIgnore]
+        public ICommand UpdateSelectedRegionCommand => new RelayCommand(x => SelectedRegionBrush.UpdateRegion(SelectedRegion),x => IsRegionSelected & SelectedRegionBrush.IsValid());
+
+        {
+        }
+
+        [JsonIgnore]
+        public bool IsRegionSelected => SelectedRegion != null;
 
         #endregion
 
