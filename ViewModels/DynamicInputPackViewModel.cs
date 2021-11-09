@@ -1,5 +1,5 @@
 ﻿using DolphinDynamicInputTexture.Data;
-using DolphinDynamicInputTexture.Propertys;
+using DolphinDynamicInputTexture.Properties;
 using DolphinDynamicInputTextureCreator.Models;
 using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
@@ -87,6 +87,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             {
                 _selected_region = value;
                 OnPropertyChanged(nameof(SelectedRegion));
+                OnPropertyChanged(nameof(IfCopyTypeOverwrite));
                 OnPropertyChanged(nameof(IsRegionSelected));
             }
         }
@@ -155,7 +156,15 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         [JsonIgnore]
         public ICommand UpdateSelectedRegionCommand => new RelayCommand(x => SelectedRegionBrush.UpdateRegion(SelectedRegion),x => IsRegionSelected & SelectedRegionBrush.IsValid());
 
+        [JsonIgnore]
+        public bool IfCopyTypeOverwrite
         {
+            get => SelectedRegion == null || SelectedRegion.CopyType == default;
+            set
+            {
+                SelectedRegion.CopyType = value ? CopyTypeProperties.overwrite : CopyTypeProperties.overlay;
+                OnPropertyChanged(nameof(IfCopyTypeOverwrite));
+            }
         }
 
         [JsonIgnore]
