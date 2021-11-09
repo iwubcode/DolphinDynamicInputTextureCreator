@@ -131,9 +131,9 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
     <Grid>
         <Grid Visibility="{Binding InputPack.Textures.ValidSelection, Converter={StaticResource BoolToVis}}">
             <ScrollViewer VerticalScrollBarVisibility="Visible"
-                  HorizontalScrollBarVisibility="Visible" x:Name="scr"
+                  HorizontalScrollBarVisibility="Visible" x:Name="scr" MouseMove="Grid_MouseMove"
                   ScrollChanged="ScrollChanged" Background="DarkGray">
-                <Grid MouseDown="Grid_MouseDown" MouseUp="Grid_MouseUp" MouseMove="Grid_MouseMove" MouseWheel="Grid_MouseWheel">
+                <Grid MouseDown="Grid_MouseDown" MouseUp="Grid_MouseUp" MouseWheel="Grid_MouseWheel">
                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Grid>
                             <Grid.Background>
