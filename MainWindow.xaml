@@ -100,7 +100,7 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
-                    <ComboBox ItemsSource="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.EmulatedKeys}" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedKey}" VerticalAlignment="Center" MinWidth="90" MaxWidth="130" Margin="2 0" ToolTip="Choose an emulated key" Visibility="{Binding SelectedRegionBrush.UseKey, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ComboBox ItemsSource="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.EmulatedKeys}" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedKey, Delay=1}" VerticalAlignment="Center" MinWidth="90" MaxWidth="130" Margin="2 0" ToolTip="Choose an emulated key" Visibility="{Binding SelectedRegionBrush.UseKey, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />

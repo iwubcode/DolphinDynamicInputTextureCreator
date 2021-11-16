@@ -16,10 +16,10 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             set
             {
                 _selected_emulated_device = value;
-                OnPropertyChanged(nameof(SelectedEmulatedDevice));
 
                 if (value?.EmulatedKeys.Count > 0)
-                    SelectedEmulatedKey ??= value.EmulatedKeys[0];
+                    SelectedEmulatedKey = value.EmulatedKeys[0];
+                OnPropertyChanged(nameof(SelectedEmulatedDevice));
             }
         }
         private EmulatedDevice _selected_emulated_device;

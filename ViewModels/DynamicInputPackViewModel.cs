@@ -102,6 +102,14 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             set
             {
                 _selected_region = value;
+                if (SelectedRegion != null)
+                {
+                    SelectedRegionBrush.SelectedEmulatedDevice = SelectedRegion.Device;
+                    SelectedRegionBrush.UseKey = SelectedRegion.Key == null || SelectedRegion.Key.Name != "";
+                    SelectedRegionBrush.UseTag = SelectedRegion.Tag == null || SelectedRegion.Tag.Name != "";
+                    SelectedRegionBrush.SelectedEmulatedKey = SelectedRegionBrush.UseKey ? SelectedRegion.Key : EmulatedDevices.Selected.EmulatedKeys.Count > 0 ? EmulatedDevices.Selected.EmulatedKeys[0] : null;
+                    SelectedRegionBrush.SelectedTag = SelectedRegionBrush.UseTag ? SelectedRegion.Tag : Tags.Count > 0 ? Tags[0] : null;
+                }
                 OnPropertyChanged(nameof(SelectedRegion));
                 OnPropertyChanged(nameof(IfCopyTypeOverwrite));
                 OnPropertyChanged(nameof(IsRegionSelected));
