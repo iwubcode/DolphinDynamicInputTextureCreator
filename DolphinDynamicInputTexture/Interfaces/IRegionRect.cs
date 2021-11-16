@@ -1,9 +1,10 @@
 ﻿using DolphinDynamicInputTexture.Data;
 using System;
+using System.ComponentModel;
 
 namespace DolphinDynamicInputTexture.Interfaces
 {
-    public interface IRectRegion : ICloneable, IEquatable<IRectRegion>
+    public interface IRectRegion : ICloneable, IEquatable<IRectRegion>, INotifyPropertyChanged
     {
         DynamicInputTexture OwnedTexture { get; internal set; }
         /// <summary>

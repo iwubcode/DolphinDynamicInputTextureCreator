@@ -4,7 +4,7 @@ using DolphinDynamicInputTextureCreator.ViewModels;
 
 namespace DolphinDynamicInputTextureCreator.Models
 {
-    public class UIRegionRect : InputRegionRect
+    public class UIRegionRect : InputSubRegionRect
     {
         public DynamicInputPackViewModel Pack
         {
@@ -24,7 +24,6 @@ namespace DolphinDynamicInputTextureCreator.Models
             set
             {
                 base.X = value;
-                OnPropertyChanged(nameof(X));
                 OnPropertyChanged(nameof(ScaledX));
             }
         }
@@ -35,10 +34,10 @@ namespace DolphinDynamicInputTextureCreator.Models
             set
             {
                 base.Y = value;
-                OnPropertyChanged(nameof(Y));
                 OnPropertyChanged(nameof(ScaledY));
             }
         }
+
 
         public new double Height
         {
@@ -46,17 +45,18 @@ namespace DolphinDynamicInputTextureCreator.Models
             set
             {
                 base.Height = value;
-                OnPropertyChanged(nameof(Height));
+                OnPropertyChanged(nameof(ScaledY));
                 OnPropertyChanged(nameof(ScaledHeight));
             }
         }
+
         public new double Width
         {
             get => base.Width;
             set
             {
                 base.Width = value;
-                OnPropertyChanged(nameof(Width));
+                OnPropertyChanged(nameof(ScaledX));
                 OnPropertyChanged(nameof(ScaledWidth));
             }
         }
@@ -78,14 +78,14 @@ namespace DolphinDynamicInputTextureCreator.Models
 
         public double ScaledX
         {
-            get => X * Pack.ScaleFactor;
-            set => X = value / Pack.ScaleFactor;
+            get => (X - (MainRegion != null ? MainRegion.X: 0)) * Pack.ScaleFactor;
+            set => X = value / Pack.ScaleFactor + (MainRegion != null ? MainRegion.X : 0);
         }
 
         public double ScaledY
         {
-            get => Y * Pack.ScaleFactor;
-            set => Y = value / Pack.ScaleFactor;
+            get => (Y - (MainRegion != null ? MainRegion.Y : 0)) * Pack.ScaleFactor;
+            set => Y = value / Pack.ScaleFactor + (MainRegion != null ? MainRegion.Y : 0);
         }
 
         public double ScaledWidth
