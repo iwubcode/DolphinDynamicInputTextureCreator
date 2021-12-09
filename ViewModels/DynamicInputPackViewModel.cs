@@ -225,6 +225,12 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         [JsonIgnore]
         public ICommand UpdateSelectedRegionCommand => new RelayCommand(x => SelectedRegionBrush.UpdateRegion(SelectedRegion),x => IsRegionSelected & SelectedRegionBrush.IsValid());
 
+        [JsonIgnore]
+        public ICommand MoveUpSelectedRegionCommand => new RelayCommand(x => SelectedRegion.SubIndex += 1, x => IsRegionSelected && SelectedRegion.OwnedRegion != null && SelectedRegion.SubIndex < SelectedRegion.OwnedRegion.SubEntries.Count - 1);
+
+        [JsonIgnore]
+        public ICommand MoveDownSelectedRegionCommand => new RelayCommand(x => SelectedRegion.SubIndex -= 1, x => IsRegionSelected && SelectedRegion.OwnedRegion != null && SelectedRegion.SubIndex > 0);
+
         public IList<InputRegion> GetRegionList(InputRegion region)
         {
             if (region.OwnedRegion != null)

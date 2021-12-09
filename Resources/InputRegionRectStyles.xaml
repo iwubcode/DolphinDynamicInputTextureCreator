@@ -81,13 +81,32 @@
     <DataTemplate x:Key="RegionTemplate" DataType="{x:Type data:InputRegion}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="4*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="8*" />
+                <RowDefinition Height="2*" />
             </Grid.RowDefinitions>
 
             <ListBox x:Name="l" ItemsSource="{Binding SubEntries}" Style="{DynamicResource RectRegionListBoxStyle}" ItemContainerStyle="{DynamicResource RectRegionSubItemStyle}" />
 
-            <Viewbox Grid.Row="0">
+            <Viewbox Grid.Row="0"  HorizontalAlignment="Left">
+                <Label Content="{Binding SubIndex, Mode=OneWay}" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="White" FontWeight="Bold">
+                    <Label.ContentTemplate>
+                        <DataTemplate>
+                            <TextBlock Name="int" Text="{Binding}" Foreground="White" HorizontalAlignment="Center" />
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding}" Value="-1">
+                                    <Setter TargetName="int" Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </Label.ContentTemplate>
+                    <Label.Effect>
+                        <DropShadowEffect ShadowDepth="1" BlurRadius="3" Color="Black" />
+                    </Label.Effect>
+                </Label>
+            </Viewbox>
+
+            <Viewbox Grid.Row="0" Grid.RowSpan="2">
                 <StackPanel>
                     <Label Content="{Binding Device.Name, Mode=OneWay}" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
                         <Label.Effect>
@@ -103,7 +122,7 @@
                 </StackPanel>
             </Viewbox>
 
-            <Viewbox Grid.Row="1" VerticalAlignment="Bottom">
+            <Viewbox Grid.Row="2" VerticalAlignment="Bottom">
                 <Label Content="{Binding RegionRect}" Foreground="White" Padding="0" ContentTemplate="{StaticResource ResourceKey=RectRegionCoordinates}">
                     <Label.Effect>
                         <DropShadowEffect ShadowDepth="1.5" BlurRadius="2" Color="Black" />
@@ -111,7 +130,7 @@
                 </Label>
             </Viewbox>
 
-            <controls:Resizer Grid.RowSpan="2" x:Name="Resizer" Visibility="Collapsed"
+            <controls:Resizer Grid.RowSpan="3" x:Name="Resizer" Visibility="Collapsed"
                                   X="{Binding RegionRect.ScaledX}" Y="{Binding RegionRect.ScaledY}"
                                   ItemWidth="{Binding RegionRect.ScaledWidth}" ItemHeight="{Binding RegionRect.ScaledHeight}" />
         </Grid>

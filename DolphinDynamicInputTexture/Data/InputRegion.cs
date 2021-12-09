@@ -132,7 +132,6 @@ namespace DolphinDynamicInputTexture.Data
         }
         private ObservableCollection<InputRegion> _sub_entries;
 
-
         public InputRegion OwnedRegion
         {
             get => _main_region;
@@ -148,15 +147,38 @@ namespace DolphinDynamicInputTexture.Data
                     }
                 }
                 OnPropertyChanged(nameof(OwnedRegion));
+                OnPropertyChanged(nameof(SubIndex));
             }
         }
         private InputRegion _main_region;
+
+        public int SubIndex
+        {
+            get
+            {
+                if (OwnedRegion == null) return -1;
+                return OwnedRegion.SubEntries.IndexOf(this);
+            }
+            set
+            {
+                if (value != SubIndex)
+                {
+                    OwnedRegion.SubEntries.Move(SubIndex, value);
+                }
+                OnPropertyChanged(nameof(SubIndex));
+            }
+        }
 
         /// <summary>
         /// connects all sub regions with this regions.
         /// </summary>
         private void OnCollectionOfSubEntriesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                SubEntries[e.OldStartingIndex].SubIndex = e.OldStartingIndex;
+                return;
+            }
 
             if (e.OldItems != null)
             {

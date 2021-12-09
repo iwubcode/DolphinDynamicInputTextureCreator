@@ -199,6 +199,9 @@
 
                     <Button Margin="2,0" Width="20" Height="20" Content="{StaticResource Icon.RemoveRegion}" VerticalAlignment="Center" Command="{Binding DeleteSelectedRegionCommand}" ToolTip="Delete Region"/>
 
+                    <Button Margin="2,0" Width="20" Height="20" Content="{StaticResource Icon.ArrowDown}" VerticalAlignment="Center" Command="{Binding MoveDownSelectedRegionCommand}" ToolTip="Move layer down" Visibility="{Binding SelectedRegionBrush.EditSubRegions, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Button Margin="2,0" Width="20" Height="20" Content="{StaticResource Icon.ArrowUp}" VerticalAlignment="Center" Command="{Binding MoveUpSelectedRegionCommand}" ToolTip="Move layer up" Visibility="{Binding SelectedRegionBrush.EditSubRegions, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
                     <Border BorderBrush="Gray" BorderThickness="0.3" Margin="2 0"/>
                     
                     <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.UseDarkBackground}" >

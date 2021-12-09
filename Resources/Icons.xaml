@@ -53,6 +53,8 @@
     <Path x:Key="Icon.NoTag" Fill="Gray" Data="{StaticResource Geometry.NoTag}"/>
     <Path x:Key="Icon.SelectRegion" Fill="Gray" Data="{StaticResource Geometry.SelectRegion}"/>
     <Path x:Key="Icon.SelectSubRegion" Fill="Gray" Data="{StaticResource Geometry.SelectSubRegion}"/>
+    <Path x:Key="Icon.ArrowUp" Fill="Gray" Data="{StaticResource Geometry.ArrowUp}"/>
+    <Path x:Key="Icon.ArrowDown" Fill="Gray" Data="{StaticResource Geometry.ArrowDown}"/>
     <!--#endregion-->
 
     <!--#region other-->
