@@ -1,0 +1,124 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:data="clr-namespace:DolphinDynamicInputTexture.Data;assembly=DolphinDynamicInputTexture"
+                    xmlns:interfaces="clr-namespace:DolphinDynamicInputTexture.Interfaces;assembly=DolphinDynamicInputTexture"
+                    xmlns:controls="clr-namespace:DolphinDynamicInputTextureCreator.Controls">
+
+    <Style TargetType="ListBox" x:Key="RectRegionListBoxStyle">
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource RectRegionItemStyle}" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ItemsPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ListBoxItem" x:Key="RectRegionItemStyle">
+        <!-- <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" /> -->
+        <Setter Property="Canvas.Left" Value="{Binding RegionRect.ScaledX}" />
+        <Setter Property="Canvas.Top" Value="{Binding RegionRect.ScaledY}" />
+        <Setter Property="Height" Value="{Binding RegionRect.ScaledHeight}" />
+        <Setter Property="Width" Value="{Binding RegionRect.ScaledWidth}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Grid>
+                        <Grid.Background>
+                            <SolidColorBrush Color="Gray" Opacity="0.25" />
+                        </Grid.Background>
+                        <Border BorderBrush="Black" BorderThickness="2"/>
+                        <ContentPresenter ContentSource="Content" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ListBoxItem" x:Key="RectRegionSubItemStyle" BasedOn="{StaticResource RectRegionItemStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border BorderBrush="#171717" BorderThickness="1" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="RectRegionCoordinates" DataType="{x:Type interfaces:IRectRegion}">
+        <StackPanel Orientation="Horizontal">
+            <Label Content="{Binding X, Mode=OneWay}" Foreground="White" ContentStringFormat="0.#" Padding="0 1 0 0" Margin="0 0 2 0" />
+            <Label Content="{Binding Y, Mode=OneWay}" Foreground="White" ContentStringFormat="0.#" Padding="0 1 0 0" Margin="2 0" />
+            <Label Content="{Binding Width, Mode=OneWay}" Foreground="White" ContentStringFormat="0.#" Padding="0 1 0 0" Margin="2 0 3 0" />
+            <Label Content="x" Foreground="White" ContentStringFormat="0.#"   Padding="0" />
+            <Label Content="{Binding Height, Mode=OneWay}" Foreground="White" ContentStringFormat="0.#" Padding="0 1 0 0" Margin="2 0 0 0" />
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="RegionDataTemplate" DataType="{x:Type data:InputRegion}">
+        <StackPanel>
+            <TextBlock Name="key" Text="{Binding Key.Name, Mode=OneWay}" FontSize="9" Foreground="White" HorizontalAlignment="Center" />
+            <TextBlock Name="tag" Text="{Binding Tag.Name, Mode=OneWay}" FontSize="9" Foreground="Violet" HorizontalAlignment="Center" />
+        </StackPanel>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Key.Name}" Value="">
+                <Setter TargetName="key" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tag.Name}" Value="">
+                <Setter TargetName="tag" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="RegionTemplate" DataType="{x:Type data:InputRegion}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ListBox x:Name="l" ItemsSource="{Binding SubEntries}" Style="{DynamicResource RectRegionListBoxStyle}" ItemContainerStyle="{DynamicResource RectRegionSubItemStyle}" />
+
+            <Viewbox Grid.Row="0">
+                <StackPanel>
+                    <Label Content="{Binding Device.Name, Mode=OneWay}" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
+                        <Label.Effect>
+                            <DropShadowEffect ShadowDepth="1" BlurRadius="3" Color="Black" />
+                        </Label.Effect>
+                    </Label>
+
+                    <Label Content="{Binding}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" ContentTemplate="{StaticResource ResourceKey=RegionDataTemplate}">
+                        <Label.Effect>
+                            <DropShadowEffect ShadowDepth="1" BlurRadius="3" Color="Black" />
+                        </Label.Effect>
+                    </Label>
+                </StackPanel>
+            </Viewbox>
+
+            <Viewbox Grid.Row="1" VerticalAlignment="Bottom">
+                <Label Content="{Binding RegionRect}" Foreground="White" Padding="0" ContentTemplate="{StaticResource ResourceKey=RectRegionCoordinates}">
+                    <Label.Effect>
+                        <DropShadowEffect ShadowDepth="1.5" BlurRadius="2" Color="Black" />
+                    </Label.Effect>
+                </Label>
+            </Viewbox>
+
+            <controls:Resizer Grid.RowSpan="2" x:Name="Resizer" Visibility="Collapsed"
+                                  X="{Binding RegionRect.ScaledX}" Y="{Binding RegionRect.ScaledY}"
+                                  ItemWidth="{Binding RegionRect.ScaledWidth}" ItemHeight="{Binding RegionRect.ScaledHeight}" />
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                <Setter TargetName="Resizer" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+</ResourceDictionary>

@@ -72,6 +72,9 @@
                                     <DataTrigger Binding="{Binding EmulatedDevices.Count}" Value="0">
                                         <Setter Property="IsEnabled" Value="False"/>
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedRegionBrush.EditSubRegions}" Value="true">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </ComboBox.Style>
@@ -227,6 +230,22 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
+
+                    <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.EditSubRegions}">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Setter Property="Content" Value="{DynamicResource Icon.SelectRegion}" />
+                                <Setter Property="ToolTip" Value="edit main regions." />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="true">
+                                        <Setter Property="Content" Value="{DynamicResource Icon.SelectSubRegion}" />
+                                        <Setter Property="ToolTip" Value="edit sub regions" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    
                 </StackPanel>
                 <controls:PanZoom x:Name="PanZoom" Grid.Row="1"></controls:PanZoom>
             </Grid>

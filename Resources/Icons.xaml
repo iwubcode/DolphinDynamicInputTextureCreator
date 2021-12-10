@@ -51,6 +51,8 @@
     <Path x:Key="Icon.NoKey" Fill="Gray" Data="{StaticResource Geometry.NoKey}"/>
     <Path x:Key="Icon.Tag" Fill="Gray" Data="{StaticResource Geometry.Tag}"/>
     <Path x:Key="Icon.NoTag" Fill="Gray" Data="{StaticResource Geometry.NoTag}"/>
+    <Path x:Key="Icon.SelectRegion" Fill="Gray" Data="{StaticResource Geometry.SelectRegion}"/>
+    <Path x:Key="Icon.SelectSubRegion" Fill="Gray" Data="{StaticResource Geometry.SelectSubRegion}"/>
     <!--#endregion-->
 
     <!--#region other-->

@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="resources\icongeometry.xaml"/>
                 <ResourceDictionary Source="resources\icons.xaml"/>
                 <ResourceDictionary Source="resources\buttonstyles.xaml"/>
+                <ResourceDictionary Source="resources\InputRegionRectStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

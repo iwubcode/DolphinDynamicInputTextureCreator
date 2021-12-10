@@ -94,6 +94,36 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             InputPack.Textures.Selected.Regions.Add(_currently_creating_region);
         }
 
+
+        public void StartCreatingSubRegion(Point p)
+        {
+            if (!InputPack.SelectedRegionBrush.IsValid())
+            {
+                return;
+            }
+
+            foreach (InputRegion r in InputPack.Textures.Selected.Regions)
+            {
+                if (r.RegionRect.Contains(p.X, p.Y) && InputPack.SelectedRegionBrush.SelectedEmulatedDevice.Equals(r.Device))
+                {
+                    //prevents a region from being created in another sub region.
+                    foreach (InputRegion subr in r.SubEntries)
+                    {
+                        if (subr.RegionRect.Contains(p.X, p.Y))
+                        {
+                            _currently_creating_region = null;
+                            return;
+                        }
+                    }
+
+                    _currently_creating_region = InputPack.SelectedRegionBrush.GetNewRegion(p.X, p.Y, 2, 2, InputPack);
+                    r.SubEntries.Add(_currently_creating_region);
+                    return;
+                }
+            }
+            _currently_creating_region = null;
+        }
+
         /// <summary>
         /// Updates the currently created region bounds
         /// </summary>
@@ -139,8 +169,8 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             if (_currently_creating_region != null)
             {
                 RemoveSmallRegion();
+                _currently_creating_region = null;
             }
-            _currently_creating_region = null;
         }
 
         /// <summary>
@@ -148,9 +178,9 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         /// </summary>
         private void RemoveSmallRegion()
         {
-            if (_currently_creating_region.RegionRect.Width == 1 && _currently_creating_region.RegionRect.Height == 1)
+            if (_currently_creating_region.RegionRect.Width + _currently_creating_region.RegionRect.Height <= 50 / InputPack.ScaleFactor)
             {
-                InputPack.Textures.Selected.Regions.Remove(_currently_creating_region);
+                InputPack.GetRegionList(_currently_creating_region).Remove(_currently_creating_region);
             }
         }
 

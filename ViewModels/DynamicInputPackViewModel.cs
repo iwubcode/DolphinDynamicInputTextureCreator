@@ -5,6 +5,7 @@ using DolphinDynamicInputTextureCreator.Other;
 using DolphinDynamicInputTextureCreator.ViewModels.Commands;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
 
@@ -137,13 +138,16 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         #region SelectedTexture
 
         [JsonIgnore]
-        public ICommand DeleteRegionCommand => new RelayCommand<InputRegion>(Region => Textures.Selected.Regions.Remove(Region));
+        public ICommand DeleteRegionCommand => new RelayCommand<InputRegion>(Region => GetRegionList(Region).Remove(Region));
+
+        [JsonIgnore]
+        public ICommand AutoSubRegionCommand => new RelayCommand<InputRegion>(Region => AutoSubRegion(Region));
 
         [JsonIgnore]
         public ICommand ResetScaleFactorCommand => new RelayCommand((x) => SetInitialZoom(Textures.Selected));
 
         [JsonIgnore]
-        public ICommand FillRegionCommand => new ViewModels.Commands.RelayCommand((x) => FillRegion(), (x) => CanFillRegion());
+        public ICommand FillRegionCommand => new RelayCommand((x) => FillRegion(), (x) => CanFillRegion());
 
         /// <summary>
         /// adds a filled region.
@@ -158,16 +162,57 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             else
             {
                 SelectedRegion.RegionRect = f.RegionRect;
+                ((UIRegionRect)SelectedRegion.RegionRect).UpdateScale();
             }
 
         }
 
         private bool CanFillRegion()
         {
-            if (!Textures.ValidSelection || !SelectedRegionBrush.IsValid())
+            if (!Textures.ValidSelection || !SelectedRegionBrush.IsValid() || IsRegionSelected && SelectedRegion.OwnedRegion != null)
                 return false;
 
             return Textures.Selected.Regions.Count == 0 || Textures.Selected.Regions.Count == 1 & IsRegionSelected && !SelectedRegion.RegionRect.Equals(new InputRegionRect(0, 0, SelectedRegion.RegionRect.OwnedTexture.ImageWidth, SelectedRegion.RegionRect.OwnedTexture.ImageHeight));
+        }
+
+        public void AutoSubRegion(InputRegion region)
+        {
+            if (region.SubEntries.Count != 0)
+                return;
+
+            foreach (var texture in Textures)
+            {
+                foreach (var dreg in texture.Regions)
+                {
+                    if (dreg.SubEntries.Count > 0 && dreg.Device.Equals(region.Device) & dreg.Key.Equals(region.Key) & dreg.Tag.Equals(region.Tag))
+                    {
+                        foreach (var dsubreg in dreg.SubEntries)
+                        {
+                            InputRegion clonregion = (InputRegion)dsubreg.Clone();
+                            clonregion.RegionRect = new UIRegionRect(clonregion.RegionRect) { Pack = this };
+                            region.SubEntries.Add(clonregion);
+                        }
+                        return;
+                    }
+                }
+            }
+
+            int d = InputRegionRect.DecimalPlaces;
+            InputRegionRect.DecimalPlaces = 3;
+            double height = region.RegionRect.Height / 3;
+            double width = region.RegionRect.Width / 3;
+            for (int i = 1; i < 8; i += 2)
+            {
+                int x = i / 3;
+                int y = i - 3 * x;
+                InputRegion subregion = new InputRegion() { Key = region.Key, Tag = region.Tag, CopyType = region.CopyType, RegionRect = new UIRegionRect(region.RegionRect.X + (width * x), region.RegionRect.Y + (height * y), width, height) { Pack = this } };
+                region.SubEntries.Add(subregion);
+
+                if (region.SubEntries.Count == 4)
+                    subregion.SubIndex -= 1;
+            }
+            InputRegionRect.DecimalPlaces = d;
+
         }
 
         #endregion
@@ -175,10 +220,22 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         #region SelectedRegion
 
         [JsonIgnore]
-        public ICommand DeleteSelectedRegionCommand => new RelayCommand(x => Textures.Selected.Regions.Remove(SelectedRegion), x => IsRegionSelected);
+        public ICommand DeleteSelectedRegionCommand => new RelayCommand(x => GetRegionList(SelectedRegion).Remove(SelectedRegion), x => IsRegionSelected);
 
         [JsonIgnore]
         public ICommand UpdateSelectedRegionCommand => new RelayCommand(x => SelectedRegionBrush.UpdateRegion(SelectedRegion),x => IsRegionSelected & SelectedRegionBrush.IsValid());
+
+        public IList<InputRegion> GetRegionList(InputRegion region)
+        {
+            if (region.OwnedRegion != null)
+            {
+                if (region.OwnedRegion.OwnedRegion != null)
+                    return GetRegionList(region.OwnedRegion);
+
+                return region.OwnedRegion.SubEntries;
+            }
+            return Textures.Selected.Regions;
+        }
 
         [JsonIgnore]
         public bool IfCopyTypeOverwrite
@@ -213,7 +270,14 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 {
                     if (Region.RegionRect is InputRegionRect)
                     {
+                        if (Region.RegionRect is UIRegionRect)
+                            break;
+
                         Region.RegionRect = new UIRegionRect(Region.RegionRect) { Pack = this };
+                        foreach (InputRegion SubRegion in Region.SubEntries)
+                        {
+                            SubRegion.RegionRect = new UIRegionRect(SubRegion.RegionRect) { Pack = this };
+                        }
                     }
                 }
                 SelectedRegion = null;
