@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DolphinDynamicInputTextureCreator.Data
+﻿
+namespace DolphinDynamicInputTexture.Data
 {
     public static class DynamicInputTextureEvents
     {

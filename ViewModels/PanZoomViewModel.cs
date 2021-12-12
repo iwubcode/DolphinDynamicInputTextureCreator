@@ -1,4 +1,4 @@
-﻿using DolphinDynamicInputTextureCreator.Data;
+﻿using DolphinDynamicInputTexture.Data;
 using System;
 using System.Windows;
 
@@ -65,7 +65,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             }
         }
 
-        private Data.RectRegion _currently_creating_region;
+        private RectRegion _currently_creating_region;
         private System.Nullable<Point> _last_pan_position;
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             }
 
             //prevents a region from being created in another region.
-            foreach (Data.RectRegion r in InputPack.Textures.Selected.Regions)
+            foreach (RectRegion r in InputPack.Textures.Selected.Regions)
             {
                 if (p.X >= r.X && p.X < (r.X + r.Width) &&
                     p.Y >= r.Y && p.Y < (r.Y + r.Height))
@@ -90,7 +90,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
                 }
             }
 
-            _currently_creating_region = new Data.RectRegion() { X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.Textures.Selected };
+            _currently_creating_region = new RectRegion() { X = p.X, Y = p.Y, Height = 1, Width = 1, Device = InputPack.SelectedRegionBrush.SelectedEmulatedDevice, Key = InputPack.SelectedRegionBrush.SelectedEmulatedKey, OwnedTexture = InputPack.Textures.Selected };
             InputPack.Textures.Selected.Regions.Add(_currently_creating_region);
 
         }

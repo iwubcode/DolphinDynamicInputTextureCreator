@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using DolphinDynamicInputTexture.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DolphinDynamicInputTextureCreator.Data
+namespace DolphinDynamicInputTextureCreator.ViewModels
 {
     public class RegionBrush : Other.PropertyChangedBase
     {

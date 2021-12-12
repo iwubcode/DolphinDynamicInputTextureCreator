@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DolphinDynamicInputTextureCreator.Interfaces
+﻿namespace DolphinDynamicInputTexture.Interfaces
 {
     public interface IImage
     {

@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using DolphinDynamicInputTexture.Data;
+using DolphinDynamicInputTexture.Interfaces;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -10,7 +12,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
     {
         #region MessageDialogs
 
-        public static bool ImageNotExistMessage(Interfaces.IImage image, string details)
+        public static bool ImageNotExistMessage(IImage image, string details)
         {
             MessageBoxResult MessageResult;
             MessageResult = MessageBox.Show(string.Format("'{0}'\nThe image '{1}' could not be found!\nSearch for the picture?", image.TexturePath, details), "Image could not be found!", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -25,7 +27,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
 
         #region FileDialogs
 
-        public static bool DialogForNewPath(Interfaces.IImage image)
+        public static bool DialogForNewPath(IImage image)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.FileName = Path.GetFileName(image.TexturePath);
@@ -51,7 +53,7 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             {
                 foreach (var filename in dialog.FileNames)
                 {
-                    pack.Textures.Add(new Data.DynamicInputTexture
+                    pack.Textures.Add(new DynamicInputTexture
                     {
                         TextureHash = Path.GetFileName(filename),
                         TexturePath = filename

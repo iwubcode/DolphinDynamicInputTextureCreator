@@ -1,4 +1,5 @@
-﻿using DolphinDynamicInputTextureCreator.ViewModels;
+﻿using DolphinDynamicInputTexture.Data;
+using DolphinDynamicInputTextureCreator.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace DolphinDynamicInputTextureCreator
     {
         public MainWindow()
         {
-            Data.DynamicInputTextureEvents.ImageNotExist = Dialogs.ImageNotExistMessage;
+            DynamicInputTextureEvents.ImageNotExist = Dialogs.ImageNotExistMessage;
             InitializeComponent();
             this.Title += " " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             InputPack = Models.DefaultData.NewInputPack();

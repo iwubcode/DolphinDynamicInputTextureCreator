@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace DolphinDynamicInputTextureCreator.Data
+namespace DolphinDynamicInputTexture.Data
 {
     /// <summary>
     /// Gives specific information about the Dolphin textures hash.

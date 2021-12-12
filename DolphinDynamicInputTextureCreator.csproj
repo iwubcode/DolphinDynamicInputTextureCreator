@@ -18,6 +18,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DolphinDynamicInputTexture\**" />
+    <EmbeddedResource Remove="DolphinDynamicInputTexture\**" />
+    <None Remove="DolphinDynamicInputTexture\**" />
+    <Page Remove="DolphinDynamicInputTexture\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Design\Images\a.png" />
     <None Remove="Design\Images\b.png" />
     <None Remove="Design\Images\c.png" />
@@ -26,7 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="DolphinDynamicInputTexture\DolphinDynamicInputTexture.csproj" />
   </ItemGroup>
 
   <ItemGroup>

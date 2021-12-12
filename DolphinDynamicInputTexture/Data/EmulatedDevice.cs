@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace DolphinDynamicInputTextureCreator.Data
+namespace DolphinDynamicInputTexture.Data
 {
     [JsonObject(IsReference = true)]
     public class EmulatedDevice : Other.PropertyChangedBase

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
-             xmlns:data="clr-namespace:DolphinDynamicInputTextureCreator.Data"
+             xmlns:data="clr-namespace:DolphinDynamicInputTexture.Data"
              xmlns:design="clr-namespace:DolphinDynamicInputTextureCreator.Design"
              xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
              mc:Ignorable="d" 

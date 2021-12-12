@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DolphinDynamicInputTexture.Data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -40,7 +41,7 @@ namespace DolphinDynamicInputTextureCreator.Controls
             {
                 if (System.IO.Path.GetExtension(file).ToLower() == ".png")
                 {
-                    InputPack.Textures.Add(new Data.DynamicInputTexture
+                    InputPack.Textures.Add(new DynamicInputTexture
                     {
                         TextureHash = System.IO.Path.GetFileName(file),
                         TexturePath = file

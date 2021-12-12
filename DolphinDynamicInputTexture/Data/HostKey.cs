@@ -1,9 +1,4 @@
-﻿using DolphinDynamicInputTextureCreator.Other;
-using Microsoft.Win32;
-using System.IO;
-using System.Windows.Input;
-
-namespace DolphinDynamicInputTextureCreator.Data
+﻿namespace DolphinDynamicInputTexture.Data
 {
     public class HostKey : Other.PropertyChangedBase, Interfaces.IDeviceKey, Interfaces.IImage
     {
