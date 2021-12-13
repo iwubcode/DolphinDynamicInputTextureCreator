@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using DolphinDynamicInputTexture.Interfaces;
+using DolphinDynamicInputTexture.Properties;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -38,6 +41,16 @@ namespace DolphinDynamicInputTexture.Data
             }
         }
         private ObservableCollection<DynamicInputTexture> _textures = new ObservableCollection<DynamicInputTexture>();
+
+        /// <summary>
+        /// The emulated Devices mapped in this pack.
+        /// </summary>
+        protected Collection<EmulatedDevice> _emulated_devices = new Collection<EmulatedDevice>();
+
+        /// <summary>
+        /// The tags mapped in this pack.
+        /// </summary>
+        protected Collection<Tag> _tags = new Collection<Tag>();
 
         /// <summary>
         /// specifies the name of the json file, which is generated during export.
@@ -102,8 +115,11 @@ namespace DolphinDynamicInputTexture.Data
         #endregion
 
         #region Export
-
-        public void OutputToLocation(string location)
+        /// <summary>
+        /// Exports the package to the specified directory
+        /// </summary>
+        /// <param name="location">export directory</param>
+        public void ExportToLocation(string location)
         {
             WriteJson(Path.Combine(location, GeneratedJsonName + ".json"));
             WriteImages(location);
@@ -198,17 +214,77 @@ namespace DolphinDynamicInputTexture.Data
                     continue;
 
                 writer.WritePropertyName(device.Name);
-                writer.WriteStartObject();
+                writer.WriteStartArray();
                 foreach (var key in device.HostKeys)
                 {
-                    writer.WritePropertyName(key.Name);
+                    writer.WriteStartObject();
+                    writer.WritePropertyName("keys");
+                    writer.WriteStartArray();
+                    foreach (var name in key.Name.Split(","))
+                    {
+                        writer.WriteValue(name);
+                    }
+                    writer.WriteEndArray();
+                    if (key.Tag != null && key.Tag.Name != "")
+                    {
+                        writer.WritePropertyName("tag");
+                        writer.WriteValue(key.Tag.Name);
+                    }
+                    writer.WritePropertyName("image");
                     key.RelativeTexturePath = CheckRelativeTexturePath(key, device, texture);
                     writer.WriteValue(key.RelativeTexturePath);
+                    writer.WriteEndObject();
                 }
-                writer.WriteEndObject();
+                writer.WriteEndArray();
             }
             writer.WriteEndObject();
         }
+
+        private void WriteRegionData(JsonWriter writer, InputRegion region)
+        {
+            writer.WriteStartObject();
+
+            if (region.Key.Name != "")
+            {
+                writer.WritePropertyName("key");
+                writer.WriteValue(region.Key.Name);
+            }
+            if (region.Tag != null && region.Tag.Name != "")
+            {
+                writer.WritePropertyName("tag");
+                writer.WriteValue(region.Tag.Name);
+            }
+            if (region.CopyType != default)
+            {
+                writer.WritePropertyName("copy_type");
+                writer.WriteValue(region.CopyType.ToString());
+            }
+            if (region.BindType != default)
+            {
+                writer.WritePropertyName("bind_type");
+                writer.WriteValue(region.BindType.ToString());
+            }
+            writer.WritePropertyName("region");
+            writer.WriteStartArray();
+            writer.WriteValue(region.RegionRect.X);
+            writer.WriteValue(region.RegionRect.Y);
+            writer.WriteValue(region.RegionRect.RightX);
+            writer.WriteValue(region.RegionRect.BottomY);
+            writer.WriteEndArray();
+            if (region.SubEntries.Count > 0)
+            {
+                writer.WritePropertyName("sub_entries");
+                writer.WriteStartArray();
+                foreach (var subregin in region.SubEntries)
+                {
+                    WriteRegionData(writer, subregin);
+                }
+                writer.WriteEndArray();
+            }
+
+            writer.WriteEndObject();
+        }
+
         #endregion
 
         private void WriteJson(string file)
@@ -220,7 +296,8 @@ namespace DolphinDynamicInputTexture.Data
                 writer.Formatting = Formatting.Indented;
 
                 writer.WriteStartObject();
-
+                writer.WritePropertyName("specification");
+                writer.WriteValue(2.0);
                 #region DefaultHOST    
                 // Only create if devices are assigned.   
                 if (HostDevices.Count != 0)
@@ -261,38 +338,22 @@ namespace DolphinDynamicInputTexture.Data
                     #region EMULATED KEYS
                     writer.WritePropertyName("emulated_controls");
                     writer.WriteStartObject();
-                    var device_to_keys_to_regions = CollectRegionsForDevices(texture);
-                    foreach (var pair in device_to_keys_to_regions)
+
+                    foreach (var region_data in CollectRegionsForDevices(texture))
                     {
                         // Skip devices with no mapped keys
-                        if (pair.Value.Count == 0)
+                        if (region_data.Value.Count == 0)
                         {
                             continue;
                         }
+                        writer.WritePropertyName(region_data.Key);
+                        writer.WriteStartArray();
 
-                        writer.WritePropertyName(pair.Key);
-                        writer.WriteStartObject();
-
-                        foreach (var keys_to_regions in pair.Value)
+                        foreach (var region in region_data.Value)
                         {
-                            writer.WritePropertyName(keys_to_regions.Key);
-
-                            if (keys_to_regions.Value.Count > 0)
-                            {
-                                writer.WriteStartArray();
-                                foreach (var region in keys_to_regions.Value)
-                                {
-                                    writer.WriteStartArray();
-                                    writer.WriteValue(region.X);
-                                    writer.WriteValue(region.Y);
-                                    writer.WriteValue(region.X + region.Width);
-                                    writer.WriteValue(region.Y + region.Height);
-                                    writer.WriteEndArray();
-                                }
-                                writer.WriteEndArray();
-                            }
+                            WriteRegionData(writer, region);
                         }
-                        writer.WriteEndObject();
+                        writer.WriteEndArray();
                     }
                     writer.WriteEndObject();
                     #endregion
@@ -351,7 +412,7 @@ namespace DolphinDynamicInputTexture.Data
             {
                 if (!File.Exists(image.TexturePath))
                 {
-                    if (DynamicInputTextureEvents.ImageNotExist == null || !DynamicInputTextureEvents.ImageNotExist(image, details != "" ? details : Path.GetFileName(image.TexturePath) ))
+                    if (DynamicInputTextureEvents.ImageNotExist == null || !DynamicInputTextureEvents.ImageNotExist(image, details != "" ? details : Path.GetFileName(image.TexturePath)))
                         return false;
                 }
             }
@@ -359,7 +420,7 @@ namespace DolphinDynamicInputTexture.Data
         }
 
         #endregion
-		
+
         #region Import
 
         #region JSON Read HELPERS
@@ -414,12 +475,16 @@ namespace DolphinDynamicInputTexture.Data
                     case "keys":
                         if (!reader.Read() || reader.TokenType != JsonToken.StartArray)
                             break;
-
                         while (reader.Read() && reader.TokenType != JsonToken.EndArray)
                         {
-                            //multi key not implemented
                             if (key.Name == null)
+                            {
                                 key.Name = reader.Value.ToString();
+                            }
+                            else
+                            {
+                                key.Name += "," + reader.Value.ToString();
+                            }
                         }
                         break;
                     case "image":
@@ -427,8 +492,13 @@ namespace DolphinDynamicInputTexture.Data
                         key.TexturePath = Path.Combine(path, key.RelativeTexturePath);
                         break;
                     case "tag":
-                        //not implemented
-                        return;
+                        if (!IsEqualInCollection(_tags, new Tag { Name = reader.ReadAsString() }, out Tag tag))
+                        {
+                            _tags.Add(tag);
+                        }
+
+                        key.Tag = tag;
+                        break;
                 }
             }
             device.HostKeys.Add(key);
@@ -440,7 +510,10 @@ namespace DolphinDynamicInputTexture.Data
             {
                 if (reader.TokenType == JsonToken.PropertyName)
                 {
-                    EmulatedDevice emulatedDevice = new EmulatedDevice { Name = reader.Value.ToString() };
+                    if (!IsEqualInCollection(_emulated_devices, new EmulatedDevice { Name = reader.Value.ToString() }, out EmulatedDevice emulatedDevice))
+                    {
+                        _emulated_devices.Add(emulatedDevice);
+                    }
 
                     reader.Read();
                     switch (reader.TokenType)
@@ -450,16 +523,17 @@ namespace DolphinDynamicInputTexture.Data
                             {
                                 if (reader.TokenType == JsonToken.PropertyName)
                                 {
-                                    EmulatedKey emulatedkey = new EmulatedKey { Name = reader.Value.ToString() };
-                                    if (!emulatedDevice.EmulatedKeys.Contains(emulatedkey))
+                                    if (!IsEqualInCollection(emulatedDevice.EmulatedKeys, new EmulatedKey { Name = reader.Value.ToString() }, out EmulatedKey emulatedkey))
+                                    {
                                         emulatedDevice.EmulatedKeys.Add(emulatedkey);
+                                    }
 
                                     if (reader.Read() && reader.TokenType == JsonToken.StartArray)
                                     {
                                         while (reader.Read() && reader.TokenType == JsonToken.StartArray)
                                         {
-                                            RectRegion Region = new RectRegion { Device = emulatedDevice, Key = emulatedkey, OwnedTexture = texture, ScaleFactor = 1 };
-                                            if (ReadRectRegion(reader, Region))
+                                            InputRegion Region = new InputRegion { Device = emulatedDevice, Key = emulatedkey };
+                                            if (ReadInputRegionRect(reader, Region.RegionRect))
                                             {
                                                 texture.Regions.Add(Region);
                                             }
@@ -471,7 +545,7 @@ namespace DolphinDynamicInputTexture.Data
                         case JsonToken.StartArray: // V2
                             while (reader.Read() && reader.TokenType != JsonToken.EndArray)
                             {
-                                ReadV2EmulatedKey(reader, emulatedDevice, texture);
+                                texture.Regions.Add(ReadV2InputRegion(reader, emulatedDevice, texture));
                             }
                             break;
                     }
@@ -479,25 +553,15 @@ namespace DolphinDynamicInputTexture.Data
             }
         }
 
-        private bool ReadRectRegion(JsonReader reader, RectRegion Region)
+        private bool ReadInputRegionRect(JsonReader reader, IRectRegion Region)
         {
             if (reader.TokenType == JsonToken.StartArray)
             {
-                try
-                {
-                    Region.X = reader.ReadAsDouble().Value;
-                    Region.Y = reader.ReadAsDouble().Value;
-                    Region.Width = reader.ReadAsDouble().Value - Region.X;
-                    Region.Height = reader.ReadAsDouble().Value - Region.Y;
-                }
-                catch (JsonReaderException)
-                {
-                    return false;
-                }
-                finally
-                {
-                    while (reader.TokenType != JsonToken.EndArray && reader.Read()) { }
-                }
+                Region.X = reader.ReadAsDouble().Value;
+                Region.Y = reader.ReadAsDouble().Value;
+                Region.Width = reader.ReadAsDouble().Value - Region.X;
+                Region.Height = reader.ReadAsDouble().Value - Region.Y;
+                while (reader.TokenType != JsonToken.EndArray && reader.Read()) { }
                 return true;
             }
             else
@@ -506,41 +570,55 @@ namespace DolphinDynamicInputTexture.Data
             }
         }
 
-        private void ReadV2EmulatedKey(JsonReader reader, EmulatedDevice emulatedDevice, DynamicInputTexture texture)
+        private InputRegion ReadV2InputRegion(JsonReader reader, EmulatedDevice emulatedDevice, DynamicInputTexture texture)
         {
-            EmulatedKey emulatedkey = new EmulatedKey();
+            InputRegion Region = new InputRegion { Device = emulatedDevice};
             while (reader.Read() && reader.TokenType != JsonToken.EndObject)
             {
                 switch (reader.Value)
                 {
                     case "key":
-                        emulatedkey.Name = reader.ReadAsString();
+                        if (!IsEqualInCollection(emulatedDevice.EmulatedKeys, new EmulatedKey { Name = reader.ReadAsString() }, out EmulatedKey emulatedkey))
+                        {
+                            emulatedDevice.EmulatedKeys.Add(emulatedkey);
+                        }
+
+                        Region.Key = emulatedkey;
                         break;
                     case "region":
-                        RectRegion Region = new RectRegion { Device = emulatedDevice, Key = emulatedkey, OwnedTexture = texture, ScaleFactor = 1 };
-                        if (reader.Read() && ReadRectRegion(reader, Region))
-                        {
-                            texture.Regions.Add(Region);
-                        }
+                        reader.Read();
+                        ReadInputRegionRect(reader, Region.RegionRect);
                         break;
                     case "tag":
-                        //not implemented
+                        if (!IsEqualInCollection(_tags, new Tag { Name = reader.ReadAsString() }, out Tag tag))
+                        {
+                            _tags.Add(tag);
+                        }
+
+                        Region.Tag = tag;
                         break;
                     case "bind_type":
-                        //not implemented
+                        Region.BindType = Enum.Parse<BindTypeProperties>(reader.ReadAsString());
                         break;
                     case "copy_type":
-                        //not implemented
+                        Region.CopyType = Enum.Parse<CopyTypeProperties>(reader.ReadAsString());
                         break;
                     case "sub_entries":
-                        //not implemented
+                        while (reader.Read() && reader.TokenType != JsonToken.EndArray)
+                        {
+                            Region.SubEntries.Add(ReadV2InputRegion(reader, emulatedDevice, texture));
+                        }
                         break;
                 }
             }
+            return Region;
         }
 
         #endregion
-
+        /// <summary>
+        /// Imports a package in dolphin dynamic input texture format
+        /// </summary>
+        /// <param name="file">path to the file</param>
         public void ImportFromLocation(string file) => ReadJson(file);
         private void ReadJson(string file)
         {
@@ -604,7 +682,7 @@ namespace DolphinDynamicInputTexture.Data
                 }
             }
         }
-		
+
         #endregion
 
         /// <summary>
@@ -612,32 +690,37 @@ namespace DolphinDynamicInputTexture.Data
         /// </summary>
         /// <param name="texture"></param>
         /// <returns></returns>
-        private Dictionary<string, Dictionary<string, List<RectRegion>>> CollectRegionsForDevices(DynamicInputTexture texture)
+        private Dictionary<string, List<InputRegion>> CollectRegionsForDevices(DynamicInputTexture texture)
         {
-            Dictionary<string, Dictionary<string, List<RectRegion>>> result = new Dictionary<string, Dictionary<string, List<RectRegion>>>();
+            Dictionary<string, List<InputRegion>> result = new Dictionary<string, List<InputRegion>>();
             foreach (var region in texture.Regions)
             {
                 if (result.ContainsKey(region.Device.Name))
                 {
-                    var key_to_regions = result[region.Device.Name];
-                    if (key_to_regions.ContainsKey(region.Key.Name))
-                    {
-                        key_to_regions[region.Key.Name].Add(region);
-                    }
-                    else
-                    {
-                        key_to_regions.Add(region.Key.Name, new List<RectRegion> { region });
-                    }
+                    result[region.Device.Name].Add(region);
                 }
                 else
                 {
-                    var key_to_regions = new Dictionary<string, List<RectRegion>>();
-                    key_to_regions.Add(region.Key.Name, new List<RectRegion> { region });
-                    result.Add(region.Device.Name, key_to_regions);
+                    result.Add(region.Device.Name, new List<InputRegion> { region });
                 }
             }
 
             return result;
         }
+
+        internal static bool IsEqualInCollection<T>(IList<T> list, T check, out T match) where T : IEquatable<T>
+        {
+            foreach (T item in list)
+            {
+                if (item.Equals(check))
+                {
+                    match = item;
+                    return true;
+                }
+            }
+            match = check;
+            return false;
+        }
+
     }
 }

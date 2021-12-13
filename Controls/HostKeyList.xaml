@@ -31,37 +31,30 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Width="120" Height="120" Margin="5">
+                        <Grid Width="130" Height="140" Margin="5">
                             <Border BorderThickness="1" BorderBrush="Black" Padding="2" Background="DarkGray">
-                                <Grid HorizontalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid Grid.Column="0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Viewbox>
-                                            <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" />
-                                        </Viewbox>
-                                        <Grid Grid.Row="0">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="3*" />
-                                            </Grid.RowDefinitions>
-                                            <Grid Grid.Row="0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="9*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <Button Content="X" Grid.Column="1" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="{Binding TexturePath, Converter={StaticResource PathToImageValueConverter}}" />
+                                    <Grid Grid.Row="0">
+                                        <Button Grid.Column="0" Width="15" Height="15" Style="{StaticResource delete}" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},
                                               Path=DataContext.DeleteKeyCommand}" CommandParameter="{Binding}"></Button>
-                                            </Grid>
-                                        </Grid>
-                                        <ComboBox Grid.Row="1" IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, Delay=2}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},
-                                              Path=DataContext.HostKeySuggestions.Available}" />
                                     </Grid>
+                                    <StackPanel Grid.Row="2"  Orientation="Vertical">
+                                        <ComboBox IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" StaysOpenOnEdit="True" Text="{Binding Name, Mode=TwoWay, Delay=2}" TextSearch.TextPath="" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},
+                                              Path=DataContext.HostKeySuggestions}" />
+                                        <ComboBox IsEditable="False" StaysOpenOnEdit="True" SelectedValue="{Binding Tag, Mode=TwoWay, Delay=4}" Foreground="DarkViolet" TextSearch.TextPath="Name"
+                                                  ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:HostKeyList}},Path=DataContext.Tags}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
                                 </Grid>
                             </Border>
                         </Grid>

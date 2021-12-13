@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator"
         Closing="Window_Closing" 
         Title="Dolphin Dynamic Input Texture Creator" MinHeight="600" MinWidth="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key ="BooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="NewData_CanExecute" Executed="NewData_Click" />
         <CommandBinding Command="Open" CanExecute="OpenData_CanExecute" Executed="OpenData_Click" />
@@ -35,6 +40,7 @@
                 <MenuItem Header="_Emulated Devices..." Name="EditEmulatedDevices" Click="EditEmulatedDevices_Click" Icon="{DynamicResource Icon.EmulatedDevices}"/>
                 <MenuItem Header="_Host Devices..." Name="EditHostDevices" Click="EditHostDevices_Click" Icon="{DynamicResource Icon.HostDevices}"/>
                 <MenuItem Header="_Metadata..." Name="EditMetadata" Click="EditMetadata_Click" Icon="{DynamicResource Icon.Metadata}" />
+                <MenuItem Header="_Tags..." Name="EditTags" Click="EditTags_Click" Icon="{DynamicResource Icon.EditTags}" />
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Left">
@@ -49,13 +55,11 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <Label Content="Choose an emulated control to map in the texture:" Margin="0 0 5 0" />
-                    <ComboBox ItemsSource="{Binding EmulatedDevices}" Margin="0 0 0 0" Width="100" x:Name="EmulatedDeviceCB" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedDevice}" VerticalAlignment="Center">
+                    <Path Width="25" Height="25" Fill="Gray" Data="{StaticResource Geometry.EmulatedDevices}" Margin="5 0 2 0"/>
+                    <ComboBox ItemsSource="{Binding EmulatedDevices}" MinWidth="90" MaxWidth="130" x:Name="EmulatedDeviceCB" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedDevice}" VerticalAlignment="Center"  Margin="2 0" ToolTip="Choose an emulated control">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                </StackPanel>
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                         <ComboBox.Style>
@@ -72,13 +76,34 @@
                             </Style>
                         </ComboBox.Style>
                     </ComboBox>
-                    <Label Content="And key:" Margin="5 0 5 0" />
-                    <ComboBox ItemsSource="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.EmulatedKeys}" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedKey}" VerticalAlignment="Center" Width="120" Margin="0 0 5 0">
+
+                    <ToggleButton Margin="2 0" IsChecked="{Binding SelectedRegionBrush.UseKey}" BorderThickness="0">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                            <Grid Background="Transparent">
+                                                <ContentPresenter/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Content" Value="{DynamicResource Icon.NoKey}" />
+                                <Setter Property="ToolTip" Value="no key selected." />
+                                    <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="true">
+                                        <Setter Property="Content" Value="{DynamicResource Icon.Key}" />
+                                        <Setter Property="ToolTip" Value="Choose an key." />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <ComboBox ItemsSource="{Binding ElementName=EmulatedDeviceCB, Path=SelectedItem.EmulatedKeys}" SelectedValue="{Binding SelectedRegionBrush.SelectedEmulatedKey, Delay=1}" VerticalAlignment="Center" MinWidth="90" MaxWidth="130" Margin="2 0" ToolTip="Choose an emulated key" Visibility="{Binding SelectedRegionBrush.UseKey, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                </StackPanel>
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                         <ComboBox.Style>
@@ -98,7 +123,81 @@
                             </Style>
                         </ComboBox.Style>
                     </ComboBox>
-                    <Button Margin="5,0,5,0" MinWidth="35" Content="{DynamicResource Icon.FillRegion}" VerticalAlignment="Center" Command="{Binding FillRegionCommand}" ToolTip="Fill Region"/>
+
+                    <ToggleButton Margin="2 0" IsChecked="{Binding SelectedRegionBrush.UseTag}" BorderThickness="0">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                            <Grid Background="Transparent">
+                                                <ContentPresenter/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Content" Value="{DynamicResource Icon.NoTag}" />
+                                <Setter Property="ToolTip" Value="no tag selected." />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="true">
+                                        <Setter Property="Content" Value="{DynamicResource Icon.Tag}" />
+                                        <Setter Property="ToolTip" Value="Choose an tag." />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                    <ComboBox ItemsSource="{Binding Tags}" SelectedValue="{Binding SelectedRegionBrush.SelectedTag}" VerticalAlignment="Center" MinWidth="90" MaxWidth="130" Margin="2 0" ToolTip="Choose an tag" Visibility="{Binding SelectedRegionBrush.UseTag, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.Style>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Tags.Count}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding EmulatedDevices.Count}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
+                    
+                    <Border BorderBrush="Gray" BorderThickness="0.3" Margin="2 0"/>
+                    
+                    <Button Margin="2,0" MinWidth="30" Height="20" Content="{DynamicResource Icon.FillRegion}" VerticalAlignment="Center" Command="{Binding FillRegionCommand}" ToolTip="Fill Region"/>
+
+                    <Button Margin="2,0" Width="30" Height="20" Content="{StaticResource Icon.UpdateRegion}" VerticalAlignment="Center" Command="{Binding UpdateSelectedRegionCommand}" ToolTip="Update Region"/>
+
+                    <ToggleButton Margin="2 0" Width="20" Height="20" IsChecked="{Binding IfCopyTypeOverwrite}" IsEnabled="{Binding IsRegionSelected}" >
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Setter Property="Content" Value="{DynamicResource Icon.RegionOverlay}" />
+                                <Setter Property="ToolTip" Value="the region is placed on top of the texture." />
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="true">
+                                        <Setter Property="Content" Value="{DynamicResource Icon.RegionOverwrite}" />
+                                        <Setter Property="ToolTip" Value="the texture is overwritten by this region." />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+
+                    <Button Margin="2,0" Width="20" Height="20" Content="{StaticResource Icon.RemoveRegion}" VerticalAlignment="Center" Command="{Binding DeleteSelectedRegionCommand}" ToolTip="Delete Region"/>
+
+                    <Border BorderBrush="Gray" BorderThickness="0.3" Margin="2 0"/>
+                    
                     <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.UseDarkBackground}" >
                         <ToggleButton.Style>
                             <Style TargetType="{x:Type ToggleButton}">
@@ -113,6 +212,7 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
+                    
                     <ToggleButton Margin="2 0" Height="20" IsChecked="{Binding SelectedRegionBrush.Subpixel}">
                         <ToggleButton.Style>
                             <Style TargetType="{x:Type ToggleButton}">

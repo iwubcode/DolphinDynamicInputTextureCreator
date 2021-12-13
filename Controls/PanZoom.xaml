@@ -21,9 +21,9 @@
         <converters:BoolToColorConverter x:Key="BoolToResizerColorBrushConverter" FalseValue="Black" TrueValue="LightBlue"/>
         <ContextMenu x:Key="ItemContextMenu">
             <MenuItem Header="Delete" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
-                                              Path=DataContext.InputPack.DeleteSelectedRegionCommand}" CommandParameter="{Binding}" Icon="{StaticResource Icon.Delete}" />
+                                              Path=DataContext.InputPack.DeleteRegionCommand}" CommandParameter="{Binding}" Icon="{StaticResource Icon.Delete}" />
         </ContextMenu>
-        <DataTemplate DataType="{x:Type data:RectRegion}">
+        <DataTemplate DataType="{x:Type data:InputRegion}">
             <Grid>
                 <Grid.Background>
                     <SolidColorBrush Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:PanZoom}},
@@ -52,21 +52,26 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="4" Color="Black"/>
                             </Label.Effect>
                         </Label>
+                        <Label Content="{Binding Tag.Name, Mode=OneWay}" FontSize="8" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Plum" >
+                            <Label.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
+                            </Label.Effect>
+                        </Label>
                     </StackPanel>
                 </Viewbox>
                 <Viewbox Grid.Row="1" >
                     <StackPanel Orientation="Horizontal" Margin="1,0">
-                        <Label  Content="{Binding X, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White" Padding="0" >
+                        <Label  Content="{Binding RegionRect.X, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White" Padding="0" >
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="{Binding Y, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White" Padding="6,0" >
+                        <Label Content="{Binding RegionRect.Y, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White" Padding="6,0" >
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="{Binding Width, Mode=OneWay}"  ContentStringFormat="0.#" Foreground="White"  Padding="0">
+                        <Label Content="{Binding RegionRect.Width, Mode=OneWay}"  ContentStringFormat="0.#" Foreground="White"  Padding="0">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
@@ -76,7 +81,7 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
                         </Label>
-                        <Label Content="{Binding Height, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White"  Padding="0">
+                        <Label Content="{Binding RegionRect.Height, Mode=OneWay}" ContentStringFormat="0.#" Foreground="White"  Padding="0">
                             <Label.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="2" Color="Black"/>
                             </Label.Effect>
@@ -84,9 +89,9 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                     </StackPanel>
                 </Viewbox>
                 <controls:Resizer Grid.RowSpan="2" Visibility="Collapsed"
-                                  X="{Binding ScaledX}" Y="{Binding ScaledY}"
-                                  ItemWidth="{Binding ScaledWidth}"
-                                  ItemHeight="{Binding ScaledHeight}"
+                                  X="{Binding RegionRect.ScaledX}" Y="{Binding RegionRect.ScaledY}"
+                                  ItemWidth="{Binding RegionRect.ScaledWidth}"
+                                  ItemHeight="{Binding RegionRect.ScaledHeight}"
                                   x:Name="Resizer"/>
             </Grid>
             <DataTemplate.Triggers>
@@ -97,10 +102,11 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
         </DataTemplate>
 
         <Style TargetType="ListBox" x:Key="RectRegionListBoxStyle">
+            <Setter Property="ItemContainerStyle" Value="{DynamicResource RectRegionItemStyle}"/>
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <Canvas/>
+                        <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
@@ -112,12 +118,13 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style TargetType="ListBoxItem" x:Key="RectRegionItemStyle">
             <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-            <Setter Property="Canvas.Left" Value="{Binding ScaledX}"/>
-            <Setter Property="Canvas.Top" Value="{Binding ScaledY}"/>
-            <Setter Property="Height" Value="{Binding ScaledHeight}"/>
-            <Setter Property="Width" Value="{Binding ScaledWidth}"/>
+            <Setter Property="Canvas.Left" Value="{Binding RegionRect.ScaledX}"/>
+            <Setter Property="Canvas.Top" Value="{Binding RegionRect.ScaledY}"/>
+            <Setter Property="Height" Value="{Binding RegionRect.ScaledHeight}"/>
+            <Setter Property="Width" Value="{Binding RegionRect.ScaledWidth}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
@@ -149,7 +156,7 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                             </Grid.Background>
                             <Grid.LayoutTransform>
                                 <TransformGroup>
-                                    <ScaleTransform ScaleX="{Binding InputPack.Textures.Selected.ScaleFactor}" ScaleY="{Binding InputPack.Textures.Selected.ScaleFactor}"/>
+                                    <ScaleTransform ScaleX="{Binding InputPack.ScaleFactor}" ScaleY="{Binding InputPack.ScaleFactor}"/>
                                 </TransformGroup>
                             </Grid.LayoutTransform>
                             <Image Source="{Binding InputPack.Textures.Selected.TexturePath, Converter={StaticResource PathToImageValueConverter}}"  Width="{Binding InputPack.Textures.Selected.ImageWidth}" Height="{Binding InputPack.Textures.Selected.ImageHeight}" Stretch="Fill" x:Name="Img" RenderOptions.BitmapScalingMode="NearestNeighbor"
@@ -157,9 +164,8 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                             </Image>
                         </Grid>
 
-                        <ListBox x:Name="lb" ItemsSource="{Binding InputPack.Textures.Selected.Regions}"
-                                 Style="{StaticResource RectRegionListBoxStyle}"
-                                 ItemContainerStyle="{StaticResource RectRegionItemStyle}"/>
+                        <ListBox x:Name="lb" ItemsSource="{Binding InputPack.Textures.Selected.Regions}" SelectedItem="{Binding InputPack.SelectedRegion, NotifyOnTargetUpdated=True}" Style="{StaticResource RectRegionListBoxStyle}"/>
+                        
                     </Grid>
                 </Grid>
             </ScrollViewer>
@@ -171,7 +177,7 @@ Converter={StaticResource BoolToResizerColorBrushConverter}}" Opacity="0.25" />
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <TextBlock Text="Zoom = " />
-                        <TextBlock Text="{Binding InputPack.Textures.Selected.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" />
+                        <TextBlock Text="{Binding InputPack.ScaleFactor, Converter={StaticResource ScaleFactorToPercentageValueConverter}}" />
                     </StackPanel>
                     <Button Grid.Row="1" Content="Reset" Command="{Binding InputPack.ResetScaleFactorCommand}" />
                 </Grid>

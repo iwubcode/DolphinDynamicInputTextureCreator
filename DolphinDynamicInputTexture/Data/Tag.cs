@@ -4,13 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace DolphinDynamicInputTexture.Data
 {
-    public class EmulatedKey : Other.PropertyChangedBase, IName, IEquatable<EmulatedKey>
+    public class Tag : Other.PropertyChangedBase, IName, IEquatable<Tag>
     {
         #region PROPERTIES
 
-        /// <summary>
-        /// The key name on the emulated machine, ex: "Buttons/A"
-        /// </summary>
         public string Name
         {
             get => _name ??= "";
@@ -22,7 +19,7 @@ namespace DolphinDynamicInputTexture.Data
         }
         private string _name;
 
-        public bool Equals([AllowNull] EmulatedKey other)
+        public bool Equals([AllowNull] Tag other)
         {
             return other != null && other.Name == Name;
         }

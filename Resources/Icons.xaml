@@ -34,6 +34,7 @@
     <Path x:Key="Icon.EmulatedDevices" Fill="Sienna" Data="{StaticResource Geometry.EmulatedDevices}" Style="{StaticResource DropShadow}" />
     <Path x:Key="Icon.HostDevices" Fill="Sienna" Data="{StaticResource Geometry.HostDevices}" Style="{StaticResource DropShadow}" />
     <Path x:Key="Icon.Metadata" Fill="Sienna" Data="{StaticResource Geometry.Metadata}" Style="{StaticResource DropShadow}" />
+    <Path x:Key="Icon.EditTags" Fill="Sienna" Data="{StaticResource Geometry.Tag}" Style="{StaticResource DropShadow}" />
     <!--#endregion-->
 
     <!--#region Tools-->
@@ -42,28 +43,18 @@
     <Path x:Key="Icon.CanvasDark" Fill="Gray" Data="{StaticResource Geometry.CanvasDark}" />
     <Path x:Key="Icon.CanvasLight" Fill="Gray" Data="{StaticResource Geometry.CanvasLight}" />
     <Path x:Key="Icon.FillRegion" Fill="Gray" Data="{StaticResource Geometry.FillRegion}" />
+    <Path x:Key="Icon.UpdateRegion" Fill="CornflowerBlue" Data="{StaticResource Geometry.Refresh}"/>
+    <Path x:Key="Icon.RegionOverlay" Fill="CornflowerBlue" Data="{StaticResource Geometry.RegionOverlay}"/>
+    <Path x:Key="Icon.RegionOverwrite" Fill="CornflowerBlue" Data="{StaticResource Geometry.RegionOverwrite}"/>
+    <Path x:Key="Icon.RemoveRegion" Fill="DarkRed" Data="{StaticResource Geometry.Delete}"/>
+    <Path x:Key="Icon.Key" Fill="Gray" Data="{StaticResource Geometry.Key}"/>
+    <Path x:Key="Icon.NoKey" Fill="Gray" Data="{StaticResource Geometry.NoKey}"/>
+    <Path x:Key="Icon.Tag" Fill="Gray" Data="{StaticResource Geometry.Tag}"/>
+    <Path x:Key="Icon.NoTag" Fill="Gray" Data="{StaticResource Geometry.NoTag}"/>
     <!--#endregion-->
 
     <!--#region other-->
     <Path x:Key="Icon.Delete" Fill="DarkRed" Stretch="Uniform"  Data="{DynamicResource Geometry.Delete}" Style="{StaticResource DropShadow}"/>
-    <!--#endregion-->
-
-    <!--#region Windows Icons-->
-    <DrawingImage x:Key="Image.EmulatedDevices">
-        <DrawingImage.Drawing>
-            <GeometryDrawing Geometry="{StaticResource Geometry.EmulatedDevices}" Brush="Sienna"/>
-        </DrawingImage.Drawing>
-    </DrawingImage>
-    <DrawingImage x:Key="Image.HostDevices">
-        <DrawingImage.Drawing>
-            <GeometryDrawing Geometry="{StaticResource Geometry.HostDevices}" Brush="Sienna"/>
-        </DrawingImage.Drawing>
-    </DrawingImage>
-    <DrawingImage x:Key="Image.Metadata">
-        <DrawingImage.Drawing>
-            <GeometryDrawing Geometry="{StaticResource Geometry.Metadata}" Brush="Sienna"/>
-        </DrawingImage.Drawing>
-    </DrawingImage>
     <!--#endregion-->
 
 </ResourceDictionary>
