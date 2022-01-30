@@ -95,11 +95,8 @@ namespace DolphinDynamicInputTexture.Data
                 {
                     foreach (InputRegion Region in value)
                     {
+                        Region.OwnedRegion = null;
                         Region.RegionRect.OwnedTexture = this;
-                        foreach (InputRegion SubEntrie in Region.SubEntries)
-                        {
-                            SubEntrie.RegionRect.OwnedTexture = this;
-                        }
                     }
                 }
                 _regions = value;
@@ -118,10 +115,11 @@ namespace DolphinDynamicInputTexture.Data
             {
                 foreach (InputRegion Region in e.NewItems)
                 {
+                    Region.OwnedRegion = null;
                     Region.RegionRect.OwnedTexture = this;
-                    foreach (InputRegion SubEntrie in Region.SubEntries)
+                    foreach (InputRegion subentry in Region.SubEntries)
                     {
-                        SubEntrie.RegionRect.OwnedTexture = this;
+                        subentry.RegionRect.OwnedTexture = this;
                     }
                 }
             }

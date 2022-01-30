@@ -91,6 +91,21 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         private bool _use_tag = false;
 
         /// <summary>
+        /// 
+        /// </summary>
+        [JsonIgnore]
+        public bool EditSubRegions
+        {
+            get => _edit_sub_regions;
+            set
+            {
+                _edit_sub_regions = value;
+                OnPropertyChanged(nameof(EditSubRegions));
+            }
+        }
+        private bool _edit_sub_regions = false;
+
+        /// <summary>
         /// whether subpixels are used.
         /// </summary>
         public bool Subpixel

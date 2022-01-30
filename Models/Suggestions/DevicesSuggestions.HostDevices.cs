@@ -43,7 +43,13 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
                     "Start", "Back", "Guide",
                     "`Pad N`", "`Pad S`", "`Pad E`", "`Pad W`",
                     "`Left X-`", "`Left X+`", "`Left Y-`", "`Left Y+`",
-                    "`Right X-`", "`Right X+`", "`Right Y-`", "`Right Y+`"
+                    "`Right X-`", "`Right X+`", "`Right Y-`", "`Right Y+`",
+                    "`Pad W`,`Pad E`", "`Pad N`,`Pad S`",
+                    "`Pad W`,`Pad N`,`Pad E`,`Pad S`",
+                    "`Left X-`,`Left Y+`","`Left Y+`,`Left X+`","`Left X+`,`Left Y-`","`Left X-`,`Left Y-`",
+                    "`Left X-`,`Left Y+`,`Left X+`,`Left Y-`",
+                    "`Right X-`,`Right Y+`","`Right Y+`,`Right X+`","`Right X+`,`Right Y-`","`Right X-`,`Right Y-`",
+                    "`Right X-`,`Right Y+`,`Right X+`,`Right Y-`"
                 }
             },
                 {
@@ -56,7 +62,7 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
                     "Up", "Down", "Left", "Right", "Shift", "Ctrl", "SPACE", "Alt", "TAB", "RETURN", "APOSTROPHE", "BACK", "SLASH", "BACKSLASH", "PERIOD",
                     "COMMA", "EQUALS", "LBRACKET", "RBRACKET", "SEMICOLON", "ESC", "DELETE", "END", "NEXT", "INSERT", "TAB", "HOME", "PRIOR", "PAUSE",
                     "`NUMPAD1`", "`NUMPAD2`", "`NUMPAD3`", "`NUMPAD4`", "`NUMPAD5`", "`NUMPAD6`", "`NUMPAD7`", "`NUMPAD8`", "`NUMPAD9`", "`NUMPAD0`",
-                    "DIVIDE", "MULTIPLY", "SUBTRACT", "ADD", "NUMPADENTER", "DECIMAL"
+                    "DIVIDE", "MULTIPLY", "SUBTRACT", "ADD", "NUMPADENTER", "DECIMAL","A,W,D,S","Left,Up,Right,Down"
                 }
             },
                 {
@@ -67,7 +73,16 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
                     "`Classic A`", "`Classic B`", "`Classic X`", "`Classic Y`", "`Classic -`", "`Classic +`", "`Classic HOME`", "`Classic L`",
                     "`Classic R`", "`Classic ZL`", "`Classic ZR`", "`Classic Up`", "`Classic Down`", "`Classic Left`", "`Classic Right`",
                     "`Classic Left X-`", "`Classic Left X+`", "`Classic Left Y-`", "`Classic Left Y+`",
-                    "`Classic Right X-`", "`Classic Right X+`", "`Classic Right Y-`", "`Classic Right Y+`"
+                    "`Classic Right X-`", "`Classic Right X+`", "`Classic Right Y-`", "`Classic Right Y+`",
+                    "`Left`,`Right`", "`Up`,`Down`",
+                    "`Left`,`Up`,`Right`,`Down`",
+                    "`Nunchuk X-`,`Nunchuk Y+`","`Nunchuk Y+`,`Nunchuk X+`","`Nunchuk X+`,`Nunchuk Y-`","`Nunchuk X-`,`Nunchuk Y-`",
+                    "`Nunchuk X-`,`Nunchuk Y+`,`Nunchuk X+`,`Nunchuk Y-`",
+                    "`Classic Left`,`Classic Right`", "`Classic Up`,`Classic Down`",
+                    "`Classic Left`,`Classic Up`,`Classic Right`,`Classic Down`",
+                    "`Classic Left X-`,`Classic Left Y+`","`Classic Left Y+`,`Classic Left X+`","`RClassic Left X+`,`Classic Left Y-`","`Classic Left X-`,`Classic Left Y-`",
+                    "`Classic Left X-`,`Classic Left Y+`,`Classic Left X+`,`Classic Left Y-`",
+                    "`Classic Right X-`,`Classic Right Y+`,`Classic Right X+`,`Classic Right Y-`"
                 }
             },
                 {
@@ -77,7 +92,9 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
                     "`Buttons 9`", "`Buttons 10`", "`Buttons 11`", "`Buttons 12`", "`Buttons 13`", "`Buttons 14`", "`Buttons 15`",
                     "`Hat 0 N`", "`Hat 0 S`", "`Hat 0 E`", "`Hat 0 W`",
                     "`Axis X-`", "`Axis X+`", "`Axis Y-`", "`Axis Y+`",
-                    "`Axis Xr-`", "`Axis Xr+`", "`Axis Yr-`", "`Axis Yr+`"
+                    "`Axis Xr-`", "`Axis Xr+`", "`Axis Yr-`", "`Axis Yr+`",
+                    "`Hat 0 W`,`Hat 0 E`", "`Hat 0 N`,`Hat 0 S`",
+                    "`Hat 0 W`,`Hat 0 N`,`Hat 0 E`,`Hat 0 S`"
                 }
             },
                 {
@@ -87,14 +104,26 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
                     "`L1`", "`L2`", "`L3`","`R1`", "`R2`", "`R3`",
                     "`Pad N`", "`Pad S`", "`Pad E`", "`Pad W`",
                     "`Left X-`", "`Left X+`", "`Left Y-`", "`Left Y+`",
-                    "`Right X-`", "`Right X+`", "`Right Y-`", "`Right Y+`"
+                    "`Right X-`", "`Right X+`", "`Right Y-`", "`Right Y+`",
+                    "`Pad W`,`Pad E`", "`Pad N`,`Pad S`",
+                    "`Pad W`,`Pad N`,`Pad E`,`Pad S`",
+                    "`Left X-`,`Left Y+`","`Left Y+`,`Left X+`","`Left X+`,`Left Y-`","`Left X-`,`Left Y-`",
+                    "`Left X-`,`Left Y+`,`Left X+`,`Left Y-`",
+                    "`Right X-`,`Right Y+`","`Right Y+`,`Right X+`","`Right X+`,`Right Y-`","`Right X-`,`Right Y-`",
+                    "`Right X-`,`Right Y+`,`Right X+`,`Right Y-`"
                 }
             },
                 {
                 "evdev",
                 new List<string>(){
                     "SOUTH", "EAST", "NORTH", "WEST", "TL", "TR", "`TL2`", "`TR2`", "START", "SELECT", "MODE", "LEFT", "UP", "RIGHT", "DOWN", "THUMBL", "THUMBR",
-                    "`Axis 0-`", "`Axis 0+`", "`Axis 1-`", "`Axis 1+`", "`Axis 3-`", "`Axis 3+`", "`Axis 4-`", "`Axis 4+`", "`Axis 6-`", "`Axis 6+`", "`Axis 7-`", "`Axis 7+`"
+                    "`Axis 0-`", "`Axis 0+`", "`Axis 1-`", "`Axis 1+`", "`Axis 3-`", "`Axis 3+`", "`Axis 4-`", "`Axis 4+`", "`Axis 6-`", "`Axis 6+`", "`Axis 7-`", "`Axis 7+`",
+                    "`LEFT`,`RIGHT`", "`UP`,`DOWN`",
+                    "`LEFT`,`UP`,`RIGHT`,`DOWN`",
+                    "`Axis 0-`,`Axis 1-`","`Axis 1-`,`Axis 0+`","`Axis 0+`,`Axis 1+`","`Axis 0-`,`Axis 1+`",
+                    "`Axis 0-`,`Axis 1-`,`Axis 0+`,`Axis 1+`",
+                    "`Axis 3-`,`Axis 4-`","`Axis 4-`,`Axis 3+`","`Axis 3+`,`Axis 4+`","`Axis 3-`,`Axis 4+`",
+                    "`Axis 3-`,`Axis 4-`,`Axis 3+`,`Axis 4+`"
                 }
             },
                 {
@@ -108,7 +137,7 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
                     "`Control_R`", "Ctrl", "Escape", "Tab", "equal", "grave", "bracketleft", "bracketright", "`Shift_L`", "`Shift_R`", "Shift", "minus", "period",
                     "Return", "semicolon", "slash", "space", "`Super_L`", "`Super_R`", "less", "Delete", "End", "Next", "SUBTRACT", "Insert", "Prior", "Pause",
                     "`KP_Insert`", "`KP_End`", "`KP_Down`", "`KP_Next`", "`KP_Left`", "`KP_Begin`", "`KP_Right`", "`KP_Home`", "`KP_Up`", "`KP_Prior`", "`KP_Add`",
-                    "`KP_Delete`", "`KP_Divide`", "`KP_Multiply`", "`KP_Enter`", "`KP_Subtract`"
+                    "`KP_Delete`", "`KP_Divide`", "`KP_Multiply`", "`KP_Enter`", "`KP_Subtract`","A,W,D,S","Left,Up,Right,Down"
                 }
             }
         };

@@ -606,7 +606,9 @@ namespace DolphinDynamicInputTexture.Data
                     case "sub_entries":
                         while (reader.Read() && reader.TokenType != JsonToken.EndArray)
                         {
-                            Region.SubEntries.Add(ReadV2InputRegion(reader, emulatedDevice, texture));
+                            InputRegion subentry = ReadV2InputRegion(reader, emulatedDevice, texture);
+                            subentry.RegionRect = new InputSubRegionRect(subentry.RegionRect);
+                            Region.SubEntries.Add(subentry);
                         }
                         break;
                 }

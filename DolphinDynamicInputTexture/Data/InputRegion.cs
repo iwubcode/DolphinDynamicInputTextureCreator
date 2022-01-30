@@ -14,7 +14,7 @@ namespace DolphinDynamicInputTexture.Data
         /// </summary>
         public EmulatedDevice Device
         {
-            get => _emulated_device ??= new EmulatedDevice();
+            get => OwnedRegion == null ? _emulated_device ??= new EmulatedDevice() : OwnedRegion.Device;
             set
             {
                 _emulated_device = value;
@@ -89,7 +89,15 @@ namespace DolphinDynamicInputTexture.Data
             {
                 IRectRegion clonerect = (IRectRegion)value.Clone();
                 clonerect.OwnedTexture = _region_rect.OwnedTexture;
+                if (OwnedRegion != null && clonerect is ISubRectRegion)
+                {
+                    ((ISubRectRegion)clonerect).MainRegion = OwnedRegion.RegionRect;
+                }
                 _region_rect = clonerect;
+                foreach (InputRegion Region in SubEntries)
+                {
+                    Region.OwnedRegion = this;
+                }
                 OnPropertyChanged(nameof(RegionRect));
             }
         }
@@ -109,9 +117,12 @@ namespace DolphinDynamicInputTexture.Data
                 }
                 if (value.Count > 0)
                 {
+                    if (BindType == BindTypeProperties.single)
+                        BindType = BindTypeProperties.multi;
+
                     foreach (InputRegion Region in value)
                     {
-                        Region.RegionRect.OwnedTexture = RegionRect.OwnedTexture;
+                        Region.OwnedRegion = this;
                     }
                 }
                 _sub_entries = value;
@@ -121,16 +132,68 @@ namespace DolphinDynamicInputTexture.Data
         }
         private ObservableCollection<InputRegion> _sub_entries;
 
+        public InputRegion OwnedRegion
+        {
+            get => _main_region;
+            internal set
+            {
+                _main_region = value;
+                if (value != null)
+                {
+                    RegionRect.OwnedTexture = _main_region.RegionRect.OwnedTexture;
+                    if (RegionRect is ISubRectRegion)
+                    {
+                        ((ISubRectRegion)RegionRect).MainRegion = OwnedRegion.RegionRect;
+                    }
+                }
+                OnPropertyChanged(nameof(OwnedRegion));
+                OnPropertyChanged(nameof(SubIndex));
+            }
+        }
+        private InputRegion _main_region;
+
+        public int SubIndex
+        {
+            get
+            {
+                if (OwnedRegion == null) return -1;
+                return OwnedRegion.SubEntries.IndexOf(this);
+            }
+            set
+            {
+                if (value != SubIndex)
+                {
+                    OwnedRegion.SubEntries.Move(SubIndex, value);
+                }
+                OnPropertyChanged(nameof(SubIndex));
+            }
+        }
+
         /// <summary>
         /// connects all sub regions with this regions.
         /// </summary>
         private void OnCollectionOfSubEntriesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                SubEntries[e.OldStartingIndex].SubIndex = e.OldStartingIndex;
+                return;
+            }
+
+            if (e.OldItems != null)
+            {
+                if (SubEntries.Count == 0)
+                    BindType = BindTypeProperties.single;
+            }
+
             if (e.NewItems != null)
             {
+                if (BindType == BindTypeProperties.single)
+                    BindType = BindTypeProperties.multi;
+
                 foreach (InputRegion Region in e.NewItems)
                 {
-                    Region.RegionRect.OwnedTexture = RegionRect.OwnedTexture;
+                    Region.OwnedRegion = this;
                 }
             }
         }
@@ -158,5 +221,6 @@ namespace DolphinDynamicInputTexture.Data
             }
             return false;
         }
+
     }
 }

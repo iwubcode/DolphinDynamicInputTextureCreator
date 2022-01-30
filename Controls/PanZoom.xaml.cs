@@ -32,9 +32,23 @@ namespace DolphinDynamicInputTextureCreator.Controls
                 ViewModel.StartPanning(e.GetPosition(Img));
             }
 
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (!ViewModel.InputPack.SelectedRegionBrush.EditSubRegions)
             {
-                ViewModel.StartCreatingRegion(e.GetPosition(Img));
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    ViewModel.StartCreatingRegion(e.GetPosition(Img));
+                }
+            }
+        }
+
+        private void GridRegion_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (ViewModel.InputPack.SelectedRegionBrush.EditSubRegions)
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    ViewModel.StartCreatingSubRegion(e.GetPosition(Img));
+                }
             }
         }
 
