@@ -1,5 +1,6 @@
 ﻿using DolphinDynamicInputTexture.Interfaces;
 using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Drawing;
@@ -187,18 +188,98 @@ namespace DolphinDynamicInputTexture.Data
             }
         }
 
+        /// <summary>
+        /// The image size is set to a multiple of the original size when exporting.
+        /// 0 = Keep current size.
+        /// </summary>
+        public int ExportImageScaling
+        {
+            get => _export_image_scaling;
+            set
+            {
+                if (value < 0) throw new ArgumentException("cannot be less than zero", nameof(ExportImageScaling));
+
+                _export_image_scaling = (byte)value;
+                OnPropertyChanged(nameof(ExportImageScaling));
+            }
+        }
+        private byte _export_image_scaling = 0;
         #endregion
 
         #region Update
 
+        /// <summary>
+        /// Scales the image in relation to the original size.
+        /// </summary>
+        /// <param name="savepath">Save location of the new file</param>
+        /// <param name="Scaling">Size in relation to the original size</param>
+        public void SetImageScaling(string savepath, int Scaling)
+        {
+            if (Scaling <= 0)
+            {
+                throw new ArgumentException("Must be at least 1 or greater", nameof(Scaling));
+            }
+
+            SetImageScaling(savepath, (int)(HashProperties.ImageWidth * Scaling), (int)(HashProperties.ImageHeight * Scaling));
+        }
+
+        /// <summary>
+        /// Scales the image to an absulute size.
+        /// </summary>
+        /// <param name="savepath">Save location of the new file</param>
+        /// <param name="width">width in pixel</param>
+        /// <param name="height">height in pixel</param>
+        public void SetImageScaling(string savepath, int width, int height)
+        {
+            using(Bitmap newImage = new Bitmap(width, height))
+            {
+                using (Bitmap Image = new Bitmap(TexturePath))
+                using (Graphics graphics = Graphics.FromImage(newImage))
+                {
+                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    graphics.DrawImage(Image, 0, 0, newImage.Width, newImage.Height);
+                }
+                newImage.Save(savepath, System.Drawing.Imaging.ImageFormat.Png);
+
+                // sets the new path and updates the regions to the new size.
+                TexturePath = savepath;
+            }
+        }
+
+        /// <summary>
+        /// reads the image size and adjusts the regions if necessary.
+        /// </summary>
         private void UpdateImageWidthHeight()
         {
             if (File.Exists(_texture_path))
             {
                 using (var bmp = new Bitmap(_texture_path))
                 {
-                    ImageHeight = bmp.Height;
-                    ImageWidth = bmp.Width;
+                    if (ImageHeight > 0 && ImageWidth > 0)
+                    {
+                        double width_scale = (double)bmp.Width / ImageWidth;
+                        double height_scale = (double)bmp.Height / ImageHeight;
+
+                        //When scaling up, the scale must be set directly.
+                        if (width_scale >= 1) ImageWidth = bmp.Width;
+                        if (height_scale >= 1) ImageHeight = bmp.Height;
+
+                        foreach (InputRegion region in Regions)
+                        {
+                            region.RegionRect.X *= width_scale;
+                            region.RegionRect.Width *= width_scale;
+                            region.RegionRect.Y *= height_scale;
+                            region.RegionRect.Height *= height_scale;
+                        }
+
+                        ImageWidth = bmp.Width;
+                        ImageHeight = bmp.Height;
+                    }
+                    else
+                    {
+                        ImageHeight = bmp.Height;
+                        ImageWidth = bmp.Width;
+                    }
                 }
             }
         }
