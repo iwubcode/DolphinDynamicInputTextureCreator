@@ -124,7 +124,10 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                pack.SetExportTextureScaling();
                 pack.ExportToLocation(dialog.SelectedPath);
+                // Updating the user interface in case the image file has changed.
+                pack.Textures.Select(pack.Textures.Selected);
                 return true;
             }
             return false;

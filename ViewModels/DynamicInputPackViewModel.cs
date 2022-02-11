@@ -132,7 +132,45 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
             }
         }
 
+        /// <summary>
+        /// List of possible texture scaling during export.
+        /// </summary>
+        public string[] ExportTextureScalingModes
+        { 
+            get => _export_texture_scaling_modes ??= new string[] { "Deactivated", "Dynamic", "1x (Original Size)", "2x", "3x", "4x", "5x" , "6x", "7x", "8x" };
+        }
+        private string[] _export_texture_scaling_modes;
+
+        /// <summary>
+        /// The currently selected export texture scaling.
+        /// </summary>
+        public string SelectedExportTextureScaling
+        {
+            get => (string)ExportTextureScalingModes.GetValue(_selected_export_texture_scaling);
+            set
+            {
+                for (int i = 0; i < ExportTextureScalingModes.Length; i++)
+                {
+                    if (value == ExportTextureScalingModes[i])
+                    {
+                        _selected_export_texture_scaling = i;
+                        OnPropertyChanged(nameof(SelectedExportTextureScaling));
+                        return;
+                    }
+                }
+                _selected_export_texture_scaling = 0;
+                OnPropertyChanged(nameof(SelectedExportTextureScaling));
+            }
+        }
+        internal int _selected_export_texture_scaling = 0;
+
+        /// <summary>
+        /// Number of pixels that the smallest region should have at least after exporting, when the Dynamic mode is used.
+        /// </summary>
+        private int _targeted_regione_size = 96;
+
         #endregion
+
         #region Commands
 
         #region SelectedTexture
@@ -331,5 +369,69 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
 
         #endregion
 
+        #region ExportScale
+
+        /// <summary>
+        /// set the export scale for each texture.
+        /// </summary>
+        public void SetExportTextureScaling()
+        {
+            foreach (DynamicInputTexture texture in Textures)
+            {
+                switch (_selected_export_texture_scaling)
+                {
+                    case 0:
+                        //(Disabled) Leaves the textures unchanged.
+                        texture.ExportImageScaling = 0;
+                        break;
+                    case 1:
+                        //(Dynamic) Calculates a good display size.
+                        SetExportTextureScaling_Dynamic(texture);
+                        break;
+                    default:
+                        //(x1-8) Use the specified scaling.
+                        texture.ExportImageScaling = _selected_export_texture_scaling - 1;
+                        break;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Calculates a good texture scaling based on region size.
+        /// </summary>
+        /// <param name="texture"></param>
+        private void SetExportTextureScaling_Dynamic(DynamicInputTexture texture)
+        {
+            // 0 if there are no regions.
+            if (texture.Regions.Count <= 0)
+            {
+                texture.ExportImageScaling = 0;
+                return;
+            }
+
+            //calculate a scaling based on the regions.
+            int smallest_region = texture.ImageWidth;
+            foreach (InputRegion region in texture.Regions)
+            {
+                int regionsize = (int)(region.RegionRect.Height + region.RegionRect.Width) / 2;
+                if (smallest_region > regionsize)
+                {
+                    smallest_region = regionsize;
+                }
+            }
+            smallest_region = (int)(smallest_region / ((texture.ImageHeightScaling + texture.ImageWidthScaling) / 2));
+            int scaling = (int)Math.Round((double)_targeted_regione_size / smallest_region, 0, MidpointRounding.AwayFromZero);
+
+            // unlikely however try to avoid too large textures.
+            int pixelsize = texture.HashProperties.ImageWidth > texture.HashProperties.ImageHeight ? texture.HashProperties.ImageWidth : texture.HashProperties.ImageHeight;
+            if (pixelsize * scaling > 4096)
+            {
+                scaling = (int)Math.Round((double)4096 / pixelsize, MidpointRounding.ToZero);
+            }
+
+            texture.ExportImageScaling = (byte)scaling;
+        }
+        #endregion
     }
 }

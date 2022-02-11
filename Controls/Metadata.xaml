@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
              mc:Ignorable="d" 
              Height="220" Width="320">
     <Grid Background="White">
@@ -31,6 +32,8 @@
             <CheckBox IsChecked="{Binding PreserveAspectRatio, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0"/>
             <Label Content="Game ID:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
             <TextBox Text="{Binding GameID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
+            <Label Content="Export Texture Scaling:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+            <ComboBox ItemsSource="{Binding ExportTextureScalingModes}" SelectedItem="{Binding SelectedExportTextureScaling}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
 
         </Grid>
     </Grid>
