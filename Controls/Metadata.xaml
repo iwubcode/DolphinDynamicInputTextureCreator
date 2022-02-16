@@ -4,34 +4,84 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DolphinDynamicInputTextureCreator.Controls"
+             xmlns:converters="clr-namespace:DolphinDynamicInputTextureCreator.ValueConverters"
              mc:Ignorable="d" 
-             Height="220" Width="320">
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="25"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="Output json name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
-            <TextBox Text="{Binding GeneratedJsonName, Mode=TwoWay}"  Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
-            <Label Content="Generated folder name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
-            <TextBox Text="{Binding GeneratedFolderName, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
-            <Label Content="Preserve aspect ratio:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
-            <CheckBox IsChecked="{Binding PreserveAspectRatio, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0"/>
-            <Label Content="Game ID:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
-            <TextBox Text="{Binding GameID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0"/>
+             Height="200" Width="320">
+    <UserControl.Resources>
+        <ResourceDictionary>
 
-        </Grid>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Grid.Row="0" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Output json name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+        <TextBox Text="{Binding GeneratedJsonName, Mode=TwoWay}"  Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,6"/>
+        <Label Content="Generated folder name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+        <TextBox Text="{Binding GeneratedFolderName, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,6"/>
+        <Label Content="Preserve aspect ratio:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+        <CheckBox IsChecked="{Binding PreserveAspectRatio, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,6"/>
+        <Label Content="Game ID:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Right"/>
+        <TextBox Text="{Binding GameID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,6"/>
+
+        <GroupBox Header="Export Texture Scaling" Grid.Row="4" Grid.ColumnSpan="2"  BorderThickness="1" BorderBrush="Gray">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Mode:" VerticalAlignment="Center"/>
+                    <ComboBox ItemsSource="{Binding ExportTextureScaling.ScalingModesHelper}" SelectedItem="{Binding ExportTextureScaling.SelectedScalingModeHelper}" MinWidth="125" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="2,6"/>
+                </StackPanel>
+
+                <DockPanel Grid.Column="1">
+
+                    <DockPanel.Style>
+                        <Style TargetType="{x:Type DockPanel}">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ExportTextureScaling.SelectedScalingModeHelper}" Value="NearestNeighbor">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ExportTextureScaling.SelectedScalingModeHelper}" Value="Bicubic">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ExportTextureScaling.SelectedScalingModeHelper}" Value="Bilinear">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DockPanel.Style>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="5,0">
+                        <Label Content="Factor:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+                        <ComboBox ItemsSource="{Binding ExportTextureScaling.ScalingFactorHelper}" SelectedItem="{Binding ExportTextureScaling.SelectedScalingFactor}" MinWidth="50" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="4,0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                                        <TextBlock VerticalAlignment="Center" Text="x" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </DockPanel>
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>

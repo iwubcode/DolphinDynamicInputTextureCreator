@@ -118,7 +118,28 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         }
         private InputRegion _selected_region;
 
+        /// <summary>
+        /// Options used to rescale textures during export.
+        /// </summary>
+        public ExportTextureScalingViewModel ExportTextureScaling
+        {
+            get
+            {
+                if (_export_texture_scaling == null)
+                {
+                    _export_texture_scaling = new ExportTextureScalingViewModel();
+                    if (Textures.ValidSelection)
+                    {
+                        ExportTextureScaling.SelectedScalingFactor = (int)Textures.Selected.ImageWidthScaling;
+                    }
+                }
+                return _export_texture_scaling;
+            }
+        }
+        public ExportTextureScalingViewModel _export_texture_scaling;
+
         #endregion
+
         #region Commands
 
         #region SelectedTexture
