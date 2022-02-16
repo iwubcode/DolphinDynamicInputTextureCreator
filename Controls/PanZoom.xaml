@@ -118,7 +118,7 @@
         </Grid>
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding InputPack.Textures.ValidSelection, Converter={StaticResource InvertBoolToVis}}">
             <TextBlock FontSize="24" TextWrapping="Wrap" TextAlignment="Center" LineHeight="50">
-                Click the <Bold>'Add Texture(s)'</Bold> buton on the left to get started. <LineBreak />
+                Click the <Bold>'Add Texture(s)'</Bold> button on the left to get started. <LineBreak />
                 Once added, <Italic>double click</Italic> on a texture to begin placing emulated regions.
             </TextBlock>
         </Grid>
