@@ -106,6 +106,27 @@
                 </Label>
             </Viewbox>
 
+            <Viewbox HorizontalAlignment="Left" VerticalAlignment="Top" MaxHeight="50" Opacity="0.75">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="{StaticResource Geometry.RegionOverlay}" Fill="CornflowerBlue" >
+                        <Path.Style>
+                            <Style TargetType="{x:Type Path}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CopyType}" Value="overlay">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
+                    
+                    <StackPanel.Effect>
+                        <DropShadowEffect ShadowDepth="1" BlurRadius="3" Color="Black" />
+                    </StackPanel.Effect>
+                </StackPanel>
+            </Viewbox>
+            
             <Viewbox Grid.Row="0" Grid.RowSpan="2">
                 <StackPanel>
                     <Label Content="{Binding Device.Name, Mode=OneWay}" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">
