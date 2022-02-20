@@ -118,20 +118,6 @@ namespace DolphinDynamicInputTextureCreator.ViewModels
         }
         private InputRegion _selected_region;
 
-        /// <summary>
-        /// When adding a new texture, whether the hash should be pulled off of the filename
-        /// </summary>
-        private bool _should_get_hash_from_texture_filename = true;
-        public bool ShouldGetHashFromTextureFilename
-        {
-            get => _should_get_hash_from_texture_filename;
-            set
-            {
-                _should_get_hash_from_texture_filename = value;
-                OnPropertyChanged(nameof(ShouldGetHashFromTextureFilename));
-            }
-        }
-
         #endregion
         #region Commands
 
