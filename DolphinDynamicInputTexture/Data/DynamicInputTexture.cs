@@ -1,5 +1,6 @@
 ﻿using DolphinDynamicInputTexture.Interfaces;
 using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Drawing;
@@ -191,14 +192,40 @@ namespace DolphinDynamicInputTexture.Data
 
         #region Update
 
+        /// <summary>
+        /// reads the image size and adjusts the regions if necessary.
+        /// </summary>
         private void UpdateImageWidthHeight()
         {
             if (File.Exists(_texture_path))
             {
                 using (var bmp = new Bitmap(_texture_path))
                 {
-                    ImageHeight = bmp.Height;
-                    ImageWidth = bmp.Width;
+                    if (ImageHeight > 0 && ImageWidth > 0)
+                    {
+                        double width_scale = (double)bmp.Width / ImageWidth;
+                        double height_scale = (double)bmp.Height / ImageHeight;
+
+                        //When scaling up, the scale must be set directly.
+                        if (width_scale >= 1) ImageWidth = bmp.Width;
+                        if (height_scale >= 1) ImageHeight = bmp.Height;
+
+                        foreach (InputRegion region in Regions)
+                        {
+                            region.RegionRect.X *= width_scale;
+                            region.RegionRect.Width *= width_scale;
+                            region.RegionRect.Y *= height_scale;
+                            region.RegionRect.Height *= height_scale;
+                        }
+
+                        ImageWidth = bmp.Width;
+                        ImageHeight = bmp.Height;
+                    }
+                    else
+                    {
+                        ImageHeight = bmp.Height;
+                        ImageWidth = bmp.Width;
+                    }
                 }
             }
         }

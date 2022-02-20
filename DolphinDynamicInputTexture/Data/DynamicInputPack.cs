@@ -121,8 +121,8 @@ namespace DolphinDynamicInputTexture.Data
         /// <param name="location">export directory</param>
         public void ExportToLocation(string location)
         {
-            WriteJson(Path.Combine(location, GeneratedJsonName + ".json"));
             WriteImages(location);
+            WriteJson(Path.Combine(location, GeneratedJsonName + ".json"));
             WriteGameID(location);
         }
 
@@ -153,6 +153,7 @@ namespace DolphinDynamicInputTexture.Data
             {
                 //exports the images for the output_textures
                 WriteImage(location, texture);
+
                 foreach (HostDevice device in texture.HostDevices)
                 {
                     foreach (HostKey key in device.HostKeys)
@@ -164,7 +165,7 @@ namespace DolphinDynamicInputTexture.Data
             }
         }
 
-        private void WriteImage(string location, Interfaces.IImage image)
+        private void WriteImage(string location, IImage image)
         {
             // Unlikely that we get here but skip textures that don't exist
             if (!File.Exists(image.TexturePath))
@@ -174,13 +175,29 @@ namespace DolphinDynamicInputTexture.Data
             image.RelativeTexturePath = CheckRelativeTexturePath(image);
             string output_location = Path.Combine(location, image.RelativeTexturePath);
 
+            //create the directory when it does not exist.
+            Directory.CreateDirectory(Path.GetDirectoryName(output_location));
+
+            //Use External Scaling if necessary.
+            if (image is DynamicInputTexture texture)
+            {
+                if (DynamicInputTextureEvents.DynamicInputTextureExportProcessor != null)
+                {
+                    DynamicInputTextureEvents.DynamicInputTextureExportProcessor.Invoke(output_location, texture);
+                    if (File.Exists(output_location))
+                    {
+                        texture.TexturePath = output_location;
+                        return;
+                    }
+                }
+            }
+
             // Prevents the file from trying to overwrite itself.
             if (Path.GetFullPath(output_location) == Path.GetFullPath(image.TexturePath))
                 return;
 
             //write the image
             const bool overwrite = true;
-            Directory.CreateDirectory(Path.GetDirectoryName(output_location));
             File.Copy(image.TexturePath, output_location, overwrite);
         }
 
