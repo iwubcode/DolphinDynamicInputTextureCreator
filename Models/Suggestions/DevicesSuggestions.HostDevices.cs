@@ -36,7 +36,7 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
             {
                 "XInput",
                 new List<string>(){
-                    "`Buttons A`", "`Buttons B`", "`Buttons X`", "`Buttons Y`", "`Buttons Start`",
+                    "`Button A`", "`Button B`", "`Button X`", "`Button Y`", "`Button Start`",
                     "`Shoulder L`", "`Shoulder R`",
                     "`Trigger L`", "`Trigger R`",
                     "`Thumb L`", "`Thumb R`",
@@ -88,8 +88,8 @@ namespace DolphinDynamicInputTextureCreator.Models.Suggestions
                 {
                 "DInput",
                 new List<string>(){
-                    "`Buttons 1`", "`Buttons 2`", "`Buttons 3`", "`Buttons 4`", "`Buttons 5`", "`Buttons 6`", "`Buttons 7`", "`Buttons 8`",
-                    "`Buttons 9`", "`Buttons 10`", "`Buttons 11`", "`Buttons 12`", "`Buttons 13`", "`Buttons 14`", "`Buttons 15`",
+                    "`Button 1`", "`Button 2`", "`Button 3`", "`Button 4`", "`Button 5`", "`Button 6`", "`Button 7`", "`Button 8`",
+                    "`Button 9`", "`Button 10`", "`Button 11`", "`Button 12`", "`Button 13`", "`Button 14`", "`Button 15`",
                     "`Hat 0 N`", "`Hat 0 S`", "`Hat 0 E`", "`Hat 0 W`",
                     "`Axis X-`", "`Axis X+`", "`Axis Y-`", "`Axis Y+`",
                     "`Axis Xr-`", "`Axis Xr+`", "`Axis Yr-`", "`Axis Yr+`",
