@@ -38,7 +38,7 @@
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Emulated Devices..." Name="EditEmulatedDevices" Click="EditEmulatedDevices_Click" Icon="{DynamicResource Icon.EmulatedDevices}"/>
-                <MenuItem Header="_Host Devices..." Name="EditHostDevices" Click="EditHostDevices_Click" Icon="{DynamicResource Icon.HostDevices}"/>
+                <MenuItem Header="_Host Devices..." Name="EditHostDevices" Click="EditDefaultHostDevices_Click" Icon="{DynamicResource Icon.HostDevices}"/>
                 <MenuItem Header="_Metadata..." Name="EditMetadata" Click="EditMetadata_Click" Icon="{DynamicResource Icon.Metadata}" />
                 <MenuItem Header="_Tags..." Name="EditTags" Click="EditTags_Click" Icon="{DynamicResource Icon.EditTags}" />
             </MenuItem>
